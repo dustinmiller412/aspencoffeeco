@@ -18,26 +18,29 @@ import {useAside} from './Aside';
 export function CartLineItem({layout, line, childrenMap}) {
   const {id, merchandise} = line;
   const {product, title, image, selectedOptions} = merchandise;
+  const sellingPlanName = /** @type {any} */ (line)?.sellingPlanAllocation?.sellingPlan?.name;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
   const {close} = useAside();
   const lineItemChildren = childrenMap[id];
   const childrenLabelId = `cart-line-children-${id}`;
 
   return (
-    <li key={id} className="cart-line">
-      <div className="cart-line-inner">
+    <li key={id} className="cart-line border-b border-border/70 py-4 last:border-b-0">
+      <div className="cart-line-inner flex gap-4">
         {image && (
-          <Image
-            alt={title}
-            aspectRatio="1/1"
-            data={image}
-            height={100}
-            loading="lazy"
-            width={100}
-          />
+          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-md bg-secondary">
+            <Image
+              alt={title}
+              aspectRatio="1/1"
+              data={image}
+              height={80}
+              loading="lazy"
+              width={80}
+            />
+          </div>
         )}
 
-        <div>
+        <div className="min-w-0 flex-1">
           <Link
             prefetch="intent"
             to={lineItemUrl}
@@ -46,21 +49,29 @@ export function CartLineItem({layout, line, childrenMap}) {
                 close();
               }
             }}
+            className="no-underline"
           >
-            <p>
-              <strong>{product.title}</strong>
+            <p className="line-clamp-2 text-sm font-medium text-foreground">
+              {product.title}
             </p>
           </Link>
-          <ProductPrice price={line?.cost?.totalAmount} />
-          <ul>
+          <p className="mt-1 text-sm text-foreground">
+            <ProductPrice price={line?.cost?.totalAmount} />
+          </p>
+          <ul className="mt-1 space-y-0.5">
             {selectedOptions.map((option) => (
-              <li key={option.name}>
+              <li key={option.name} className="text-xs text-muted-foreground">
                 <small>
                   {option.name}: {option.value}
                 </small>
               </li>
             ))}
           </ul>
+          {sellingPlanName ? (
+            <p className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              Delivery: {sellingPlanName}
+            </p>
+          ) : null}
           <CartLineQuantity line={line} />
         </div>
       </div>
@@ -99,30 +110,33 @@ function CartLineQuantity({line}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="cart-line-quantity">
-      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
+    <div className="cart-line-quantity mt-3 flex items-center gap-2">
+      <small className="sr-only">Quantity: {quantity}</small>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
           disabled={quantity <= 1 || !!isOptimistic}
           name="decrease-quantity"
           value={prevQuantity}
+          className="inline-flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
         >
-          <span>&#8722; </span>
+          <span>&#8722;</span>
         </button>
       </CartLineUpdateButton>
-      &nbsp;
+      <span className="inline-flex h-7 min-w-8 items-center justify-center px-2 text-xs font-medium">
+        {quantity}
+      </span>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
         <button
           aria-label="Increase quantity"
           name="increase-quantity"
           value={nextQuantity}
           disabled={!!isOptimistic}
+          className="inline-flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
         >
           <span>&#43;</span>
         </button>
       </CartLineUpdateButton>
-      &nbsp;
       <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
     </div>
   );
@@ -145,7 +159,11 @@ function CartLineRemoveButton({lineIds, disabled}) {
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button disabled={disabled} type="submit">
+      <button
+        disabled={disabled}
+        type="submit"
+        className="ml-2 text-xs uppercase tracking-[0.12em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:cursor-not-allowed disabled:opacity-40"
+      >
         Remove
       </button>
     </CartForm>

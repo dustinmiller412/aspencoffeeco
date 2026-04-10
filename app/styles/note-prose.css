@@ -1,0 +1,445 @@
+/*
+  note-prose.css
+  ──────────────────────────────────────────────────────────────
+  Editorial prose overrides for Aspen Coffee Co. blog posts.
+  Applied via the `.note-prose` class on the prose wrapper div.
+  Import this in app/root.tsx (or wherever your global styles live).
+
+  Assumes:
+  • Tailwind CSS with the @tailwindcss/typography plugin
+  • `font-serif` → your configured serif stack (e.g. Lora, Georgia)
+  • CSS custom properties from your theme for foreground / muted tones
+  ──────────────────────────────────────────────────────────────
+*/
+
+/* ── Tokens ─────────────────────────────────────────────────── */
+.note-prose {
+  --prose-accent:        #B84A1E;   /* burnt sienna — pip / accent */
+  --prose-accent-bg:     #F5EDE5;   /* tinted accent surface       */
+  --prose-border:        #DFD0BF;   /* warm border                 */
+  --prose-muted:         #8A7E74;   /* muted text                  */
+  --prose-code-bg:       #1C1917;   /* dark warm — code blocks     */
+  --prose-code-text:     #E8DFD0;   /* warm cream — code text      */
+  --prose-code-string:   #A8C5A0;   /* muted green — strings       */
+  --prose-code-keyword:  #E6A97A;   /* warm amber — keywords       */
+  --prose-code-comment:  #5C6B5C;   /* muted green — comments      */
+}
+
+
+/* ── Body paragraphs ────────────────────────────────────────── */
+.note-prose p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 1.4em;
+  color: inherit;
+}
+
+/* Drop cap — first paragraph only */
+.note-prose > p:first-of-type::first-letter {
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 4.2em;
+  font-weight: 600;
+  line-height: 0.78;
+  float: left;
+  margin-right: 0.08em;
+  margin-top: 0.06em;
+  color: var(--prose-accent);
+}
+
+
+/* ── Headings ───────────────────────────────────────────────── */
+.note-prose h2,
+.note-prose h3,
+.note-prose h4 {
+  font-family: var(--font-serif, Georgia, serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-top: 2.6em;
+  margin-bottom: 0.6em;
+}
+
+.note-prose h2 {
+  font-size: 1.75rem;
+  padding-bottom: 0.45em;
+  border-bottom: 1.5px solid var(--prose-border);
+  position: relative;
+}
+
+/* Accent pip under h2 */
+.note-prose h2::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 0;
+  width: 2.25rem;
+  height: 1.5px;
+  background-color: var(--prose-accent);
+}
+
+.note-prose h3 {
+  font-size: 1.3rem;
+  font-style: italic;
+}
+
+/* Section label: italicised lines directly after ## heading */
+.note-prose h2 + p em:only-child,
+.note-prose h3 + p em:only-child {
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+  color: var(--prose-muted);
+  margin-top: -0.5em;
+  margin-bottom: 1.4em;
+}
+
+
+/* ── Horizontal rule → ornamental divider ───────────────────── */
+.note-prose hr {
+  border: none;
+  margin: 3rem auto;
+  text-align: center;
+  overflow: visible;
+  position: relative;
+  height: 1px;
+  background: var(--prose-border);
+}
+
+.note-prose hr::after {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-background, #FAF8F4);
+  padding: 0 0.75rem;
+  font-size: 0.65rem;
+  color: var(--prose-accent);
+  letter-spacing: 0.3em;
+}
+
+/* Dark mode hr background fill */
+.dark .note-prose hr::after {
+  background: var(--background);
+}
+
+
+/* ── Blockquote → pull quote ────────────────────────────────── */
+.note-prose blockquote {
+  border-left: none;
+  border-top: 1.5px solid var(--prose-border);
+  border-bottom: 1.5px solid var(--prose-border);
+  padding: 1.5rem 0;
+  margin: 2.5rem 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  line-height: 1.55;
+  color: var(--prose-muted);
+  position: relative;
+}
+
+.note-prose blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.1em;
+  left: -0.1em;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--prose-accent);
+  opacity: 0.25;
+  font-family: var(--font-serif, Georgia, serif);
+}
+
+.note-prose blockquote p {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+
+.note-prose blockquote p::first-letter {
+  /* prevent drop cap inside blockquotes */
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  float: none;
+  margin: 0;
+  color: inherit;
+}
+
+
+/* ── Inline callout divs (already styled via Tailwind in MD) ── */
+.note-prose .not-prose {
+  font-size: 1rem;
+  line-height: inherit;
+  font-style: normal;
+}
+
+
+/* ── Lists ──────────────────────────────────────────────────── */
+.note-prose ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.6em 0;
+}
+
+.note-prose ul li {
+  position: relative;
+  padding-left: 1.4em;
+  margin-bottom: 0.55em;
+  font-size: 1.0rem;
+  line-height: 1.7;
+}
+
+.note-prose ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--prose-accent);
+  font-weight: 600;
+}
+
+.note-prose ol {
+  padding-left: 1.4em;
+  margin: 1.6em 0;
+  counter-reset: ol-counter;
+  list-style: none;
+}
+
+.note-prose ol li {
+  position: relative;
+  padding-left: 1.6em;
+  margin-bottom: 0.55em;
+  counter-increment: ol-counter;
+  font-size: 1.0rem;
+  line-height: 1.7;
+}
+
+.note-prose ol li::before {
+  content: counter(ol-counter) '.';
+  position: absolute;
+  left: 0;
+  color: var(--prose-accent);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ── Links ──────────────────────────────────────────────────── */
+.note-prose a {
+  color: var(--prose-accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.note-prose a:hover {
+  text-decoration-color: var(--prose-accent);
+}
+
+
+/* ── Inline code ────────────────────────────────────────────── */
+.note-prose :not(pre) > code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.85em;
+  background-color: var(--prose-accent-bg);
+  border: 1px solid var(--prose-border);
+  color: var(--prose-accent);
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+}
+
+
+/* ── Code blocks ────────────────────────────────────────────── */
+.note-prose pre {
+  background-color: var(--prose-code-bg) !important;
+  color: var(--prose-code-text);
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  padding: 1.5rem 1.75rem;
+  border-radius: 0.85rem;
+  overflow-x: auto;
+  margin: 2rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 4px 24px rgba(0,0,0,0.18);
+}
+
+.note-prose pre code {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  color: inherit;
+  font-size: inherit;
+}
+
+/* Language label */
+.note-prose pre[data-language]::before {
+  content: attr(data-language);
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--prose-code-comment);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Syntax highlight tokens — works with highlight.js or shiki */
+.note-prose pre .hljs-string,
+.note-prose pre .token.string         { color: var(--prose-code-string); }
+
+.note-prose pre .hljs-keyword,
+.note-prose pre .token.keyword        { color: var(--prose-code-keyword); }
+
+.note-prose pre .hljs-comment,
+.note-prose pre .token.comment        { color: var(--prose-code-comment); font-style: italic; }
+
+.note-prose pre .hljs-number,
+.note-prose pre .token.number         { color: #C7A97B; }
+
+.note-prose pre .hljs-attr,
+.note-prose pre .token.property       { color: #A8C5BD; }
+
+.note-prose pre .hljs-title,
+.note-prose pre .token.function       { color: #D4A97B; }
+
+
+/* ── Images & figures ───────────────────────────────────────── */
+.note-prose img {
+  border-radius: 0.85rem;
+  border: 1px solid var(--prose-border);
+  width: 100%;
+  height: auto;
+}
+
+.note-prose figure {
+  margin: 2.5rem 0;
+}
+
+.note-prose figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--prose-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+
+/* ── Callout base ───────────────────────────────────────────── */
+.note-prose .callout {
+  border-radius: 0.85rem;
+  border: 1px solid var(--prose-border);
+  background-color: white;
+  padding: 1.1rem 1.25rem;
+  margin: 2rem 0;
+}
+
+.note-prose .callout--accent {
+  border-color: var(--prose-accent);
+  background-color: var(--prose-accent-bg);
+}
+
+.note-prose .callout-label {
+  font-size: 0.72rem;       /* ↑ was 0.65rem */
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--prose-muted);
+  margin-bottom: 0.4rem;
+}
+
+.note-prose .callout-body {
+  font-size: 1rem;          /* ↑ was 0.9rem */
+  line-height: 1.65;
+}
+
+.dark .note-prose .callout {
+  background-color: rgba(255,255,255,0.04);
+  border-color: rgba(255,255,255,0.1);
+}
+
+
+/* ── Callout variants ───────────────────────────────────────── */
+
+/* Warm — tan background */
+.note-prose .callout--warm {
+  background-color: #F6EDE1;
+  border-color: #DCCCBA;
+}
+.dark .note-prose .callout--warm {
+  background-color: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Feature — gradient bg with large display text */
+.note-prose .callout--feature {
+  background: linear-gradient(180deg, #FFFAF4 0%, #F7EFE3 100%);
+  border-color: #E4D5C4;
+  box-shadow: 0 18px 45px rgba(90, 64, 40, 0.05);
+  padding: 1.5rem 1.75rem;
+}
+.dark .note-prose .callout--feature {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2);
+}
+
+.note-prose .callout-display {
+  font-family: var(--font-serif, 'Newsreader', Georgia, serif);
+  font-size: 1.75rem;
+  line-height: 1.15;
+  color: var(--foreground);
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+}
+
+.note-prose .callout-sub {
+  font-size: 1rem;          /* ↑ was 0.875rem */
+  line-height: 1.65;
+  color: var(--muted-foreground);
+  margin-top: 0.65rem;
+  max-width: 52ch;
+}
+
+/* Grid — 3-column layout */
+.note-prose .callout--grid {
+  display: grid;
+  gap: 0.75rem;
+  background-color: #FBF6EF;
+  border-color: #E4D7C7;
+}
+.dark .note-prose .callout--grid {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+@media (min-width: 640px) {
+  .note-prose .callout--grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* List inside a callout */
+.note-prose .callout-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.note-prose .callout-list li {
+  font-size: 1rem;          /* ↑ was 0.875rem */
+  line-height: 1.6;
+  color: var(--foreground);
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Override prose ul bullets inside callouts */
+.note-prose .callout-list li::before {
+  display: none;
+}

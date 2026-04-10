@@ -8,18 +8,31 @@ import {useFetcher} from 'react-router';
 export function CartSummary({cart, layout}) {
   const className =
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
+  const isAside = layout === 'aside';
   const summaryId = useId();
   const discountsHeadingId = useId();
   const discountCodeInputId = useId();
   const giftCardHeadingId = useId();
   const giftCardInputId = useId();
+  const subscriptionLineCount =
+    cart?.lines?.nodes?.filter((line) => line?.sellingPlanAllocation?.sellingPlan)
+      ?.length || 0;
 
   return (
-    <div aria-labelledby={summaryId} className={className}>
-      <h4 id={summaryId}>Totals</h4>
-      <dl role="group" className="cart-subtotal">
+    <div
+      aria-labelledby={summaryId}
+      className={`${className} ${
+        isAside
+          ? 'mt-4 border-t border-border/80 bg-background pt-4'
+          : 'mt-8 border-t border-border/80 pt-4'
+      }`}
+    >
+      <h4 id={summaryId} className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+        Order Summary
+      </h4>
+      <dl role="group" className="cart-subtotal mt-2 flex items-center justify-between">
         <dt>Subtotal</dt>
-        <dd>
+        <dd className="font-medium">
           {cart?.cost?.subtotalAmount?.amount ? (
             <Money data={cart?.cost?.subtotalAmount} />
           ) : (
@@ -27,33 +40,55 @@ export function CartSummary({cart, layout}) {
           )}
         </dd>
       </dl>
-      <CartDiscounts
-        discountCodes={cart?.discountCodes}
-        discountsHeadingId={discountsHeadingId}
-        discountCodeInputId={discountCodeInputId}
-      />
-      <CartGiftCard
-        giftCardCodes={cart?.appliedGiftCards}
-        giftCardHeadingId={giftCardHeadingId}
-        giftCardInputId={giftCardInputId}
-      />
-      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} />
+      <div className="mt-2.5 space-y-2.5">
+        <CartDiscounts
+          discountCodes={cart?.discountCodes}
+          discountsHeadingId={discountsHeadingId}
+          discountCodeInputId={discountCodeInputId}
+        />
+        <CartGiftCard
+          giftCardCodes={cart?.appliedGiftCards}
+          giftCardHeadingId={giftCardHeadingId}
+          giftCardInputId={giftCardInputId}
+        />
+      </div>
+      {subscriptionLineCount > 0 ? (
+        <p className="mt-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+          Includes {subscriptionLineCount} subscription item
+          {subscriptionLineCount > 1 ? 's' : ''}
+        </p>
+      ) : null}
+      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} layout={layout} />
     </div>
   );
 }
 
 /**
- * @param {{checkoutUrl?: string}}
+ * @param {{checkoutUrl?: string; layout: CartSummaryProps['layout']}}
  */
-function CartCheckoutActions({checkoutUrl}) {
+function CartCheckoutActions({checkoutUrl, layout}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="mt-4 space-y-2">
+      <a
+        href={checkoutUrl}
+        target="_self"
+        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-primary px-5 text-xs uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Continue to checkout
       </a>
-      <br />
+      {layout === 'aside' ? (
+        <a
+          href="/cart"
+          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-secondary"
+        >
+          View bag
+        </a>
+      ) : null}
+      <p className="text-[11px] leading-relaxed text-muted-foreground">
+        Shipping and taxes are calculated at checkout.
+      </p>
     </div>
   );
 }
@@ -76,7 +111,7 @@ function CartDiscounts({
       ?.map(({code}) => code) || [];
 
   return (
-    <section aria-label="Discounts">
+    <div>
       {/* Have existing discount, display it with a remove option */}
       <dl hidden={!codes.length}>
         <div>
@@ -99,7 +134,7 @@ function CartDiscounts({
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
+        <div className="mt-1.5 flex items-center gap-2">
           <label htmlFor={discountCodeInputId} className="sr-only">
             Discount code
           </label>
@@ -108,14 +143,18 @@ function CartDiscounts({
             type="text"
             name="discountCode"
             placeholder="Discount code"
+            className="h-10 flex-1 rounded-md border border-border bg-background px-3 text-sm"
           />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
+          <button
+            type="submit"
+            aria-label="Apply discount code"
+            className="inline-flex h-10 items-center rounded-md border border-border px-3 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-secondary"
+          >
             Apply
           </button>
         </div>
       </UpdateDiscountForm>
-    </section>
+    </div>
   );
 }
 
@@ -194,9 +233,9 @@ function CartGiftCard({giftCardCodes, giftCardHeadingId, giftCardInputId}) {
   };
 
   return (
-    <section aria-label="Gift cards">
+    <div>
       {giftCardCodes && giftCardCodes.length > 0 && (
-        <dl>
+        <dl className="m-0">
           <dt id={giftCardHeadingId}>Applied Gift Card(s)</dt>
           {giftCardCodes.map((giftCard) => (
             <dd key={giftCard.id} className="cart-discount">
@@ -222,7 +261,7 @@ function CartGiftCard({giftCardCodes, giftCardHeadingId, giftCardInputId}) {
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
+        <div className="mt-1.5 flex items-center gap-2">
           <label htmlFor={giftCardInputId} className="sr-only">
             Gift card code
           </label>
@@ -232,18 +271,19 @@ function CartGiftCard({giftCardCodes, giftCardHeadingId, giftCardInputId}) {
             name="giftCardCode"
             placeholder="Gift card code"
             ref={giftCardCodeInput}
+            className="h-10 flex-1 rounded-md border border-border bg-background px-3 text-sm"
           />
-          &nbsp;
           <button
             type="submit"
             disabled={giftCardAddFetcher.state !== 'idle'}
             aria-label="Apply gift card code"
+            className="inline-flex h-10 items-center rounded-md border border-border px-3 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-secondary disabled:opacity-60"
           >
             Apply
           </button>
         </div>
       </AddGiftCardForm>
-    </section>
+    </div>
   );
 }
 
