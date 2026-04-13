@@ -6,6 +6,7 @@ const QUICK_LINKS = [
   {title: 'Home', to: '/'},
   {title: 'Shop', to: '/collections/coffee'},
   {title: 'About', to: '/about'},
+  {title: 'Wholesale', to: '/wholesale'},
   {title: 'Grind Size Guide', to: '/grind-size-guide'},
   {title: 'Field Notes', to: '/fieldnotes'},
   {title: 'Contact', to: '/contact'},

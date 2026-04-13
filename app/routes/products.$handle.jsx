@@ -9,7 +9,7 @@ import {
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ShoppingBag, Check } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { ProductForm } from '~/components/ProductForm';
 import { AddToCartButton } from '~/components/AddToCartButton';
 import { redirectIfHandleIsLocalized } from '~/lib/redirect';
@@ -89,6 +89,8 @@ export default function Product() {
   const [added, setAdded] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [selectedSellingPlanId, setSelectedSellingPlanId] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const { open } = useAside();
 
   const selectedVariant = useOptimisticVariant(
@@ -113,8 +115,9 @@ export default function Product() {
     );
   }, [product]);
 
-  const activeImage =
-    selectedVariant?.image || product?.images?.nodes?.[0] || null;
+  const productImages = useMemo(() => product?.images?.nodes || [], [product?.images?.nodes]);
+  const activeImage = productImages[currentImageIndex] || selectedVariant?.image || null;
+  const hasMultipleImages = productImages.length > 1;
 
   const fallbackDescriptionParagraphs = useMemo(() => {
     return (product?.description || '')
@@ -184,6 +187,40 @@ export default function Product() {
     }
   }, [isSubscriptionProduct, selectedSellingPlanId, sellingPlans]);
 
+  useEffect(() => {
+    const handleKeydown = (event) => {
+      if (event.key === 'Escape') {
+        setIsImageModalOpen(false);
+      }
+    };
+
+    if (isImageModalOpen) {
+      window.addEventListener('keydown', handleKeydown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  }, [isImageModalOpen]);
+
+  useEffect(() => {
+    if (!productImages.length) {
+      setCurrentImageIndex(0);
+      return;
+    }
+
+    const selectedImageId = selectedVariant?.image?.id;
+    if (!selectedImageId) return;
+
+    const matchingImageIndex = productImages.findIndex(
+      (image) => image.id === selectedImageId,
+    );
+
+    if (matchingImageIndex >= 0) {
+      setCurrentImageIndex(matchingImageIndex);
+    }
+  }, [productImages, selectedVariant?.image?.id]);
+
   const effectiveSellingPlanId =
     isSubscriptionProduct && sellingPlans.length
       ? selectedSellingPlanId || sellingPlans[0].id
@@ -192,6 +229,22 @@ export default function Product() {
   const handleAddToCart = () => {
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
+  };
+
+  const goToPreviousImage = () => {
+    if (!hasMultipleImages) return;
+
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? productImages.length - 1 : prevIndex - 1,
+    );
+  };
+
+  const goToNextImage = () => {
+    if (!hasMultipleImages) return;
+
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === productImages.length - 1 ? 0 : prevIndex + 1,
+    );
   };
 
   return (
@@ -214,13 +267,59 @@ export default function Product() {
           >
             <div className="relative aspect-[4/5] bg-secondary overflow-hidden">
               {activeImage ? (
-                <img
-                  src={activeImage.url}
-                  alt={activeImage.altText || product.title}
-                  className="w-full h-full object-cover"
-                />
+                <button
+                  type="button"
+                  onClick={() => setIsImageModalOpen(true)}
+                  className="h-full w-full cursor-zoom-in"
+                  aria-label="Open larger product image"
+                >
+                  <img
+                    src={activeImage.url}
+                    alt={activeImage.altText || product.title}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ) : null}
+
+              {hasMultipleImages ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={goToPreviousImage}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55"
+                    aria-label="Previous product image"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goToNextImage}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55"
+                    aria-label="Next product image"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </>
               ) : null}
             </div>
+
+            {hasMultipleImages ? (
+              <div className="mt-4 flex items-center justify-center gap-2">
+                {productImages.map((image, index) => (
+                  <button
+                    key={image.id || image.url || index}
+                    type="button"
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`h-2.5 w-2.5 rounded-full transition-colors ${
+                      index === currentImageIndex
+                        ? 'bg-foreground'
+                        : 'bg-foreground/30 hover:bg-foreground/50'
+                    }`}
+                    aria-label={`Go to product image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            ) : null}
           </motion.div>
 
           <motion.div
@@ -238,7 +337,7 @@ export default function Product() {
             </h1>
 
             {heroHook ? (
-              <p className="text-base md:text-lg leading-relaxed text-muted-foreground mb-8 max-w-lg">
+              <p className="text-base md:text-lg leading-relaxed whitespace-pre-line text-muted-foreground mb-8 max-w-lg">
                 {heroHook}
               </p>
             ) : null}
@@ -397,6 +496,59 @@ export default function Product() {
           product={product}
           activeImage={activeImage}
         />
+
+        {isImageModalOpen && activeImage ? (
+          <div
+            className="fixed inset-0 z-50 bg-black/85 px-4 py-8"
+            onClick={() => setIsImageModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Product image preview"
+          >
+            <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setIsImageModalOpen(false)}
+                className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
+                aria-label="Close image preview"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div
+                className="relative flex h-full w-full items-center justify-center"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <img
+                  src={activeImage.url}
+                  alt={activeImage.altText || product.title}
+                  className="max-h-[90vh] max-w-full object-contain"
+                />
+
+                {hasMultipleImages ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={goToPreviousImage}
+                      className="absolute left-1 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
+                      aria-label="Previous product image"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={goToNextImage}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
+                      aria-label="Next product image"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

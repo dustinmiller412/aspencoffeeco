@@ -76,8 +76,27 @@ const SHOP_FILTER_TITLES = [
   'Merch',
 ];
 
+const COLLECTION_HEADER_COPY = {
+  coffee:
+    'Everything we roast, all in one place. From everyday blends to rotating single origins and subscriptions, this is the full lineup. Whether you’re just getting into specialty coffee or already deep into it, you’ll find something here that’s easy to brew and worth coming back to.',
+  blends:
+    'Built for consistency and balance. Our blends are designed to be approachable, reliable, and easy to brew no matter your setup. Whether it’s your first step into specialty coffee or your daily go-to, these are the coffees you don’t have to overthink.',
+  'single-origin':
+    'Coffees with a clear sense of place. Each single origin highlights the character of where it was grown and how it was processed. We keep the approach simple so you can focus on what makes each one unique without needing a perfect setup to enjoy it.',
+  subscriptions:
+    'Fresh coffee, on your schedule. Our subscriptions are the easiest way to stay stocked and keep things interesting. Choose what fits your routine and we’ll handle the rest, with coffees roasted to order and sent at their peak.',
+  gear:
+    'Reliable brewing tools to help you get the most out of every bag.',
+  merch:
+    'Aspen goods for home, cafe days, and coffee runs.',
+};
+
 export default function Collection() {
   const {collection, collections} = useLoaderData();
+  const headerCopy =
+    COLLECTION_HEADER_COPY[collection.handle] ||
+    collection.description ||
+    '';
 
   // Resolve requested filter titles to actual Shopify collection handles.
   const filters = SHOP_FILTER_TITLES.map((title) => {
@@ -108,13 +127,12 @@ export default function Collection() {
           className="mb-16"
         >
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
-            The Collection
           </p>
           <h1 className="font-serif text-5xl md:text-6xl font-medium tracking-tight mb-6">
             Shop
           </h1>
-          <p className="text-muted-foreground max-w-lg leading-relaxed">
-            Every bag is roasted to order and shipped within 48 hours. Freshness guaranteed.
+          <p className="text-muted-foreground max-w-2xl leading-relaxed">
+            {headerCopy}
           </p>
         </motion.div>
 

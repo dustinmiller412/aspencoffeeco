@@ -1,5 +1,4 @@
 import {NavLink} from 'react-router';
-import {Coffee} from 'lucide-react';
 
 /** @type {Route.MetaFunction} */
 export const meta = () => {
@@ -12,6 +11,7 @@ const BREW_METHODS = [
     brewMethod: 'Autodrip',
     grindSize: 'Medium/Coarse',
     looksLike: 'Sea salt',
+    methodIcon: '/images/moccamasterweb2.png',
     image: '/images/Medium_Coarse.jpg',
   },
   {
@@ -19,6 +19,7 @@ const BREW_METHODS = [
     brewMethod: 'Espresso',
     grindSize: 'Fine',
     looksLike: 'Cinnamon',
+    methodIcon: '/images/espresso.png',
     image: '/images/Fine.jpg',
   },
   {
@@ -26,6 +27,7 @@ const BREW_METHODS = [
     brewMethod: 'Pour Over',
     grindSize: 'Medium',
     looksLike: 'Rough beach sand',
+    methodIcon: '/images/v60.png',
     image: '/images/Medium.jpg',
   },
   {
@@ -33,6 +35,7 @@ const BREW_METHODS = [
     brewMethod: 'French Press',
     grindSize: 'Coarse',
     looksLike: 'Coarsely cracked pepper',
+    methodIcon: '/images/press.png',
     image: '/images/Coarse.jpg',
   },
   {
@@ -40,6 +43,7 @@ const BREW_METHODS = [
     brewMethod: 'Aeropress',
     grindSize: 'Medium-Fine',
     looksLike: 'Fine table salt',
+    methodIcon: '/images/aeropress.png',
     image: '/images/Medium-fine.jpg',
   },
   {
@@ -47,6 +51,7 @@ const BREW_METHODS = [
     brewMethod: 'Cold Brew',
     grindSize: 'Coarse',
     looksLike: 'Coarsely cracked pepper',
+    methodIcon: '/images/coldbrew.svg',
     image: '/images/Coarse.jpg',
   },
   {
@@ -54,6 +59,7 @@ const BREW_METHODS = [
     brewMethod: 'Siphon',
     grindSize: 'Medium',
     looksLike: 'Rough beach sand',
+    methodIcon: '/images/siphon.webp',
     image: '/images/Medium.jpg',
   },
 ];
@@ -83,9 +89,19 @@ export default function GrindSizeGuide() {
               </h2>
 
               <div className="grid items-center gap-8 md:grid-cols-[0.9fr_1.7fr_1fr]">
-                <div className="flex justify-center md:justify-start">
-                  <div className="inline-flex h-24 w-24 items-center justify-center rounded-full border border-[#ddccb8] bg-[#f8efe3] text-[#7a6249] dark:border-white/20 dark:bg-white/10 dark:text-[#d8c1a8] md:h-28 md:w-28">
-                    <Coffee className="h-11 w-11" strokeWidth={1.5} />
+                <div className="flex justify-center">
+                  <div className="inline-flex items-center justify-center">
+                    <img
+                      src={item.methodIcon}
+                      alt={`${item.brewMethod} brewer icon`}
+                      className="h-44 w-44 object-contain md:h-32 md:w-32"
+                      loading="lazy"
+                      style={
+                        item.id === 'siphon' || item.id === 'cold-brew'
+                          ? {filter: 'brightness(0) saturate(100%)'}
+                          : undefined
+                      }
+                    />
                   </div>
                 </div>
 

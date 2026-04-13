@@ -1,5 +1,5 @@
 ---
-title: "You've Been Brewing Fine. Here's How to Brew Better."
+title: "Let’s Make Your Coffee Taste Better at Home."
 date: 2026-01-20
 slug: brew-better-at-home
 tags: [Brew, Taste]
@@ -9,9 +9,9 @@ coverImage: "https://cdn.shopify.com/s/files/1/0968/1915/1139/files/vlad-tchompa
 
 <p class="lead">Here's the thing nobody tells you about bad coffee at home: it's almost never the coffee's fault.</p>
 
-It's the ratio. It's the grind. It's the water that sat in the reservoir for three days. It's the same scoop you've been using since 2019 that you eyeball slightly differently every single morning.
+It usually comes down to a few small things. The ratio. The grind. The water that’s been sitting in the reservoir for a few days. The same scoop you’ve been using for years, filled a little differently every morning.
 
-Great coffee at home isn't about owning better gear. It's about making a few small decisions consistently. That's the whole secret. Everything below is just detail.
+Better coffee at home doesn’t come from better gear. It comes from doing a few simple things consistently. That’s really it. Everything below just helps you get there.
 
 <div class="callout callout--feature">
   <p class="callout-label">One rule before we start</p>
@@ -38,7 +38,7 @@ Great coffee at home isn't about owning better gear. It's about making a few sma
   </div>
 </div>
 
-Drip machines get unfairly maligned. They're not the problem. We are — because we ask them to perform miracles while giving them wildly inconsistent inputs. Mystery scoops. Tap water. Coffee that's been open since March.
+Drip machines get unfairly maligned. They're not the problem. We are, because we ask them to perform miracles while giving them wildly inconsistent inputs. Mystery scoops. Tap water. Coffee that's been open since March.
 
 Give a drip machine fresh coffee, filtered water, and a real ratio, and it will make a genuinely good cup every single time. That's a promise.
 
@@ -47,7 +47,7 @@ Give a drip machine fresh coffee, filtered water, and a real ratio, and it will 
 1. Fill the reservoir with fresh, cold filtered water
 2. Add ground coffee to the filter basket
 3. Press the button. Let the machine do what it was built to do.
-4. Pour immediately and drink it while it's hot — don't let it sit on the burner
+4. Pour immediately and drink it while it's hot, don't let it sit on the burner
 
 <div class="callout">
   <p class="callout-label">When things go wrong</p>
@@ -60,7 +60,7 @@ Give a drip machine fresh coffee, filtered water, and a real ratio, and it will 
 
 <div class="callout callout--warm">
   <p class="callout-label">Best match</p>
-  <p class="callout-body">The drip machine is where balanced, sweet coffees shine. <a href="/products/evergreen-blend">Evergreen Blend</a> was built specifically for this — it was designed to be the best cup you make without thinking too hard about it.</p>
+  <p class="callout-body">The drip machine is where balanced, sweet coffees shine. <a href="/products/evergreen-blend">Evergreen Blend</a> was built specifically for this, it was designed to be the best cup you make without thinking too hard about it.</p>
 </div>
 
 
@@ -83,18 +83,18 @@ Give a drip machine fresh coffee, filtered water, and a real ratio, and it will 
   </div>
 </div>
 
-French press is coffee with nothing to hide. No filters pulling out the oils and texture — everything stays in the cup, which means you taste the full personality of the bean. It's heavier, moodier, and more satisfying on a slow morning than almost any other method.
+French press is coffee with nothing to hide. No filters pulling out the oils and texture- everything stays in the cup, which means you taste the full personality of the bean. It's heavier, moodier, and more satisfying on a slow morning than almost any other method.
 
 The catch: grind size matters more than people realize. Too fine and you get silt and bitterness. Too coarse and the cup tastes hollow. Coarser than you think is almost always the right instinct.
 
 ### How to brew
 
 1. Add coffee to the empty press
-2. Pour hot water just off boil over the grounds — all at once
+2. Pour hot water just off boil over the grounds, all at once
 3. Give it a gentle stir to make sure everything is wet
 4. Put the lid on. Don't plunge yet.
 5. Brew for 4 minutes
-6. Press slowly and pour immediately — leaving it sitting extracts bitterness you don't want
+6. Press slowly and pour immediately, leaving it sitting extracts bitterness you don't want
 
 <div class="callout">
   <p class="callout-label">When things go wrong</p>
@@ -106,7 +106,7 @@ The catch: grind size matters more than people realize. Too fine and you get sil
 
 <div class="callout callout--warm">
   <p class="callout-label">Best match</p>
-  <p class="callout-body">Full-bodied coffees with chocolate and caramel notes are made for this method. <a href="/products/anchor-espresso-blend">Anchor Espresso Blend</a> — despite the name — is exceptional in a French press.</p>
+  <p class="callout-body">Full-bodied coffees with chocolate and caramel notes are made for this method. <a href="/products/anchor-espresso-blend">Anchor Espresso Blend</a>, despite the name, is exceptional in a French press.</p>
 </div>
 
 
@@ -129,13 +129,13 @@ The catch: grind size matters more than people realize. Too fine and you get sil
   </div>
 </div>
 
-If you've ever wondered why the same coffee tastes different at a specialty café than it does at home — this is usually why. Pour over strips away the noise and lets origin character speak clearly. Acidity, fruit notes, florals — the flavors that get buried in a drip machine suddenly have room to exist.
+If you've ever wondered why the same coffee tastes different at a specialty café than it does at home, this is usually why. Pour over strips away the noise and lets origin character speak clearly. Acidity, fruit notes, florals- the flavors that get buried in a drip machine suddenly have room to exist.
 
 It looks fussier than it is. You're just pouring water over coffee slowly. The main skill is consistency, not precision.
 
 ### How to brew
 
-1. Rinse your filter with hot water and discard it — this removes paper taste and preheats the vessel
+1. Rinse your filter with hot water and discard it. This removes paper taste and preheats the vessel
 2. Add coffee and gently level the bed
 3. Start your bloom: pour 40–60g of water over the grounds and wait 30–45 seconds while it bubbles and releases gas
 4. Pour the remaining water slowly in steady circles, working from center outward
@@ -152,7 +152,7 @@ It looks fussier than it is. You're just pouring water over coffee slowly. The m
 
 <div class="callout callout--warm">
   <p class="callout-label">Best match</p>
-  <p class="callout-body">This is where single origin coffees earn their reputation. <a href="/collections/single-origin">Our current single origins</a> are worth brewing this way — they're selected specifically because they have something to say when you give them room to say it.</p>
+  <p class="callout-body">This is where single origin coffees earn their reputation. <a href="/collections/single-origin">Our current single origins</a> are worth brewing this way. They're selected specifically because they have something to say when you give them room to say it.</p>
 </div>
 
 
@@ -175,14 +175,14 @@ It looks fussier than it is. You're just pouring water over coffee slowly. The m
   </div>
 </div>
 
-Espresso is coffee under pressure, in every sense of the phrase. It's the method with the steepest learning curve and the highest reward. Small changes — a half-step on your grinder, a slightly uneven tamp — have outsized consequences in the cup. That's what makes it humbling, and also what makes it interesting.
+Espresso is coffee under pressure, in every sense of the phrase. It's the method with the steepest learning curve and the highest reward. Small changesm a half-step on your grinder, a slightly uneven tamp, etc... have outsized consequences in the cup. That's what makes it humbling, and also what makes it interesting.
 
 The key mindset shift: stop chasing perfection and start chasing repeatability. A shot you can make the same way twice is worth more than a perfect shot you can't recreate.
 
 ### How to brew
 
-1. Dose coffee into the portafilter — weigh it if you can
-2. Distribute and tamp evenly — pressure matters less than consistency
+1. Dose coffee into the portafilter, weigh it if you can
+2. Distribute and tamp evenly. Pressure matters less than consistency
 3. Lock in and brew
 4. Target 25–30 seconds to reach your output weight
 
@@ -197,7 +197,7 @@ The key mindset shift: stop chasing perfection and start chasing repeatability. 
 
 <div class="callout callout--warm">
   <p class="callout-label">Best match</p>
-  <p class="callout-body">A coffee built for espresso makes this easier. <a href="/products/anchor-espresso-blend">Anchor Espresso Blend</a> was developed specifically to stay structured and sweet under pressure — and to hold its character in milk without disappearing.</p>
+  <p class="callout-body">A coffee built for espresso makes this easier. <a href="/products/anchor-espresso-blend">Anchor Espresso Blend</a> was developed specifically to stay structured and sweet under pressure and to hold its character in milk without disappearing.</p>
 </div>
 
 
@@ -222,7 +222,7 @@ The key mindset shift: stop chasing perfection and start chasing repeatability. 
 
 Cold brew is the most forgiving thing you can make. Long, slow extraction at low temperatures naturally avoids most bitterness and produces something smooth, sweet, and gentle. You almost have to try to get it wrong.
 
-The tradeoff is time — but it's hands-off time, which barely counts.
+The tradeoff is time, but it's hands-off time, which barely counts.
 
 ### How to brew
 
@@ -234,7 +234,7 @@ The tradeoff is time — but it's hands-off time, which barely counts.
 <div class="callout">
   <p class="callout-label">Things worth knowing</p>
   <ul class="callout-list">
-    <li>Cold brew is a concentrate by default — dilute 1:1 with water or milk to taste.</li>
+    <li>Cold brew is a concentrate by default. Dilute 1:1 with water or milk to taste.</li>
     <li>It keeps well in the fridge for up to a week.</li>
     <li>It's excellent over ice, with oat milk, or plain.</li>
   </ul>
@@ -242,7 +242,7 @@ The tradeoff is time — but it's hands-off time, which barely counts.
 
 <div class="callout callout--warm">
   <p class="callout-label">Best match</p>
-  <p class="callout-body">Medium roasts with sweetness and body work especially well here. <a href="/products/evergreen-blend">Evergreen Blend</a> makes a genuinely great cold brew — balanced and smooth without needing any dilution tricks.</p>
+  <p class="callout-body">Medium roasts with sweetness and body work especially well here. <a href="/products/evergreen-blend">Evergreen Blend</a> makes a genuinely great cold brew. Balanced and smooth without needing any dilution tricks.</p>
 </div>
 
 
@@ -250,8 +250,8 @@ The tradeoff is time — but it's hands-off time, which barely counts.
 
 Change one thing at a time.
 
-That's it. That's the whole framework for getting better at brewing coffee at home. When you change the grind and the dose and the water temperature all at once and the cup improves, you have no idea what actually fixed it. When you change one thing and taste the difference — that's how you actually learn.
+That's it. That's the whole framework for getting better at brewing coffee at home. When you change the grind and the dose and the water temperature all at once and the cup improves, you have no idea what actually fixed it. When you change one thing and taste the difference, that's how you actually learn.
 
-Coffee should be a pleasure, not a puzzle. The more you pay attention, the more enjoyable it gets — and the faster you develop the kind of instinct that makes a good cup feel effortless.
+Coffee should be a pleasure, not a puzzle. The more you pay attention, the more enjoyable it gets and the faster you develop the kind of instinct that makes a good cup feel effortless.
 
 If you're not sure which coffee to start with, [Evergreen Blend](/products/evergreen-blend) is the honest answer for most brewing situations. When you're ready to go further, our [single origins](/collections/single-origin) are waiting.
