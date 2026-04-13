@@ -1320,7 +1320,7 @@ interface GeneratedQueryTypes {
     return: FooterQuery;
     variables: FooterQueryVariables;
   };
-  '#graphql\n  query FeaturedProducts($handle: String!, $first: Int!) {\n    collection(handle: $handle) {\n      products(first: $first) {\n        nodes {\n          id\n          title\n          handle\n          featuredImage {\n            url\n            altText\n          }\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n          variants(first: 1) {\n            nodes {\n              selectedOptions {\n                name\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
+  '#graphql\n  query FeaturedProducts($handle: String!, $first: Int!) {\n    collection(handle: $handle) {\n      products(first: $first, sortKey: CREATED, reverse: true) {\n        nodes {\n          id\n          title\n          handle\n          featuredImage {\n            url\n            altText\n          }\n          priceRange {\n            minVariantPrice {\n              amount\n              currencyCode\n            }\n          }\n          variants(first: 1) {\n            nodes {\n              selectedOptions {\n                name\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n': {
     return: FeaturedProductsQuery;
     variables: FeaturedProductsQueryVariables;
   };

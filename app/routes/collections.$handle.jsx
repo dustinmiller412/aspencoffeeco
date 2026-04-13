@@ -262,7 +262,9 @@ const COLLECTION_QUERY = `#graphql
         first: $first,
         last: $last,
         before: $startCursor,
-        after: $endCursor
+        after: $endCursor,
+        sortKey: CREATED,
+        reverse: true
       ) {
         nodes {
           ...ProductItem

@@ -33,18 +33,31 @@ export async function loader(args) {
 async function loadCriticalData({context}) {
   try {
     const notes = getAllNotesMeta().slice(0, 3);
-    const [{collection}] = await Promise.all([
+    const [featuredCollections] = await Promise.all([
       context.storefront.query(FEATURED_PRODUCTS_QUERY, {
         variables: {
-          handle: 'coffee',
-          first: 4,
+          blendsHandle: 'blends',
+          singleOriginHandle: 'single-origin',
+          first: 8,
         },
       }),
     ]);
 
+    const blendedNodes = featuredCollections?.blends?.products?.nodes || [];
+    const singleOriginNodes = featuredCollections?.singleOrigin?.products?.nodes || [];
+
+    const mergedNodes = [...blendedNodes, ...singleOriginNodes]
+      .filter(Boolean)
+      .filter(
+        (product, index, allProducts) =>
+          allProducts.findIndex((item) => item.id === product.id) === index,
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 4);
+
     return {
       isShopLinked: Boolean(context.env.PUBLIC_STORE_DOMAIN),
-      products: collection?.products ?? null,
+      products: {nodes: mergedNodes},
       notes,
     };
   } catch (error) {
@@ -83,13 +96,46 @@ export default function Homepage() {
 }
 
 const FEATURED_PRODUCTS_QUERY = `#graphql
-  query FeaturedProducts($handle: String!, $first: Int!) {
-    collection(handle: $handle) {
-      products(first: $first) {
+  query FeaturedProducts(
+    $blendsHandle: String!
+    $singleOriginHandle: String!
+    $first: Int!
+  ) {
+    blends: collection(handle: $blendsHandle) {
+      products(first: $first, sortKey: CREATED, reverse: true) {
         nodes {
           id
           title
           handle
+          createdAt
+          featuredImage {
+            url
+            altText
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          variants(first: 1) {
+            nodes {
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+    singleOrigin: collection(handle: $singleOriginHandle) {
+      products(first: $first, sortKey: CREATED, reverse: true) {
+        nodes {
+          id
+          title
+          handle
+          createdAt
           featuredImage {
             url
             altText

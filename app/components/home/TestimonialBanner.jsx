@@ -13,7 +13,7 @@ export default function TestimonialBanner() {
       >
         <div className="aspect-[4/3] w-full overflow-hidden bg-[#c7b09d]">
           <img
-            src="/images/hero-coffee.png"
+            src="/images/blends.png"
             alt="Coffee subscription"
             className="h-full w-full object-cover"
             loading="lazy"
