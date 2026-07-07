@@ -8,7 +8,11 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
+  useSearchParams,
+  useNavigate,
 } from 'react-router';
+import {useEffect, useState} from 'react';
+import {motion, AnimatePresence} from 'framer-motion';
 import {ThemeProvider} from 'next-themes';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
@@ -169,6 +173,39 @@ export function Layout({children}) {
   );
 }
 
+function SubscribedToast() {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (params.get('subscribed') !== 'true') return;
+    setVisible(true);
+    const timer = setTimeout(() => {
+      setVisible(false);
+      navigate('.', {replace: true, preventScrollReset: true});
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [params, navigate]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{opacity: 0, y: 24}}
+          animate={{opacity: 1, y: 0}}
+          exit={{opacity: 0, y: 24}}
+          transition={{duration: 0.35, ease: 'easeOut'}}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] px-6 py-4 rounded-xl border border-[#e7ddd1] bg-white shadow-[0_8px_32px_rgba(92,66,43,0.12)] dark:border-white/10 dark:bg-[#1f1915] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-center pointer-events-none"
+        >
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-0.5">You&apos;re confirmed</p>
+          <p className="text-sm font-medium text-foreground">Welcome to the list. Your 10% off is on the way.</p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   /** @type {RootLoader} */
   const data = useRouteLoaderData('root');
@@ -186,6 +223,7 @@ export default function App() {
       <PageLayout {...data}>
         <Outlet />
       </PageLayout>
+      <SubscribedToast />
     </Analytics.Provider>
   );
 }

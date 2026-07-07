@@ -1,14 +1,5 @@
 import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
-
-function resolveStoreDomain(rawDomain) {
-  const value = String(rawDomain || '').trim();
-  if (!value) return '';
-
-  return value
-    .replace(/^https?:\/\//i, '')
-    .replace(/\/.*$/, '')
-    .trim();
-}
+import {sendEmail} from '~/lib/email.server';
 
 /**
  * @param {Route.ActionArgs} args
@@ -47,44 +38,40 @@ export async function action({request, context}) {
     );
   }
 
-  const storeDomain = resolveStoreDomain(context.env.PUBLIC_STORE_DOMAIN);
-  if (!storeDomain) {
-    return data({ok: false, error: 'Store domain is not configured.'}, {status: 500});
+  const apiKey = context.env.POSTMARK_API_KEY;
+  if (!apiKey) {
+    return data({ok: false, error: 'Email service is not configured.'}, {status: 500});
   }
 
-  const endpoint = `https://${storeDomain}/contact`;
-  const body = new URLSearchParams({
-    form_type: 'contact',
-    utf8: '✓',
-    'contact[name]': contactName,
-    'contact[email]': email,
-    'contact[body]': `Wholesale inquiry for dustin@aspencoffee.co\n\nContact Name: ${contactName}\nBusiness Name: ${businessName}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nWebsite: ${website || 'Not provided'}\nNumber of Locations: ${locationCount || 'Not provided'}\nEstimated Monthly Volume: ${monthlyVolume}\n\nMessage:\n${message}`,
+  const result = await sendEmail({
+    apiKey,
+    from: 'Aspen Coffee Co <hello@aspencoffee.co>',
+    to: 'dustin@aspencoffee.co',
+    replyTo: email,
+    subject: `Wholesale Inquiry — ${businessName}`,
+    text: [
+      `Contact Name: ${contactName}`,
+      `Business Name: ${businessName}`,
+      `Email: ${email}`,
+      `Phone: ${phone || 'Not provided'}`,
+      `Website: ${website || 'Not provided'}`,
+      `Number of Locations: ${locationCount || 'Not provided'}`,
+      `Estimated Monthly Volume: ${monthlyVolume}`,
+      ``,
+      `Message:`,
+      message,
+    ].join('\n'),
   });
 
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: body.toString(),
-    });
-
-    if (!response.ok) {
-      return data(
-        {ok: false, error: 'Unable to send your inquiry right now. Please try again.'},
-        {status: 502},
-      );
-    }
-
-    return data({ok: true});
-  } catch (error) {
-    console.error('Wholesale form submission failed', error);
+  if (!result.ok) {
+    console.error('Wholesale email failed:', result.error);
     return data(
       {ok: false, error: 'Unable to send your inquiry right now. Please try again.'},
-      {status: 500},
+      {status: 502},
     );
   }
+
+  return data({ok: true});
 }
 
 /** @type {Route.MetaFunction} */

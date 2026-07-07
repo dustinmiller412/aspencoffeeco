@@ -13,6 +13,12 @@ export default {
    * @return {Promise<Response>}
    */
   async fetch(request, env, executionContext) {
+    const url = new URL(request.url);
+    if (url.hostname === 'aspencoffeeco.myshopify.com') {
+      url.hostname = 'aspencoffee.co';
+      return Response.redirect(url.toString(), 301);
+    }
+
     try {
       const hydrogenContext = await createHydrogenRouterContext(
         request,

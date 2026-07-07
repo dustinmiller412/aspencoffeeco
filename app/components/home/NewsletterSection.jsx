@@ -10,7 +10,6 @@ export default function NewsletterSection() {
   useEffect(() => {
     if (fetcher.data?.ok) {
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
     }
   }, [fetcher.data]);
 

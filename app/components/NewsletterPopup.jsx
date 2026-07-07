@@ -36,7 +36,7 @@ export function NewsletterPopup() {
   useEffect(() => {
     if (fetcher.data?.ok) {
       setSubmitted(true);
-      window.setTimeout(() => setOpen(false), 1100);
+      window.setTimeout(() => setOpen(false), 2500);
     }
   }, [fetcher.data]);
 
