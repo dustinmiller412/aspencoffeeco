@@ -75,7 +75,7 @@ export default function HeroSection() {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </NavLink>
             <NavLink
-              to="/"
+              to="/about"
               className="inline-flex items-center justify-center gap-3 border border-foreground/15 bg-white/60 px-8 py-4 text-sm font-medium tracking-[0.16em] uppercase text-foreground transition-colors duration-500 hover:bg-white/85 dark:border-white/15 dark:bg-black/30 dark:hover:bg-black/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 dark:focus-visible:ring-offset-background select-none"
             >
               Our Story

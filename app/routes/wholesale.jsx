@@ -196,7 +196,7 @@ export default function Wholesale() {
                 className="h-12 w-full rounded-lg border border-[#dfd1c2] bg-white px-4 text-sm text-foreground outline-none transition-colors focus:border-foreground/45 dark:border-white/15 dark:bg-white/5"
               >
                 <option value="" disabled>Select volume range</option>
-                <option value="Under 25 lbs">Under 25 lbs</option>
+                <option value="5 - 25 lbs">5 - 25 lbs</option>
                 <option value="25 - 75 lbs">25 - 75 lbs</option>
                 <option value="75 - 150 lbs">75 - 150 lbs</option>
                 <option value="150+ lbs">150+ lbs</option>

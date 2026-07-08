@@ -187,7 +187,7 @@ export default function Collection() {
                         ${formatProductPrice(product.priceRange?.minVariantPrice?.amount || '0')}
                       </span>
                     </div>
-                    <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-accent mt-2 group-hover:text-foreground transition-colors">
+                    <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-muted-foreground mt-2 group-hover:text-foreground transition-colors">
                       View Details
                       <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                     </span>
