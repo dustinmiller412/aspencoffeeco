@@ -68,6 +68,7 @@ export function NewsletterPopup() {
           </p>
         ) : (
           <fetcher.Form method="post" action="/api/newsletter" className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden'}} />
             <input
               type="email"
               name="email"

@@ -53,6 +53,13 @@ async function subscribeViaCustomerCreate(context, email) {
  */
 export async function action({request, context}) {
   const formData = await request.formData();
+
+  // Honeypot: bots fill this, humans never see it
+  const honeypot = String(formData.get('website') || '');
+  if (honeypot) {
+    return data({ok: true});
+  }
+
   const email = String(formData.get('email') || '').trim();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

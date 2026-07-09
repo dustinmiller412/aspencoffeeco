@@ -43,6 +43,7 @@ export default function NewsletterSection() {
             </motion.p>
           ) : (
             <fetcher.Form method="post" action="/api/newsletter" className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden'}} />
               <input
                 type="email"
                 name="email"
