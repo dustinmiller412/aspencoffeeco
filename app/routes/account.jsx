@@ -72,6 +72,10 @@ function AccountMenu() {
         Orders &nbsp;
       </NavLink>
       &nbsp;|&nbsp;
+      <NavLink to="/account/subscriptions" style={isActiveStyle}>
+        &nbsp; Subscriptions &nbsp;
+      </NavLink>
+      &nbsp;|&nbsp;
       <NavLink to="/account/profile" style={isActiveStyle}>
         &nbsp; Profile &nbsp;
       </NavLink>
