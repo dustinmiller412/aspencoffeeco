@@ -1,4 +1,5 @@
 import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
+import {useEffect, useRef} from 'react';
 import {sendEmail} from '~/lib/email.server';
 
 /**
@@ -6,6 +7,14 @@ import {sendEmail} from '~/lib/email.server';
  */
 export async function action({request, context}) {
   const formData = await request.formData();
+
+  // Honeypot — bots fill this, real users never see it
+  if (formData.get('_hp')) return data({ok: true});
+
+  // Timing check — bots submit instantly; require at least 3 seconds
+  const renderedAt = Number(formData.get('_t') || 0);
+  if (!renderedAt || Date.now() - renderedAt < 3000) return data({ok: true});
+
   const name = String(formData.get('name') || '').trim();
   const email = String(formData.get('email') || '').trim();
   const subject = String(formData.get('subject') || '').trim();
@@ -70,6 +79,13 @@ export default function Contact() {
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
+  const timestampRef = useRef(null);
+
+  useEffect(() => {
+    if (timestampRef.current) {
+      timestampRef.current.value = Date.now().toString();
+    }
+  }, []);
 
   return (
     <div className="bg-[linear-gradient(180deg,#fefcf8_0%,#f8f1e8_40%,#fffdfa_100%)] px-6 pb-36 pt-32 dark:bg-[linear-gradient(180deg,#13110f_0%,#171310_45%,#14110f_100%)] md:pt-40">
@@ -89,6 +105,15 @@ export default function Contact() {
             className="w-full max-w-none space-y-5 px-2 md:px-4"
             style={{maxWidth: 'none'}}
           >
+            {/* Timing token — set on mount so instant bot submissions fail */}
+            <input ref={timestampRef} type="hidden" name="_t" defaultValue="" />
+
+            {/* Honeypot — visually hidden, bots fill it, real users don't */}
+            <div aria-hidden="true" style={{position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none'}}>
+              <label htmlFor="contact-website">Website</label>
+              <input id="contact-website" name="_hp" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
+
             <div>
               <label htmlFor="contact-name" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
                 Name

@@ -42,53 +42,63 @@ export default function AccountLayout() {
 
   const heading = customer
     ? customer.firstName
-      ? `Welcome, ${customer.firstName}`
-      : `Welcome to your account.`
-    : 'Account Details';
+      ? `Welcome back, ${customer.firstName}`
+      : `My Account`
+    : 'My Account';
 
   return (
-    <div className="account">
-      <h1>{heading}</h1>
-      <br />
+    <div className="max-w-4xl mx-auto px-4 pb-10 pt-48">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight m-0">{heading}</h1>
+        <Logout />
+      </div>
       <AccountMenu />
-      <br />
-      <br />
-      <Outlet context={{customer}} />
+      <div className="mt-8">
+        <Outlet context={{customer}} />
+      </div>
     </div>
   );
 }
 
 function AccountMenu() {
-  function isActiveStyle({isActive, isPending}) {
-    return {
-      fontWeight: isActive ? 'bold' : undefined,
-      color: isPending ? 'grey' : 'black',
-    };
-  }
-
   return (
-    <nav role="navigation">
-      <NavLink to="/account/orders" style={isActiveStyle}>
-        Orders &nbsp;
-      </NavLink>
-      &nbsp;|&nbsp;
-      <NavLink to="/account/profile" style={isActiveStyle}>
-        &nbsp; Profile &nbsp;
-      </NavLink>
-      &nbsp;|&nbsp;
-      <NavLink to="/account/addresses" style={isActiveStyle}>
-        &nbsp; Addresses &nbsp;
-      </NavLink>
-      &nbsp;|&nbsp;
-      <Logout />
+    <nav
+      role="navigation"
+      className="flex gap-1 border-b border-[var(--border)] overflow-x-auto"
+    >
+      {[
+        {to: '/account/orders', label: 'Orders'},
+        {to: '/account/subscriptions', label: 'Subscriptions'},
+        {to: '/account/profile', label: 'Profile'},
+        {to: '/account/addresses', label: 'Addresses'},
+      ].map(({to, label}) => (
+        <NavLink
+          key={to}
+          to={to}
+          className={({isActive}) =>
+            `px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
+              isActive
+                ? 'border-[var(--foreground)] text-[var(--foreground)]'
+                : 'border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
+            }`
+          }
+        >
+          {label}
+        </NavLink>
+      ))}
     </nav>
   );
 }
 
 function Logout() {
   return (
-    <Form className="account-logout" method="POST" action="/account/logout">
-      &nbsp;<button type="submit">Sign out</button>
+    <Form method="POST" action="/account/logout">
+      <button
+        type="submit"
+        className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
+      >
+        Sign out
+      </button>
     </Form>
   );
 }

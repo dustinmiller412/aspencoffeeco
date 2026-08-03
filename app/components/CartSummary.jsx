@@ -2,6 +2,8 @@ import {CartForm, Money} from '@shopify/hydrogen';
 import {useEffect, useId, useRef, useState} from 'react';
 import {useFetcher} from 'react-router';
 
+const FREE_SHIPPING_THRESHOLD = 40;
+
 /**
  * @param {CartSummaryProps}
  */
@@ -27,6 +29,7 @@ export function CartSummary({cart, layout}) {
           : 'mt-8 border-t border-border/80 pt-4'
       }`}
     >
+      <FreeShippingProgress subtotal={cart?.cost?.subtotalAmount} />
       <h4 id={summaryId} className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
         Order Summary
       </h4>
@@ -59,6 +62,49 @@ export function CartSummary({cart, layout}) {
         </p>
       ) : null}
       <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} layout={layout} />
+    </div>
+  );
+}
+
+/** @param {{subtotal: {amount: string; currencyCode: string} | undefined}} */
+function FreeShippingProgress({subtotal}) {
+  const amount = parseFloat(subtotal?.amount || '0');
+  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - amount);
+  const progress = Math.min(100, (amount / FREE_SHIPPING_THRESHOLD) * 100);
+  const qualified = remaining === 0;
+
+  return (
+    <div className="mb-4 rounded-md bg-secondary/50 px-3 py-2.5">
+      <p className="text-xs text-foreground">
+        {qualified ? (
+          <span className="font-medium text-green-600 dark:text-green-400">
+            You&apos;ve unlocked free shipping!
+          </span>
+        ) : (
+          <>
+            Add{' '}
+            <span className="font-medium">
+              ${remaining.toFixed(2)}
+            </span>{' '}
+            more for free shipping
+          </>
+        )}
+      </p>
+      <div
+        role="progressbar"
+        aria-valuenow={Math.round(progress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Progress to free shipping"
+        className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-border"
+      >
+        <div
+          className={`h-full rounded-full transition-all duration-500 ${
+            qualified ? 'bg-green-500' : 'bg-primary'
+          }`}
+          style={{width: `${progress}%`}}
+        />
+      </div>
     </div>
   );
 }

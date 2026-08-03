@@ -588,59 +588,39 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 
-.account-logout {
-  display: inline-block;
+.account-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
 }
 
-/*
-* --------------------------------------------------
-* Order Search Form - Minimal & Responsive
-* --------------------------------------------------
-*/
-.order-search-form {
-  margin-bottom: 1.5rem;
+.account-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: transparent;
+  color: inherit;
+  margin: 0;
 }
 
-.order-search-fieldset {
-  border: 1px solid #e5e5e5;
-  border-radius: 4px;
-  padding: 1rem;
-}
-
-.order-search-legend {
-  font-weight: 600;
-  padding: 0 0.5rem;
-}
-
-.order-search-active {
-  font-weight: normal;
-  opacity: 0.7;
-  margin-left: 0.5rem;
-}
-
-.order-search-inputs {
-  display: grid;
-  gap: 1rem;
-  margin: 0.25rem 0 1rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .order-search-inputs {
-    grid-template-columns: 1fr 1fr;
-  }
+.account-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
 }
 
 .order-search-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: transparent;
+  color: inherit;
+  margin: 0;
 }
 
-.order-search-buttons {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+.order-search-input:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
 }

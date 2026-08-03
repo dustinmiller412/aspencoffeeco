@@ -86,48 +86,60 @@ export default function AccountProfile() {
   /** @type {ActionReturnData} */
   const action = useActionData();
   const customer = action?.customer ?? account?.customer;
+  const isSaving = state !== 'idle';
 
   return (
-    <div className="account-profile">
-      <h2>My profile</h2>
-      <br />
-      <Form method="PUT">
-        <legend>Personal information</legend>
-        <fieldset>
-          <label htmlFor="firstName">First name</label>
-          <input
-            id="firstName"
-            name="firstName"
-            type="text"
-            autoComplete="given-name"
-            placeholder="First name"
-            aria-label="First name"
-            defaultValue={customer.firstName ?? ''}
-            minLength={2}
-          />
-          <label htmlFor="lastName">Last name</label>
-          <input
-            id="lastName"
-            name="lastName"
-            type="text"
-            autoComplete="family-name"
-            placeholder="Last name"
-            aria-label="Last name"
-            defaultValue={customer.lastName ?? ''}
-            minLength={2}
-          />
-        </fieldset>
-        {action?.error ? (
-          <p>
-            <mark>
-              <small>{action.error}</small>
-            </mark>
-          </p>
-        ) : (
-          <br />
+    <div className="max-w-lg">
+      <h2 className="text-lg font-semibold mb-6">Personal information</h2>
+      <Form method="PUT" style={{maxWidth: '100%'}}>
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="firstName" className="account-label">
+              First name
+            </label>
+            <input
+              id="firstName"
+              name="firstName"
+              type="text"
+              autoComplete="given-name"
+              placeholder="First name"
+              aria-label="First name"
+              defaultValue={customer.firstName ?? ''}
+              minLength={2}
+              className="account-input"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="lastName" className="account-label">
+              Last name
+            </label>
+            <input
+              id="lastName"
+              name="lastName"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Last name"
+              aria-label="Last name"
+              defaultValue={customer.lastName ?? ''}
+              minLength={2}
+              className="account-input"
+            />
+          </div>
+        </div>
+
+        {action?.error && (
+          <p className="mb-4 text-sm text-red-500">{action.error}</p>
         )}
-        <button type="submit" disabled={state !== 'idle'}>
-          {state !== 'idle' ? 'Updating' : 'Update'}
+        {action?.customer && !action?.error && (
+          <p className="mb-4 text-sm text-emerald-500">Profile updated.</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSaving}
+          className="px-5 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
+        >
+          {isSaving ? 'Saving…' : 'Save changes'}
         </button>
       </Form>
     </div>
