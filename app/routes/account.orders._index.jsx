@@ -59,7 +59,7 @@ export default function Orders() {
   const {orders} = customer;
 
   return (
-    <div className="orders">
+    <div>
       <OrderSearchForm currentFilters={filters} />
       <OrdersTable orders={orders} filters={filters} />
     </div>
@@ -76,7 +76,7 @@ function OrdersTable({orders, filters}) {
   const hasFilters = !!(filters.name || filters.confirmationNumber);
 
   return (
-    <div className="acccount-orders" aria-live="polite">
+    <div aria-live="polite">
       {orders?.nodes.length ? (
         <PaginatedResourceSection connection={orders}>
           {({node: order}) => <OrderItem key={order.id} order={order} />}
@@ -93,22 +93,26 @@ function OrdersTable({orders, filters}) {
  */
 function EmptyOrders({hasFilters = false}) {
   return (
-    <div>
+    <div className="py-16 text-center text-[var(--muted-foreground)]">
       {hasFilters ? (
         <>
-          <p>No orders found matching your search.</p>
-          <br />
-          <p>
-            <Link to="/account/orders">Clear filters →</Link>
-          </p>
+          <p className="mb-4">No orders found matching your search.</p>
+          <Link
+            to="/account/orders"
+            className="text-sm underline underline-offset-4 hover:text-[var(--foreground)]"
+          >
+            Clear filters →
+          </Link>
         </>
       ) : (
         <>
-          <p>You haven&apos;t placed any orders yet.</p>
-          <br />
-          <p>
-            <Link to="/collections">Start Shopping →</Link>
-          </p>
+          <p className="mb-4">You haven&apos;t placed any orders yet.</p>
+          <Link
+            to="/collections"
+            className="text-sm underline underline-offset-4 hover:text-[var(--foreground)]"
+          >
+            Start Shopping →
+          </Link>
         </>
       )}
     </div>
@@ -152,49 +156,48 @@ function OrderSearchForm({currentFilters}) {
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="order-search-form"
+      className="mb-6 max-w-none"
       aria-label="Search orders"
+      style={{maxWidth: '100%'}}
     >
-      <fieldset className="order-search-fieldset">
-        <legend className="order-search-legend">Filter Orders</legend>
-
-        <div className="order-search-inputs">
-          <input
-            type="search"
-            name={ORDER_FILTER_FIELDS.NAME}
-            placeholder="Order #"
-            aria-label="Order number"
-            defaultValue={currentFilters.name || ''}
-            className="order-search-input"
-          />
-          <input
-            type="search"
-            name={ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER}
-            placeholder="Confirmation #"
-            aria-label="Confirmation number"
-            defaultValue={currentFilters.confirmationNumber || ''}
-            className="order-search-input"
-          />
-        </div>
-
-        <div className="order-search-buttons">
-          <button type="submit" disabled={isSearching}>
-            {isSearching ? 'Searching' : 'Search'}
+      <div className="flex flex-wrap gap-3 items-end">
+        <input
+          type="search"
+          name={ORDER_FILTER_FIELDS.NAME}
+          placeholder="Order #"
+          aria-label="Order number"
+          defaultValue={currentFilters.name || ''}
+          className="order-search-input flex-1 min-w-[140px]"
+        />
+        <input
+          type="search"
+          name={ORDER_FILTER_FIELDS.CONFIRMATION_NUMBER}
+          placeholder="Confirmation #"
+          aria-label="Confirmation number"
+          defaultValue={currentFilters.confirmationNumber || ''}
+          className="order-search-input flex-1 min-w-[160px]"
+        />
+        <button
+          type="submit"
+          disabled={isSearching}
+          className="px-4 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
+        >
+          {isSearching ? 'Searching…' : 'Search'}
+        </button>
+        {hasFilters && (
+          <button
+            type="button"
+            disabled={isSearching}
+            onClick={() => {
+              setSearchParams(new URLSearchParams());
+              formRef.current?.reset();
+            }}
+            className="px-4 py-2 text-sm font-medium border border-[var(--border)] rounded-md hover:bg-[var(--accent)] transition-colors disabled:opacity-50"
+          >
+            Clear
           </button>
-          {hasFilters && (
-            <button
-              type="button"
-              disabled={isSearching}
-              onClick={() => {
-                setSearchParams(new URLSearchParams());
-                formRef.current?.reset();
-              }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      </fieldset>
+        )}
+      </div>
     </form>
   );
 }
@@ -202,25 +205,84 @@ function OrderSearchForm({currentFilters}) {
 /**
  * @param {{order: OrderItemFragment}}
  */
+const FINANCIAL_STATUS_STYLES = {
+  PAID: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
+  PENDING: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
+  REFUNDED: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
+  PARTIALLY_REFUNDED: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
+  VOIDED: 'bg-[var(--muted)] text-[var(--muted-foreground)]',
+};
+
+const FULFILLMENT_STATUS_STYLES = {
+  SUCCESS: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
+  FAILURE: 'bg-red-500/15 text-red-600 dark:text-red-400',
+  PENDING: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
+  IN_PROGRESS: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
+};
+
+function StatusBadge({label, styleMap}) {
+  const cls =
+    styleMap[label] ?? 'bg-[var(--muted)] text-[var(--muted-foreground)]';
+  return (
+    <span
+      className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${cls}`}
+    >
+      {label}
+    </span>
+  );
+}
+
 function OrderItem({order}) {
   const fulfillmentStatus = flattenConnection(order.fulfillments)[0]?.status;
+  const orderUrl = `/account/orders/${btoa(order.id)}`;
+
   return (
-    <>
-      <fieldset>
-        <Link to={`/account/orders/${btoa(order.id)}`}>
-          <strong>#{order.number}</strong>
+    <div className="flex items-center justify-between gap-4 py-4 border-b border-[var(--border)] last:border-0">
+      <div className="flex flex-col gap-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Link
+            to={orderUrl}
+            className="font-semibold hover:underline underline-offset-2"
+          >
+            Order #{order.number}
+          </Link>
+          {order.financialStatus && (
+            <StatusBadge
+              label={order.financialStatus}
+              styleMap={FINANCIAL_STATUS_STYLES}
+            />
+          )}
+          {fulfillmentStatus && (
+            <StatusBadge
+              label={fulfillmentStatus}
+              styleMap={FULFILLMENT_STATUS_STYLES}
+            />
+          )}
+        </div>
+        <p className="text-sm text-[var(--muted-foreground)]">
+          {new Date(order.processedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+          {order.confirmationNumber && (
+            <span> · #{order.confirmationNumber}</span>
+          )}
+        </p>
+      </div>
+      <div className="flex items-center gap-4 shrink-0">
+        <Money
+          data={order.totalPrice}
+          className="font-medium tabular-nums"
+        />
+        <Link
+          to={orderUrl}
+          className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
+        >
+          View →
         </Link>
-        <p>{new Date(order.processedAt).toDateString()}</p>
-        {order.confirmationNumber && (
-          <p>Confirmation: {order.confirmationNumber}</p>
-        )}
-        <p>{order.financialStatus}</p>
-        {fulfillmentStatus && <p>{fulfillmentStatus}</p>}
-        <Money data={order.totalPrice} />
-        <Link to={`/account/orders/${btoa(order.id)}`}>View Order →</Link>
-      </fieldset>
-      <br />
-    </>
+      </div>
+    </div>
   );
 }
 

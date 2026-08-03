@@ -1,4 +1,5 @@
 import {Analytics, getShopAnalytics, useNonce} from '@shopify/hydrogen';
+import {Toaster} from 'sonner';
 import {
   Outlet,
   useRouteError,
@@ -224,6 +225,7 @@ export default function App() {
         <Outlet />
       </PageLayout>
       <SubscribedToast />
+      <Toaster position="bottom-right" theme="system" richColors />
     </Analytics.Provider>
   );
 }

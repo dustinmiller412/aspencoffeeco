@@ -63,7 +63,8 @@ export function sealClient(token) {
       throw new Error(`Seal API ${res.status}: ${text}`);
     }
 
-    return res.json();
+    const json = await res.json();
+    return json.payload ?? json;
   }
 
   return {
