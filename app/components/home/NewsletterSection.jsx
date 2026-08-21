@@ -21,7 +21,7 @@ export default function NewsletterSection() {
           whileInView={{opacity: 1, y: 0}}
           viewport={{once: true}}
           transition={{duration: 0.8}}
-          className="max-w-2xl mx-auto rounded-[2rem] border border-[#e7ddd1] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,246,241,0.92))] px-8 py-14 text-center shadow-[0_20px_50px_rgba(92,66,43,0.045)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] dark:shadow-[0_20px_50px_rgba(0,0,0,0.24)]"
+          className="max-w-2xl mx-auto text-center"
         >
           <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
             ROASTED FRESH. DELIVERED FIRST.

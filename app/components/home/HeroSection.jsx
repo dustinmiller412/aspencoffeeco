@@ -38,15 +38,6 @@ export default function HeroSection() {
           transition={{duration: 1, ease: [0.22, 1, 0.36, 1]}}
           className="max-w-3xl"
         >
-          <motion.p
-            initial={{opacity: 0}}
-            animate={{opacity: 1}}
-            transition={{delay: 0.3, duration: 0.8}}
-            className="text-xs tracking-[0.24em] uppercase text-white mb-6"
-          >
-            Your next favorite cup starts here.
-          </motion.p>
-
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium leading-[0.88] tracking-[0.01em] text-foreground mb-8">
             From farm to cup, {' '}
             <span className="italic text-accent dark:text-stone-400">every coffee has a story.</span>

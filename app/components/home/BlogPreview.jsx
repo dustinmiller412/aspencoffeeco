@@ -41,10 +41,10 @@ export default function BlogPreview({notes = []}) {
               >
                 <NavLink
                   to={`/fieldnotes/${note.slug}`}
-                  className="group block cursor-pointer rounded-[1.75rem] border border-[#e7ddd1] bg-white/70 p-4 text-inherit no-underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:border-white/10 dark:bg-white/5"
+                  className="group block cursor-pointer text-inherit no-underline hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
                 >
                   {note.coverImage ? (
-                    <div className="aspect-[16/10] overflow-hidden rounded-[1.2rem] bg-[#f6efe7] mb-6 dark:bg-white/10">
+                    <div className="aspect-[16/10] overflow-hidden rounded-lg bg-[#f6efe7] mb-6 dark:bg-white/10">
                       <img
                         src={note.coverImage}
                         alt={note.title}

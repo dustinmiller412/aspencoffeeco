@@ -45,14 +45,14 @@ export default function About() {
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <NavLink
               to="/collections/coffee"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Shop Coffee
               <ArrowRight className="h-4 w-4" />
             </NavLink>
             <NavLink
               to="/fieldnotes"
-              className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground transition-colors hover:bg-background/70"
+              className="inline-flex items-center gap-2 border border-border/70 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground transition-colors hover:bg-background/70"
             >
               Read Field Notes
             </NavLink>
@@ -145,14 +145,14 @@ export default function About() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <NavLink
               to="/collections/coffee"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Browse Current Coffees
               <ArrowRight className="h-4 w-4" />
             </NavLink>
             <NavLink
               to="/fieldnotes"
-              className="inline-flex items-center gap-2 rounded-full border border-border/60 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-2 border border-border/60 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
             >
               Read Field Notes
             </NavLink>

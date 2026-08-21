@@ -36,7 +36,17 @@ export default function FeaturedProducts({products}) {
           </NavLink>
         </div>
 
-        <Suspense fallback={<div>Loading products...</div>}>
+        <Suspense fallback={
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 md:gap-6">
+            {[0,1,2,3].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="aspect-[3/4] bg-[#f0e8df] dark:bg-white/10 mb-5" />
+                <div className="h-5 bg-[#e8ddd4] dark:bg-white/10 rounded mb-2 w-3/4" />
+                <div className="h-4 bg-[#e8ddd4] dark:bg-white/10 rounded w-1/2" />
+              </div>
+            ))}
+          </div>
+        }>
           <Await resolve={products}>
             {(resolvedProducts) => {
               if (!resolvedProducts?.nodes?.length) return null;
@@ -55,9 +65,9 @@ export default function FeaturedProducts({products}) {
                     >
                       <NavLink
                         to={`/products/${product.handle}`}
-                        className="group block rounded-[2rem] border border-[#e7ddd1] bg-white/72 p-4 text-inherit no-underline hover:no-underline shadow-[0_18px_50px_rgba(91,64,40,0.04)] backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:shadow-[0_18px_50px_rgba(0,0,0,0.22)]"
+                        className="group block text-inherit no-underline hover:no-underline"
                       >
-                        <div className="aspect-[3/4] overflow-hidden rounded-[1.4rem] mb-6 bg-[#f5eee6] dark:bg-white/10">
+                        <div className="aspect-[3/4] overflow-hidden mb-5 bg-[#f5eee6] dark:bg-white/10">
                           {product.featuredImage && (
                             <Image
                               data={product.featuredImage}
