@@ -254,21 +254,25 @@ export default function Addresses() {
   const {defaultAddress, addresses} = customer;
 
   return (
-    <div className="max-w-2xl">
-      {addresses.nodes.length > 0 && (
-        <div className="mb-10">
-          <h2 className="text-lg font-semibold mb-4">Saved addresses</h2>
+    <div className="grid items-start gap-10 lg:grid-cols-2">
+      <section>
+        <h2 className="mb-6 text-3xl">Saved addresses</h2>
+        {addresses.nodes.length > 0 ? (
           <ExistingAddresses
             addresses={addresses}
             defaultAddress={defaultAddress}
           />
-        </div>
-      )}
+        ) : (
+          <p className="block-card m-0 p-6 text-sm">
+            No saved addresses yet. Add one and it&apos;ll be ready at checkout.
+          </p>
+        )}
+      </section>
 
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Add new address</h2>
+      <section className="block-card p-6 md:p-8 lg:sticky lg:top-28">
+        <h2 className="mb-6 text-3xl">Add new address</h2>
         <NewAddressForm key={addresses.nodes.length} />
-      </div>
+      </section>
     </div>
   );
 }
@@ -299,7 +303,7 @@ function NewAddressForm() {
           disabled={stateForMethod('POST') !== 'idle'}
           formMethod="POST"
           type="submit"
-          className="px-5 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="btn-ink"
         >
           {stateForMethod('POST') !== 'idle' ? 'Adding…' : 'Add address'}
         </button>
@@ -312,31 +316,33 @@ function NewAddressForm() {
  * @param {Pick<CustomerFragment, 'addresses' | 'defaultAddress'>}
  */
 function ExistingAddresses({addresses, defaultAddress}) {
-  const {state, formMethod} = useNavigation();
+  const {state, formMethod, formData} = useNavigation();
+  const deletingId =
+    state !== 'idle' && formMethod === 'DELETE' ? formData?.get('addressId') : null;
 
   return (
     <div className="flex flex-col gap-4">
       {addresses.nodes.map((address) => {
         const isDefault = defaultAddress?.id === address.id;
-        const isDeleting = state !== 'idle' && formMethod === 'DELETE';
+        const isDeleting = deletingId === address.id;
         const nameLine = [address.firstName, address.lastName].filter(Boolean).join(' ');
         const cityLine = [address.city, address.zoneCode, address.zip].filter(Boolean).join(', ');
 
         return (
-          <div key={address.id} className="border border-[var(--border)] rounded-lg p-5 flex items-start justify-between gap-4">
+          <div key={address.id} className="block-card p-5 flex items-start justify-between gap-4">
             <div className="text-sm space-y-0.5">
               {isDefault && (
-                <span className="inline-block mb-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                <span className="eyebrow mb-3 inline-block border-2 border-ink bg-pop-1 px-2 py-0.5 text-[0.6rem]">
                   Default
                 </span>
               )}
-              {nameLine && <p className="font-medium">{nameLine}</p>}
-              {address.company && <p className="text-[var(--muted-foreground)]">{address.company}</p>}
-              {address.address1 && <p className="text-[var(--muted-foreground)]">{address.address1}</p>}
-              {address.address2 && <p className="text-[var(--muted-foreground)]">{address.address2}</p>}
-              {cityLine && <p className="text-[var(--muted-foreground)]">{cityLine}</p>}
-              {address.territoryCode && <p className="text-[var(--muted-foreground)]">{address.territoryCode}</p>}
-              {address.phoneNumber && <p className="text-[var(--muted-foreground)]">{address.phoneNumber}</p>}
+              {nameLine && <p className="mb-1 font-display text-base uppercase">{nameLine}</p>}
+              {address.company && <p className="text-muted-foreground">{address.company}</p>}
+              {address.address1 && <p className="text-muted-foreground">{address.address1}</p>}
+              {address.address2 && <p className="text-muted-foreground">{address.address2}</p>}
+              {cityLine && <p className="text-muted-foreground">{cityLine}</p>}
+              {address.territoryCode && <p className="text-muted-foreground">{address.territoryCode}</p>}
+              {address.phoneNumber && <p className="text-muted-foreground">{address.phoneNumber}</p>}
             </div>
 
             <Form method="DELETE" className="shrink-0">
@@ -344,7 +350,7 @@ function ExistingAddresses({addresses, defaultAddress}) {
               <button
                 type="submit"
                 disabled={isDeleting}
-                className="text-sm text-red-500 hover:text-red-400 transition-colors disabled:opacity-50"
+                className="text-sm font-bold text-destructive underline underline-offset-4 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? 'Removing…' : 'Remove'}
               </button>
@@ -446,14 +452,14 @@ export function AddressForm({addressId, address, defaultAddress, children}) {
             type="checkbox"
             className="w-4 h-4 accent-[var(--foreground)]"
           />
-          <label htmlFor={`${addressId}-defaultAddress`} className="text-sm text-[var(--muted-foreground)]">
+          <label htmlFor={`${addressId}-defaultAddress`} className="text-sm text-muted-foreground">
             Set as default address
           </label>
         </div>
       </div>
 
       {error && (
-        <p className="mt-3 text-sm text-red-500">{error}</p>
+        <p className="mt-3 text-sm text-destructive font-semibold">{error}</p>
       )}
 
       <div className="mt-4">

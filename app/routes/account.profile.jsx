@@ -2,6 +2,7 @@ import {CUSTOMER_UPDATE_MUTATION} from '~/graphql/customer-account/CustomerUpdat
 import {
   data,
   Form,
+  Link,
   useActionData,
   useNavigation,
   useOutletContext,
@@ -88,60 +89,91 @@ export default function AccountProfile() {
   const customer = action?.customer ?? account?.customer;
   const isSaving = state !== 'idle';
 
+  const email = account?.customer?.emailAddress?.emailAddress;
+  const defaultAddress = account?.customer?.defaultAddress;
+
   return (
-    <div className="max-w-lg">
-      <h2 className="text-lg font-semibold mb-6">Personal information</h2>
-      <Form method="PUT" style={{maxWidth: '100%'}}>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="firstName" className="account-label">
-              First name
-            </label>
-            <input
-              id="firstName"
-              name="firstName"
-              type="text"
-              autoComplete="given-name"
-              placeholder="First name"
-              aria-label="First name"
-              defaultValue={customer.firstName ?? ''}
-              minLength={2}
-              className="account-input"
-            />
+    <div className="grid items-start gap-8 lg:grid-cols-[1.3fr_1fr]">
+      <section className="block-card p-6 md:p-8">
+        <h2 className="mb-6 text-3xl">Personal information</h2>
+        <Form method="PUT" style={{maxWidth: '100%'}}>
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="firstName" className="account-label">
+                First name
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                placeholder="First name"
+                aria-label="First name"
+                defaultValue={customer.firstName ?? ''}
+                minLength={2}
+                className="account-input"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="lastName" className="account-label">
+                Last name
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                placeholder="Last name"
+                aria-label="Last name"
+                defaultValue={customer.lastName ?? ''}
+                minLength={2}
+                className="account-input"
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="lastName" className="account-label">
-              Last name
-            </label>
-            <input
-              id="lastName"
-              name="lastName"
-              type="text"
-              autoComplete="family-name"
-              placeholder="Last name"
-              aria-label="Last name"
-              defaultValue={customer.lastName ?? ''}
-              minLength={2}
-              className="account-input"
-            />
-          </div>
+
+          {action?.error && (
+            <p className="mb-4 text-sm font-semibold text-destructive">{action.error}</p>
+          )}
+          {action?.customer && !action?.error && (
+            <p className="mb-4 border-2 border-ink bg-pop-1 px-3 py-2 text-sm font-bold">
+              Profile updated.
+            </p>
+          )}
+
+          <button type="submit" disabled={isSaving} className="btn-ink">
+            {isSaving ? 'Saving…' : 'Save changes'}
+          </button>
+        </Form>
+      </section>
+
+      <section className="block-card overflow-hidden">
+        <div className="border-b-2 border-ink bg-pop-1 px-6 py-4">
+          <p className="eyebrow m-0">Account details</p>
         </div>
-
-        {action?.error && (
-          <p className="mb-4 text-sm text-red-500">{action.error}</p>
-        )}
-        {action?.customer && !action?.error && (
-          <p className="mb-4 text-sm text-emerald-500">Profile updated.</p>
-        )}
-
-        <button
-          type="submit"
-          disabled={isSaving}
-          className="px-5 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
-        >
-          {isSaving ? 'Saving…' : 'Save changes'}
-        </button>
-      </Form>
+        <dl className="m-0 divide-y-2 divide-ink">
+          <div className="px-6 py-5">
+            <dt className="account-label mb-1">Sign-in email</dt>
+            <dd className="m-0 break-all font-semibold">{email || '—'}</dd>
+            <dd className="m-0 mt-1 text-xs opacity-70">
+              This is the email you sign in with.
+            </dd>
+          </div>
+          <div className="px-6 py-5">
+            <dt className="account-label mb-1">Default shipping address</dt>
+            <dd className="m-0 text-sm leading-relaxed">
+              {defaultAddress?.formatted?.length
+                ? defaultAddress.formatted.join(', ')
+                : 'No default address yet.'}
+            </dd>
+            <dd className="m-0 mt-3">
+              <Link to="/account/addresses" className="eyebrow underline decoration-cta decoration-[3px] underline-offset-4">
+                Manage addresses →
+              </Link>
+            </dd>
+          </div>
+        </dl>
+      </section>
     </div>
   );
 }

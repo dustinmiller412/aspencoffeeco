@@ -1,4 +1,4 @@
-import {NavLink} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 
 /** @type {Route.MetaFunction} */
 export const meta = () => {
@@ -64,68 +64,54 @@ const BREW_METHODS = [
   },
 ];
 
+const TONES = ['bg-pop-1', 'bg-cta', 'bg-pop-2'];
+
 export default function GrindSizeGuide() {
   return (
-    <div className="bg-[linear-gradient(180deg,#fffdfa_0%,#f8f0e6_42%,#f5ebde_72%,#fffdfa_100%)] px-6 pb-24 pt-32 dark:bg-[linear-gradient(180deg,#13110f_0%,#1b1714_42%,#17130f_100%)] md:pt-36">
-      <div className="mx-auto max-w-6xl">
-        <header className="mb-14 text-center">
-          <h1 className="mt-14 font-serif text-5xl leading-[0.96] tracking-[0.01em] text-foreground md:text-6xl">
-            Grind Size Guide
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Use this quick reference to dial in your grind before brewing. Grind consistency changes extraction,
-            cup balance, and how your coffee tastes.
-          </p>
-        </header>
+    <div>
+      <PageHeader eyebrow="Brew better" title="Grind size guide" tone="bg-cta">
+        Use this quick reference to dial in your grind before brewing. Grind consistency changes extraction,
+        cup balance, and how your coffee tastes.
+      </PageHeader>
 
-        <div className="space-y-10 md:space-y-12">
-          {BREW_METHODS.map((item) => (
-            <section
-              key={item.id}
-              className="rounded-[1.75rem] border border-[#e4d7c8] bg-white/78 p-6 shadow-[0_16px_40px_rgba(77,55,37,0.06)] dark:border-white/10 dark:bg-white/5 dark:shadow-[0_16px_40px_rgba(0,0,0,0.22)] md:p-8"
-            >
-              <h2 className="mb-8 text-center font-serif text-4xl uppercase tracking-[0.08em] text-foreground md:text-5xl">
-                {item.brewMethod}
-              </h2>
+      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-14 md:grid-cols-2 md:py-20">
+        {BREW_METHODS.map((item, i) => (
+          <section key={item.id} className="block-card flex flex-col p-0">
+            <div className={`flex items-center justify-between gap-4 border-b-2 border-ink px-6 py-5 ${TONES[i % TONES.length]}`}>
+              <h2 className="m-0 text-3xl md:text-4xl">{item.brewMethod}</h2>
+              <img
+                src={item.methodIcon}
+                alt={`${item.brewMethod} brewer icon`}
+                className="h-16 w-16 object-contain"
+                loading="lazy"
+                style={
+                  item.id === 'siphon' || item.id === 'cold-brew'
+                    ? {filter: 'brightness(0) saturate(100%)'}
+                    : undefined
+                }
+              />
+            </div>
 
-              <div className="grid items-center gap-8 md:grid-cols-[0.9fr_1.7fr_1fr]">
-                <div className="flex justify-center">
-                  <div className="inline-flex items-center justify-center">
-                    <img
-                      src={item.methodIcon}
-                      alt={`${item.brewMethod} brewer icon`}
-                      className="h-44 w-44 object-contain md:h-32 md:w-32"
-                      loading="lazy"
-                      style={
-                        item.id === 'siphon' || item.id === 'cold-brew'
-                          ? {filter: 'brightness(0) saturate(100%)'}
-                          : undefined
-                      }
-                    />
-                  </div>
-                </div>
-
+            <div className="grid flex-1 grid-cols-[1fr_auto] items-center gap-6 p-6">
+              <dl className="m-0 space-y-4">
                 <div>
-                  <div className="border-y border-[#d8c8b6] py-3 text-sm uppercase tracking-[0.1em] text-foreground dark:border-white/15 md:text-base">
-                    <span className="font-semibold text-muted-foreground">Grind Size:</span> {item.grindSize}
-                  </div>
-                  <div className="border-b border-[#d8c8b6] py-3 text-sm uppercase tracking-[0.1em] text-foreground dark:border-white/15 md:text-base">
-                    <span className="font-semibold text-muted-foreground">Looks Like:</span> {item.looksLike}
-                  </div>
+                  <dt className="eyebrow opacity-70">Grind size</dt>
+                  <dd className="m-0 font-display text-2xl uppercase">{item.grindSize}</dd>
                 </div>
-
-                <div className="flex justify-center md:justify-end">
-                  <img
-                    src={item.image}
-                    alt={`${item.brewMethod} grind size example`}
-                    className="h-44 w-44 rounded-full object-contain md:h-52 md:w-52"
-                    loading="lazy"
-                  />
+                <div>
+                  <dt className="eyebrow opacity-70">Looks like</dt>
+                  <dd className="m-0 text-lg font-semibold">{item.looksLike}</dd>
                 </div>
-              </div>
-            </section>
-          ))}
-        </div>
+              </dl>
+              <img
+                src={item.image}
+                alt={`${item.brewMethod} grind size example`}
+                className="h-32 w-32 border-2 border-ink object-cover md:h-40 md:w-40"
+                loading="lazy"
+              />
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );

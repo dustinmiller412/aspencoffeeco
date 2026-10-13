@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 /**
@@ -66,11 +67,12 @@ export default function Page() {
   const {page} = useLoaderData();
 
   return (
-    <div className="page">
-      <header>
-        <h1>{page.title}</h1>
-      </header>
-      <main dangerouslySetInnerHTML={{__html: page.body}} />
+    <div>
+      <PageHeader title={page.title} tone="bg-pop-2" />
+      <div
+        className="prose mx-auto max-w-3xl px-6 py-14 md:py-20"
+        dangerouslySetInnerHTML={{__html: page.body}}
+      />
     </div>
   );
 }

@@ -2,9 +2,9 @@ import {redirect, useLoaderData} from 'react-router';
 import {NavLink} from 'react-router';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {motion} from 'framer-motion';
-import {ArrowRight} from 'lucide-react';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
-import {formatProductPrice} from '~/lib/price';
+import {ProductItem} from '~/components/ProductItem';
+import {PageHeader} from '~/components/PageHeader';
 
 /**
  * @type {Route.MetaFunction}
@@ -116,83 +116,39 @@ export default function Collection() {
   });
 
   return (
-    <div className="pt-32 pb-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Header */}
-        <motion.div
-          initial={{opacity: 0, y: 20}}
-          animate={{opacity: 1, y: 0}}
-          transition={{duration: 0.8}}
-          className="mb-16"
-        >
-          <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
-          </p>
-          <h1 className="font-serif text-5xl md:text-6xl font-medium tracking-tight mb-6">
-            Shop
-          </h1>
-          <p className="text-muted-foreground max-w-2xl leading-relaxed">
-            {headerCopy}
-          </p>
-        </motion.div>
+    <div>
+      <PageHeader eyebrow="Shop" title={collection.title} dark>
+        {headerCopy}
+      </PageHeader>
 
+      <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">
         {/* Collection Filters */}
         <div className="mb-12 flex flex-wrap items-center gap-2.5">
-          {filters.map((filter) => {
-            const isActive = filter.handle === collection.handle;
-
-            return (
-              <NavLink
-                key={filter.label}
-                to={`/collections/${filter.handle}`}
-                className={`rounded-full border px-3.5 py-1.5 text-[0.68rem] uppercase tracking-[0.14em] whitespace-nowrap transition-colors ${
-                  isActive
-                    ? 'border-foreground bg-foreground text-background'
-                    : 'border-[#ddcfbf] bg-[#f8f2ea] text-muted-foreground hover:text-foreground dark:border-white/20 dark:bg-white/5 dark:hover:border-white/35'
-                }`}
-              >
-                {filter.label}
-              </NavLink>
-            );
-          })}
+          {filters.map((filter) => (
+            <NavLink
+              key={filter.label}
+              to={`/collections/${filter.handle}`}
+              className={`pill whitespace-nowrap ${
+                filter.handle === collection.handle ? 'pill-active' : ''
+              }`}
+            >
+              {filter.label}
+            </NavLink>
+          ))}
         </div>
 
         {/* Products Grid */}
         {collection.products?.nodes?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-6">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {collection.products.nodes.map((product, i) => (
               <motion.div
                 key={product.id}
+                className="h-full"
                 initial={{opacity: 0, y: 30}}
                 animate={{opacity: 1, y: 0}}
                 transition={{delay: i * 0.08, duration: 0.6}}
               >
-                <NavLink
-                  to={`/products/${product.handle}`}
-                  className="group block cursor-pointer"
-                >
-                  <div className="aspect-[3/4] overflow-hidden mb-6 bg-secondary">
-                    {product.featuredImage && (
-                      <img
-                        src={product.featuredImage.url}
-                        alt={product.featuredImage.altText || product.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                      />
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <h3 className="font-serif text-lg font-medium">{product.title}</h3>
-                      <span className="text-sm font-medium">
-                        ${formatProductPrice(product.priceRange?.minVariantPrice?.amount || '0')}
-                      </span>
-                    </div>
-                    <span className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-muted-foreground mt-2 group-hover:text-foreground transition-colors">
-                      View Details
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </div>
-                </NavLink>
+                <ProductItem product={product} loading={i < 6 ? 'eager' : 'lazy'} />
               </motion.div>
             ))}
           </div>
@@ -224,12 +180,16 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
+    productType
+    availableForSale
+    images(first: 2) {
+      nodes {
+        id
+        altText
+        url
+        width
+        height
+      }
     }
     priceRange {
       minVariantPrice {

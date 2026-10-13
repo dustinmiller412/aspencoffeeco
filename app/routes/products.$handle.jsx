@@ -247,25 +247,25 @@ export default function Product() {
     );
   };
 
+  const squareButton =
+    'inline-flex h-11 w-11 items-center justify-center border-2 border-ink bg-paper-2 text-ink transition-colors hover:bg-cta';
+
   return (
-    <div className="pt-28 md:pt-48 pb-24 px-6 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <NavLink
-          to={backToShopPath}
-          className="inline-flex items-center gap-2 text-xs tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors mb-12"
-        >
-          <ArrowLeft className="w-3 h-3" />
-          Back to Shop
+    <div className="px-6 pb-8 pt-8 md:pt-12">
+      <div className="mx-auto max-w-7xl">
+        <NavLink to={backToShopPath} className="pill mb-10 gap-2">
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to shop
         </NavLink>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-24">
+        <div className="mb-24 grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-20">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:sticky lg:top-36 lg:self-start"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="lg:sticky lg:top-28 lg:self-start"
           >
-            <div className="relative aspect-[4/5] bg-secondary overflow-hidden">
+            <div className="block-card relative aspect-square overflow-hidden shadow-block-lg">
               {activeImage ? (
                 <button
                   type="button"
@@ -276,94 +276,78 @@ export default function Product() {
                   <img
                     src={activeImage.url}
                     alt={activeImage.altText || product.title}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 </button>
               ) : null}
 
               {hasMultipleImages ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={goToPreviousImage}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55"
-                    aria-label="Previous product image"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
+                <div className="absolute bottom-4 right-4 flex gap-2">
+                  <button type="button" onClick={goToPreviousImage} className={squareButton} aria-label="Previous product image">
+                    <ChevronLeft className="h-5 w-5" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={goToNextImage}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55"
-                    aria-label="Next product image"
-                  >
-                    <ChevronRight className="h-4 w-4" />
+                  <button type="button" onClick={goToNextImage} className={squareButton} aria-label="Next product image">
+                    <ChevronRight className="h-5 w-5" />
                   </button>
-                </>
+                </div>
               ) : null}
             </div>
 
             {hasMultipleImages ? (
-              <div className="mt-4 flex items-center justify-center gap-2">
+              <div className="mt-6 flex flex-wrap gap-3">
                 {productImages.map((image, index) => (
                   <button
                     key={image.id || image.url || index}
                     type="button"
                     onClick={() => setCurrentImageIndex(index)}
-                    className={`h-2.5 w-2.5 rounded-full transition-colors ${
-                      index === currentImageIndex
-                        ? 'bg-foreground'
-                        : 'bg-foreground/30 hover:bg-foreground/50'
+                    className={`h-16 w-16 overflow-hidden border-2 border-ink transition-[transform,box-shadow] ${
+                      index === currentImageIndex ? '-translate-x-0.5 -translate-y-0.5 shadow-block' : 'opacity-70 hover:opacity-100'
                     }`}
                     aria-label={`Go to product image ${index + 1}`}
-                  />
+                  >
+                    <img src={image.url} alt="" className="h-full w-full object-cover" loading="lazy" />
+                  </button>
                 ))}
               </div>
             ) : null}
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col justify-center max-w-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="flex max-w-xl flex-col"
           >
-            <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
-              {product.vendor || 'Aspen Coffee Co'}
-            </p>
+            <p className="eyebrow mb-4">{product.vendor || 'Aspen Coffee Co'}</p>
 
-            <h1 className="font-serif text-4xl md:text-5xl font-medium tracking-tight mb-5 leading-tight">
-              {product.title}
-            </h1>
+            <h1 className="m-0 mb-6 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.95]">{product.title}</h1>
 
             {heroHook ? (
-              <p className="text-base md:text-lg leading-relaxed whitespace-pre-line text-muted-foreground mb-8 max-w-lg">
-                {heroHook}
-              </p>
+              <p className="mb-8 max-w-lg whitespace-pre-line text-lg leading-relaxed">{heroHook}</p>
             ) : null}
 
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center gap-6">
+            <div className="flex flex-col gap-7">
+              <div className="flex items-center justify-between gap-6 border-y-2 border-ink py-4">
                 {selectedVariant?.price && (
-                  <span className="font-serif text-3xl font-medium">
+                  <span className="font-display text-4xl">
                     ${formatProductPrice(selectedVariant.price.amount)}
                   </span>
                 )}
 
-                <div className="flex items-center border border-border">
+                <div className="flex items-center border-2 border-ink bg-paper-2">
                   <button
                     type="button"
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="w-10 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex h-12 w-11 items-center justify-center text-lg font-bold transition-colors hover:bg-pop-1"
                     aria-label="Decrease quantity"
                   >
                     –
                   </button>
-                  <span className="w-8 text-center text-sm">{quantity}</span>
+                  <span className="w-10 border-x-2 border-ink text-center font-display leading-[3rem]">{quantity}</span>
                   <button
                     type="button"
                     onClick={() => setQuantity((q) => q + 1)}
-                    className="w-10 h-12 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex h-12 w-11 items-center justify-center text-lg font-bold transition-colors hover:bg-pop-1"
                     aria-label="Increase quantity"
                   >
                     +
@@ -380,31 +364,26 @@ export default function Product() {
               </Suspense>
 
               {isCoffeeProduct ? (
-                <p className="text-sm text-muted-foreground -mt-2">
+                <p className="-mt-2 text-sm">
                   Not sure what grind size to choose?{' '}
                   <NavLink
                     to="/grind-size-guide"
-                    className="underline underline-offset-4 hover:text-foreground transition-colors"
+                    className="font-bold underline decoration-cta decoration-[3px] underline-offset-4"
                   >
-                    Check out our Grind Size Guide
+                    Check out our grind size guide
                   </NavLink>
                 </p>
               ) : null}
 
               {sellingPlans.length ? (
                 <div>
-                  <p className="mb-3 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Purchase Option
-                  </p>
+                  <p className="eyebrow mb-3">Purchase option</p>
                   <div className="flex flex-wrap gap-2.5">
                     {!isSubscriptionProduct ? (
                       <button
                         type="button"
                         onClick={() => setSelectedSellingPlanId('')}
-                        className={`h-10 border px-4 text-xs uppercase tracking-[0.12em] transition-colors ${!selectedSellingPlanId
-                            ? 'border-foreground text-foreground'
-                            : 'border-border text-muted-foreground hover:text-foreground'
-                          }`}
+                        className={`pill ${!selectedSellingPlanId ? 'pill-active' : ''}`}
                       >
                         One-time purchase
                       </button>
@@ -415,10 +394,7 @@ export default function Product() {
                         key={plan.id}
                         type="button"
                         onClick={() => setSelectedSellingPlanId(plan.id)}
-                        className={`h-10 border px-4 text-xs uppercase tracking-[0.12em] transition-colors ${effectiveSellingPlanId === plan.id
-                            ? 'border-foreground text-foreground'
-                            : 'border-border text-muted-foreground hover:text-foreground'
-                          }`}
+                        className={`pill ${effectiveSellingPlanId === plan.id ? 'pill-active' : ''}`}
                       >
                         {plan.name}
                       </button>
@@ -445,10 +421,7 @@ export default function Product() {
                   handleAddToCart();
                   open('cart');
                 }}
-                className={`inline-flex w-full h-14 items-center justify-center gap-3 px-6 text-[0.72rem] font-medium tracking-[0.16em] uppercase transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-60 ${added
-                    ? 'bg-green-700 text-white'
-                    : 'bg-primary text-primary-foreground hover:bg-primary/90 dark:hover:bg-primary/80'
-                  }`}
+                className={`btn h-16 w-full text-base ${added ? 'bg-pop-1 text-ink' : 'bg-cta text-cta-ink'}`}
               >
                 {(fetcher) => {
                   const isAdding = fetcher.state !== 'idle';
@@ -456,7 +429,7 @@ export default function Product() {
                   if (!selectedVariant?.availableForSale) {
                     return (
                       <>
-                        <ShoppingBag className="w-4 h-4" />
+                        <ShoppingBag className="h-5 w-5" />
                         Sold out
                       </>
                     );
@@ -465,8 +438,8 @@ export default function Product() {
                   if (isAdding) {
                     return (
                       <>
-                        <ShoppingBag className="w-4 h-4" />
-                        Adding...
+                        <ShoppingBag className="h-5 w-5" />
+                        Adding…
                       </>
                     );
                   }
@@ -474,7 +447,7 @@ export default function Product() {
                   if (added) {
                     return (
                       <>
-                        <Check className="w-4 h-4" />
+                        <Check className="h-5 w-5" />
                         Added
                       </>
                     );
@@ -482,8 +455,8 @@ export default function Product() {
 
                   return (
                     <>
-                      <ShoppingBag className="w-4 h-4" />
-                      Add to Bag
+                      <ShoppingBag className="h-5 w-5" />
+                      Add to bag
                     </>
                   );
                 }}
@@ -499,7 +472,7 @@ export default function Product() {
 
         {isImageModalOpen && activeImage ? (
           <div
-            className="fixed inset-0 z-50 bg-black/85 px-4 py-8"
+            className="fixed inset-0 z-[70] bg-ink/90 px-4 py-8"
             onClick={() => setIsImageModalOpen(false)}
             role="dialog"
             aria-modal="true"
@@ -509,7 +482,7 @@ export default function Product() {
               <button
                 type="button"
                 onClick={() => setIsImageModalOpen(false)}
-                className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
+                className={`${squareButton} absolute right-5 top-5`}
                 aria-label="Close image preview"
               >
                 <X className="h-5 w-5" />
@@ -522,25 +495,15 @@ export default function Product() {
                 <img
                   src={activeImage.url}
                   alt={activeImage.altText || product.title}
-                  className="max-h-[90vh] max-w-full object-contain"
+                  className="max-h-[90vh] max-w-full border-2 border-paper-2 object-contain"
                 />
 
                 {hasMultipleImages ? (
                   <>
-                    <button
-                      type="button"
-                      onClick={goToPreviousImage}
-                      className="absolute left-1 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
-                      aria-label="Previous product image"
-                    >
+                    <button type="button" onClick={goToPreviousImage} className={`${squareButton} absolute left-1 top-1/2 -translate-y-1/2`} aria-label="Previous product image">
                       <ChevronLeft className="h-5 w-5" />
                     </button>
-                    <button
-                      type="button"
-                      onClick={goToNextImage}
-                      className="absolute right-1 top-1/2 -translate-y-1/2 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white transition-colors hover:bg-black/60"
-                      aria-label="Next product image"
-                    >
+                    <button type="button" onClick={goToNextImage} className={`${squareButton} absolute right-1 top-1/2 -translate-y-1/2`} aria-label="Next product image">
                       <ChevronRight className="h-5 w-5" />
                     </button>
                   </>

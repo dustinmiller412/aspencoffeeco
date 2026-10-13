@@ -1,18 +1,30 @@
 import tailwindAnimate from 'tailwindcss-animate';
 import tailwindTypography from '@tailwindcss/typography';
 
+// Brand colors live in CSS vars (index.css); color-mix keeps `/opacity` modifiers working.
+const brand = (v) => `color-mix(in srgb, var(${v}) calc(<alpha-value> * 100%), transparent)`;
+
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ['class'],
   content: ['./app/**/*.{js,jsx,ts,tsx}', './content/**/*.{md,mdx}', './index.html'],
   theme: {
     extend: {
       fontFamily: {
         sans: ['Manrope', 'sans-serif'],
-        serif: ['Newsreader', 'serif'],
         mono: ['JetBrains Mono', 'monospace'],
+        display: ['var(--font-display)'],
+      },
+      boxShadow: {
+        block: '6px 6px 0 var(--shadow, var(--ink))',
+        'block-lg': '10px 10px 0 var(--shadow, var(--ink))',
       },
       colors: {
+        ink: brand('--ink'),
+        paper: {DEFAULT: brand('--paper'), 2: brand('--paper-2')},
+        cta: {DEFAULT: brand('--cta'), ink: brand('--cta-ink')},
+        'pop-1': brand('--pop-1'),
+        'pop-2': brand('--pop-2'),
+        glow: brand('--glow'),
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
@@ -85,14 +97,15 @@ export default {
               fontWeight: '500',
               textDecorationThickness: '1px',
               textUnderlineOffset: '0.24em',
-              textDecorationColor: 'rgba(120, 95, 65, 0.35)',
+              textDecorationColor: 'color-mix(in srgb, var(--ink) 35%, transparent)',
             },
             strong: {
               color: 'var(--foreground)',
               fontWeight: '650',
             },
             h2: {
-              fontFamily: theme('fontFamily.serif').join(', '),
+              fontFamily: 'var(--font-display)',
+              textTransform: 'uppercase',
               color: 'var(--foreground)',
               fontWeight: '600',
               letterSpacing: '-0.01em',
@@ -100,7 +113,7 @@ export default {
               marginTop: '2.4em',
               marginBottom: '0.8em',
               paddingTop: '1em',
-              borderTop: '1px solid rgba(120, 95, 65, 0.18)',
+              borderTop: '1px solid color-mix(in srgb, var(--ink) 18%, transparent)',
             },
             h3: {
               color: 'var(--foreground)',
@@ -109,23 +122,23 @@ export default {
               marginBottom: '0.7em',
             },
             hr: {
-              borderColor: 'rgba(120, 95, 65, 0.18)',
+              borderColor: 'color-mix(in srgb, var(--ink) 18%, transparent)',
               marginTop: '2.5em',
               marginBottom: '2.5em',
             },
             blockquote: {
               color: 'var(--foreground)',
               fontStyle: 'normal',
-              borderLeftColor: 'rgba(120, 95, 65, 0.3)',
-              backgroundColor: 'rgba(120, 95, 65, 0.06)',
-              borderRadius: theme('borderRadius.xl'),
+              borderLeftColor: 'color-mix(in srgb, var(--ink) 30%, transparent)',
+              backgroundColor: 'color-mix(in srgb, var(--ink) 6%, transparent)',
+              borderRadius: '0',
               padding: '1rem 1.25rem',
             },
             code: {
               color: 'var(--foreground)',
               fontWeight: '500',
-              backgroundColor: 'rgba(120, 95, 65, 0.08)',
-              borderRadius: '0.35rem',
+              backgroundColor: 'color-mix(in srgb, var(--ink) 8%, transparent)',
+              borderRadius: '0',
               padding: '0.18em 0.34em',
             },
             'code::before': {
@@ -135,7 +148,7 @@ export default {
               content: 'none',
             },
             pre: {
-              borderRadius: '1rem',
+              borderRadius: '0',
             },
             ol: {
               paddingLeft: '1.15em',
@@ -148,7 +161,7 @@ export default {
               fontWeight: '600',
             },
             'ul > li::marker': {
-              color: 'rgba(120, 95, 65, 0.55)',
+              color: 'color-mix(in srgb, var(--ink) 55%, transparent)',
             },
           },
         },
@@ -160,15 +173,15 @@ export default {
             '--tw-prose-links': 'var(--foreground)',
             '--tw-prose-bold': 'var(--foreground)',
             '--tw-prose-counters': 'var(--muted-foreground)',
-            '--tw-prose-bullets': 'rgba(120, 95, 65, 0.55)',
-            '--tw-prose-hr': 'rgba(120, 95, 65, 0.18)',
+            '--tw-prose-bullets': 'color-mix(in srgb, var(--ink) 55%, transparent)',
+            '--tw-prose-hr': 'color-mix(in srgb, var(--ink) 18%, transparent)',
             '--tw-prose-quotes': 'var(--foreground)',
-            '--tw-prose-quote-borders': 'rgba(120, 95, 65, 0.3)',
+            '--tw-prose-quote-borders': 'color-mix(in srgb, var(--ink) 30%, transparent)',
             '--tw-prose-captions': 'var(--muted-foreground)',
             '--tw-prose-code': 'var(--foreground)',
-            '--tw-prose-pre-bg': 'rgba(24, 20, 17, 0.94)',
-            '--tw-prose-th-borders': 'rgba(120, 95, 65, 0.18)',
-            '--tw-prose-td-borders': 'rgba(120, 95, 65, 0.12)',
+            '--tw-prose-pre-bg': 'var(--ink)',
+            '--tw-prose-th-borders': 'color-mix(in srgb, var(--ink) 18%, transparent)',
+            '--tw-prose-td-borders': 'color-mix(in srgb, var(--ink) 12%, transparent)',
           },
         },
       }),

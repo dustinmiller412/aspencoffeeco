@@ -75,7 +75,7 @@ function getStorySteps(product, activeImage) {
 function StorytellingVisual({step, topClassName = ''}) {
   return (
     <div className={topClassName}>
-      <div className="h-full border border-border bg-background overflow-hidden">
+      <div className="block-card h-full overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={step.id}
@@ -85,7 +85,7 @@ function StorytellingVisual({step, topClassName = ''}) {
             transition={{duration: 0.45}}
             className="h-full flex flex-col"
           >
-            <div className="relative h-full bg-secondary overflow-hidden">
+            <div className="relative flex-1 overflow-hidden bg-paper">
               {step.image?.url ? (
                 <motion.img
                   key={step.image.url}
@@ -99,21 +99,12 @@ function StorytellingVisual({step, topClassName = ''}) {
                 />
               ) : null}
 
-              <div className="absolute inset-x-0 bottom-0 h-[28%] bg-gradient-to-t from-white via-white/95 via-white/70 to-transparent" />
+            </div>
 
-              <div className="absolute inset-x-0 bottom-0 px-6 pt-16 pb-8 text-black">
-                <p className="text-[0.65rem] uppercase tracking-[0.25em] mb-2 text-black/60">
-                  {step.eyebrow}
-                </p>
-
-                <h3 className="font-serif text-2xl md:text-3xl">
-                  {step.title}
-                </h3>
-
-                <p className="text-[0.7rem] uppercase tracking-[0.2em] mt-3 text-black/70">
-                  {step.kicker}
-                </p>
-              </div>
+            <div className="border-t-2 border-ink bg-pop-2 px-6 py-5">
+              <p className="eyebrow mb-2">{step.eyebrow}</p>
+              <h3 className="text-2xl md:text-3xl">{step.title}</h3>
+              <p className="eyebrow mt-3 opacity-70">{step.kicker}</p>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -173,19 +164,15 @@ export default function ProductStorytelling({product, activeImage}) {
   const activeStep = steps.find((step) => step.id === activeStepId) || steps[0];
 
   return (
-    <section className="mt-28 lg:mt-36">
+    <section className="mt-28 border-t-2 border-ink pt-20 lg:mt-36">
       {/* Section header */}
       <div className="mb-10 max-w-2xl">
-        <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
-          Why this coffee
-        </p>
-        <h2 className="font-serif text-3xl md:text-4xl leading-tight">
-          The story behind the cup.
-        </h2>
+        <p className="eyebrow mb-4">Why this coffee</p>
+        <h2 className="text-5xl md:text-6xl">The story behind the cup.</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20">
-        <div className="lg:hidden sticky top-24 z-20 mb-2 h-[42svh] max-h-[32rem] min-h-[20rem] bg-background">
+        <div className="sticky top-24 z-20 mb-2 h-[42svh] max-h-[32rem] min-h-[20rem] bg-paper lg:hidden">
           <StorytellingVisual step={activeStep} topClassName="h-full" />
         </div>
 
@@ -209,12 +196,19 @@ export default function ProductStorytelling({product, activeImage}) {
                 className="min-h-[46vh] md:min-h-[52vh] lg:min-h-[80vh] flex items-center"
               >
                 <div className="max-w-xl">
-                  <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-3">
-                    {String(index + 1).padStart(2, '0')} / {step.eyebrow}
+                  <p className="eyebrow mb-4 inline-flex items-center gap-3">
+                    <span
+                      className={`inline-flex h-9 w-9 items-center justify-center border-2 border-ink font-display text-sm transition-colors ${
+                        isActive ? 'bg-cta' : 'bg-paper-2'
+                      }`}
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    {step.eyebrow}
                   </p>
 
                   <h3
-                    className={`font-serif text-3xl md:text-5xl leading-tight transition-opacity duration-300 ${
+                    className={`text-4xl transition-opacity duration-300 md:text-5xl ${
                       isActive ? 'opacity-100' : 'opacity-60'
                     }`}
                   >

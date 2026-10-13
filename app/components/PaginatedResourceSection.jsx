@@ -19,16 +19,16 @@ export function PaginatedResourceSection({
 
         return (
           <div>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+            <PreviousLink className="btn-outline mb-10">
+              {isLoading ? 'Loading…' : '↑ Load previous'}
             </PreviousLink>
             {resourcesClassName ? (
               <div className={resourcesClassName}>{resourcesMarkup}</div>
             ) : (
               resourcesMarkup
             )}
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+            <NextLink className="btn-outline mt-12">
+              {isLoading ? 'Loading…' : 'Load more ↓'}
             </NextLink>
           </div>
         );

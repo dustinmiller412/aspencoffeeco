@@ -1,4 +1,5 @@
 import {useLoaderData, Link} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
@@ -50,11 +51,12 @@ export default function Collections() {
   const {collections} = useLoaderData();
 
   return (
-    <div className="collections">
-      <h1>Collections</h1>
+    <div>
+      <PageHeader eyebrow="Shop" title="Collections" dark />
+      <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">
       <PaginatedResourceSection
         connection={collections}
-        resourcesClassName="collections-grid"
+        resourcesClassName="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
       >
         {({node: collection, index}) => (
           <CollectionItem
@@ -64,6 +66,7 @@ export default function Collections() {
           />
         )}
       </PaginatedResourceSection>
+      </div>
     </div>
   );
 }
@@ -77,13 +80,14 @@ export default function Collections() {
 function CollectionItem({collection, index}) {
   return (
     <Link
-      className="collection-item"
+      className="block-card group block text-ink no-underline transition-[transform,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:no-underline hover:shadow-block-lg"
       key={collection.id}
       to={`/collections/${collection.handle}`}
       prefetch="intent"
     >
       {collection?.image && (
         <Image
+          className="border-b-2 border-ink"
           alt={collection.image.altText || collection.title}
           aspectRatio="1/1"
           data={collection.image}
@@ -91,7 +95,7 @@ function CollectionItem({collection, index}) {
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h5>{collection.title}</h5>
+      <h2 className="m-0 p-5 text-2xl">{collection.title}</h2>
     </Link>
   );
 }

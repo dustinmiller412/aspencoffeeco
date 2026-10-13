@@ -1,4 +1,5 @@
 import {redirect, useLoaderData} from 'react-router';
+import {OrderStatusBadge} from '~/components/OrderStatusBadge';
 import {Money, Image} from '@shopify/hydrogen';
 import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuery';
 
@@ -39,7 +40,8 @@ export async function loader({params, context}) {
   const discountApplications = order.discountApplications.nodes;
 
   // Get fulfillment status from first fulfillment node
-  const fulfillmentStatus = order.fulfillments.nodes[0]?.status ?? 'N/A';
+  // No fulfillment yet means the order hasn't shipped; show it as processing.
+  const fulfillmentStatus = order.fulfillments.nodes[0]?.status ?? 'OPEN';
 
   // Get first discount value with proper type checking
   const firstDiscount = discountApplications[0]?.value;
@@ -73,8 +75,8 @@ export default function OrderRoute() {
     fulfillmentStatus,
   } = useLoaderData();
   return (
-    <div className="account-order">
-      <h2>Order {order.name}</h2>
+    <div className="block-card p-6 md:p-8 [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:text-xl [&_table]:my-6 [&_table]:w-full [&_table]:border-collapse [&_td]:border-2 [&_td]:border-ink [&_td]:p-3 [&_th]:border-2 [&_th]:border-ink [&_th]:bg-pop-1 [&_th]:p-3 [&_th]:text-left [&_th]:text-xs [&_th]:uppercase">
+      <h2 className="mb-3 text-4xl">Order {order.name}</h2>
       <p>Placed on {new Date(order.processedAt).toDateString()}</p>
       {order.confirmationNumber && (
         <p>Confirmation: {order.confirmationNumber}</p>
@@ -100,12 +102,7 @@ export default function OrderRoute() {
             {((discountValue && discountValue.amount) ||
               discountPercentage) && (
               <tr>
-                <th scope="row" colSpan={3}>
-                  <p>Discounts</p>
-                </th>
-                <th scope="row">
-                  <p>Discounts</p>
-                </th>
+                <th scope="row" colSpan={3} className="!text-right">Discounts</th>
                 <td>
                   {discountPercentage ? (
                     <span>-{discountPercentage}% OFF</span>
@@ -116,35 +113,26 @@ export default function OrderRoute() {
               </tr>
             )}
             <tr>
-              <th scope="row" colSpan={3}>
-                <p>Subtotal</p>
-              </th>
-              <th scope="row">
-                <p>Subtotal</p>
-              </th>
+              <th scope="row" colSpan={3} className="!text-right">Subtotal</th>
               <td>
                 <Money data={order.subtotal} />
               </td>
             </tr>
             <tr>
-              <th scope="row" colSpan={3}>
-                Tax
-              </th>
-              <th scope="row">
-                <p>Tax</p>
-              </th>
+              <th scope="row" colSpan={3} className="!text-right">Shipping</th>
+              <td>
+                <Money data={order.totalShipping} />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" colSpan={3} className="!text-right">Tax</th>
               <td>
                 <Money data={order.totalTax} />
               </td>
             </tr>
             <tr>
-              <th scope="row" colSpan={3}>
-                Total
-              </th>
-              <th scope="row">
-                <p>Total</p>
-              </th>
-              <td>
+              <th scope="row" colSpan={3} className="!text-right">Total</th>
+              <td className="font-display text-lg">
                 <Money data={order.totalPrice} />
               </td>
             </tr>
@@ -153,26 +141,20 @@ export default function OrderRoute() {
         <div>
           <h3>Shipping Address</h3>
           {order?.shippingAddress ? (
-            <address>
-              <p>{order.shippingAddress.name}</p>
-              {order.shippingAddress.formatted ? (
-                <p>{order.shippingAddress.formatted}</p>
-              ) : (
-                ''
-              )}
-              {order.shippingAddress.formattedArea ? (
-                <p>{order.shippingAddress.formattedArea}</p>
-              ) : (
-                ''
+            <address className="not-italic leading-relaxed">
+              {(order.shippingAddress.formatted ?? [order.shippingAddress.name]).map(
+                (line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ),
               )}
             </address>
           ) : (
             <p>No shipping address defined</p>
           )}
           <h3>Status</h3>
-          <div>
-            <p>{fulfillmentStatus}</p>
-          </div>
+          <OrderStatusBadge status={fulfillmentStatus} kind="fulfillment" />
         </div>
       </div>
       <br />
@@ -209,7 +191,7 @@ function OrderLineRow({lineItem}) {
       </td>
       <td>{lineItem.quantity}</td>
       <td>
-        <Money data={lineItem.totalDiscount} />
+        <Money data={lineItem.totalPrice} />
       </td>
     </tr>
   );

@@ -14,7 +14,6 @@ import {
 } from 'react-router';
 import {useEffect, useState} from 'react';
 import {motion, AnimatePresence} from 'framer-motion';
-import {ThemeProvider} from 'next-themes';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
@@ -60,8 +59,8 @@ export function links() {
       rel: 'preconnect',
       href: 'https://shop.app',
     },
-    {rel: 'icon', type: 'image/svg+xml', href: '/images/favicon.svg'},
-    {rel: 'shortcut icon', href: '/images/favicon.svg'},
+    {rel: 'icon', type: 'image/png', href: '/brand/logomark/favicon.png'},
+    {rel: 'apple-touch-icon', href: '/brand/logomark/favicon.png'},
   ];
 }
 
@@ -81,6 +80,8 @@ export async function loader(args) {
     ...deferredData,
     ...criticalData,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    // New per page load; ContourDivider uses it to draw unique lines (same on server and client).
+    contourSeed: Math.floor(Math.random() * 2 ** 31),
     shop: getShopAnalytics({
       storefront,
       publicStorefrontId: env.PUBLIC_STOREFRONT_ID,
@@ -164,9 +165,7 @@ export function Layout({children}) {
         <Links />
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
+        {children}
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
@@ -197,10 +196,10 @@ function SubscribedToast() {
           animate={{opacity: 1, y: 0}}
           exit={{opacity: 0, y: 24}}
           transition={{duration: 0.35, ease: 'easeOut'}}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[80] px-6 py-4 rounded-xl border border-[#e7ddd1] bg-white shadow-[0_8px_32px_rgba(92,66,43,0.12)] dark:border-white/10 dark:bg-[#1f1915] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)] text-center pointer-events-none"
+          className="block-card pointer-events-none fixed bottom-6 left-1/2 z-[80] -translate-x-1/2 bg-cta px-6 py-4 text-center text-cta-ink"
         >
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-0.5">You&apos;re confirmed</p>
-          <p className="text-sm font-medium text-foreground">Welcome to the list. Your 10% off is on the way.</p>
+          <p className="eyebrow mb-1">You&apos;re confirmed</p>
+          <p className="font-display text-sm uppercase">Welcome to the list. Your 10% off is on the way.</p>
         </motion.div>
       )}
     </AnimatePresence>
@@ -225,7 +224,7 @@ export default function App() {
         <Outlet />
       </PageLayout>
       <SubscribedToast />
-      <Toaster position="bottom-right" theme="system" richColors />
+      <Toaster position="bottom-right" theme="light" toastOptions={{className: '! !border-2 !border-ink !bg-paper-2 !text-ink !shadow-block'}} />
     </Analytics.Provider>
   );
 }
@@ -243,14 +242,24 @@ export function ErrorBoundary() {
   }
 
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
+    <div className="flex min-h-screen items-center justify-center bg-pop-2 px-6 py-16">
+      <div className="block-card w-full max-w-xl p-8 text-center shadow-block-lg md:p-12">
+        <p className="eyebrow mb-4">Error {errorStatus}</p>
+        <h1 className="m-0 text-6xl md:text-7xl">
+          {errorStatus === 404 ? 'Lost the beans' : 'Something spilled'}
+        </h1>
+        <p className="mt-6 text-lg">
+          {errorStatus === 404
+            ? "We couldn't find that page. It may have moved or sold out."
+            : 'Something went wrong on our end. Try again in a moment.'}
+        </p>
+        {errorStatus !== 404 && errorMessage ? (
+          <pre className="mt-6 overflow-auto border-2 border-ink bg-paper p-4 text-left text-xs">{errorMessage}</pre>
+        ) : null}
+        <a href="/" className="btn-cta mt-8">
+          Back home
+        </a>
+      </div>
     </div>
   );
 }

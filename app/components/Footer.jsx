@@ -1,6 +1,8 @@
 import {Suspense} from 'react';
 import {Await, NavLink} from 'react-router';
 import {Facebook, Instagram} from 'lucide-react';
+import {Logo} from '~/components/Header';
+import NewsletterSection from '~/components/NewsletterSection';
 
 const QUICK_LINKS = [
   {title: 'Home', to: '/'},
@@ -11,6 +13,18 @@ const QUICK_LINKS = [
   {title: 'Field Notes', to: '/fieldnotes'},
   {title: 'Contact', to: '/contact'},
 ];
+
+const SOCIAL_LINKS = [
+  {href: 'https://instagram.com/aspencoffee.co', label: 'Instagram', Icon: Instagram},
+  {
+    href: 'https://www.facebook.com/profile.php?id=61587097293266',
+    label: 'Facebook',
+    Icon: Facebook,
+  },
+];
+
+const FOOTER_LINK_CLASS =
+  'w-fit text-sm font-semibold uppercase tracking-[0.1em] text-paper-2/80 transition-colors hover:text-glow';
 
 const SCA_BADGE_SRC = '/images/SCA-Member2026-Badge-GreyYellow-8.png';
 
@@ -33,128 +47,110 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
           });
 
           return (
-            <footer className="relative mt-10 border-t border-[#ded2c4] bg-[linear-gradient(180deg,#f7efe4_0%,#f3e8da_40%,#efe1cf_100%)] px-6 py-16 dark:border-white/10 dark:bg-[linear-gradient(180deg,#171311_0%,#1d1713_45%,#211914_100%)]">
-              <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[1.3fr_0.9fr_1fr_0.85fr]">
-                <div>
-                  <p className="mb-4 text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                    {shopName}
-                  </p>
-                  <h2 className="max-w-md font-serif text-3xl font-medium leading-[0.98] tracking-[0.01em] text-foreground md:text-4xl">
-                    Crafted in Pittsburgh.<br/> Coffee worth slowing down for.
-                  </h2>
-                  <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
-                    Small-batch roasting, rotating seasonal selections, and a cup that feels intentional from first sip to last.
-                  </p>
-
-                </div>
-
-                <div>
-                  <p className="mb-5 text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                    Explore
-                  </p>
-                  <nav className="flex flex-col gap-3" role="navigation" aria-label="Footer navigation">
-                    {QUICK_LINKS.map((link) => (
-                      <NavLink
-                        key={link.to}
-                        to={link.to}
-                        prefetch="intent"
-                        className={({isActive}) =>
-                          `w-fit text-sm uppercase tracking-[0.12em] transition-colors ${
-                            isActive
-                              ? 'text-foreground'
-                              : 'text-muted-foreground hover:text-foreground'
-                          }`
-                        }
-                        end={link.to === '/'}
-                      >
-                        {link.title}
-                      </NavLink>
-                    ))}
-                  </nav>
-                </div>
-
-                <div>
-                  <p className="mb-5 text-xs uppercase tracking-[0.28em] text-muted-foreground">
-                    Policies
-                  </p>
-                  <nav className="flex flex-col gap-3" role="navigation" aria-label="Policy links">
-                    {visiblePolicyItems.map((item) => {
-                      if (!item.url) return null;
-
-                      const url = normalizeMenuUrl({
-                        itemUrl: item.url,
-                        primaryDomainUrl,
-                        publicStoreDomain,
-                      });
-
-                      const isExternal = !url.startsWith('/');
-                      const baseClassName =
-                        'w-fit text-sm uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground';
-
-                      return isExternal ? (
+            <>
+              <NewsletterSection />
+              <footer className="bg-ink px-6 pb-10 pt-16 text-paper-2">
+                <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[1.4fr_1fr_1fr_auto]">
+                  <div>
+                    <Logo variant="badge" label={shopName} className="mb-6 h-28 text-paper-2" />
+                    <p className="max-w-sm text-sm leading-relaxed text-paper-2/75">
+                      Small-batch roasting, rotating seasonal selections, and a cup
+                      that feels intentional from first sip to last. Crafted in Pittsburgh.
+                    </p>
+                    <div className="mt-6 flex gap-3">
+                      {SOCIAL_LINKS.map(({href, label, Icon}) => (
                         <a
-                          href={url}
-                          key={item.id}
-                          rel="noopener noreferrer"
+                          key={label}
+                          href={href}
                           target="_blank"
-                          className={baseClassName}
+                          rel="noopener noreferrer"
+                          className="inline-flex h-10 w-10 items-center justify-center border-2 border-paper-2/40 transition-colors hover:border-cta hover:bg-cta hover:text-cta-ink"
+                          aria-label={label}
                         >
-                          {item.title}
+                          <Icon className="h-4 w-4" />
                         </a>
-                      ) : (
-                        <NavLink
-                          end
-                          key={item.id}
-                          prefetch="intent"
-                          to={url}
-                          className={({isActive}) =>
-                            `${baseClassName} ${isActive ? 'text-foreground' : ''}`
-                          }
-                        >
-                          {item.title}
-                        </NavLink>
-                      );
-                    })}
-                  </nav>
-                </div>
+                      ))}
+                    </div>
+                  </div>
 
-                <div className="flex justify-center md:justify-start">
+                  <div>
+                    <p className="eyebrow mb-5 text-glow">Explore</p>
+                    <nav className="flex flex-col gap-3" aria-label="Footer navigation">
+                      {QUICK_LINKS.map((link) => (
+                        <NavLink
+                          key={link.to}
+                          to={link.to}
+                          prefetch="intent"
+                          className={({isActive}) =>
+                            `${FOOTER_LINK_CLASS} ${isActive ? 'text-glow' : ''}`
+                          }
+                          end={link.to === '/'}
+                        >
+                          {link.title}
+                        </NavLink>
+                      ))}
+                    </nav>
+                  </div>
+
+                  <div>
+                    <p className="eyebrow mb-5 text-glow">Policies</p>
+                    <nav className="flex flex-col gap-3" aria-label="Policy links">
+                      {visiblePolicyItems.map((item) => {
+                        if (!item.url) return null;
+
+                        const url = normalizeMenuUrl({
+                          itemUrl: item.url,
+                          primaryDomainUrl,
+                          publicStoreDomain,
+                        });
+
+                        return url.startsWith('/') ? (
+                          <NavLink
+                            end
+                            key={item.id}
+                            prefetch="intent"
+                            to={url}
+                            className={({isActive}) =>
+                              `${FOOTER_LINK_CLASS} ${isActive ? 'text-glow' : ''}`
+                            }
+                          >
+                            {item.title}
+                          </NavLink>
+                        ) : (
+                          <a
+                            href={url}
+                            key={item.id}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            className={FOOTER_LINK_CLASS}
+                          >
+                            {item.title}
+                          </a>
+                        );
+                      })}
+                    </nav>
+                  </div>
+
                   <img
                     src={SCA_BADGE_SRC}
                     alt="Specialty Coffee Association member badge"
-                    className="h-auto w-36 opacity-90"
+                    className="h-auto w-28 self-start"
                     loading="lazy"
                   />
                 </div>
-              </div>
 
-              <div className="mx-auto mt-12 grid max-w-7xl grid-cols-1 gap-4 border-t border-[#d8c9b8] pt-6 text-xs uppercase tracking-[0.16em] text-muted-foreground dark:border-white/10 md:grid-cols-3 md:items-center">
-                <p className="text-center md:text-left">© {new Date().getFullYear()} {shopName}</p>
+                <Logo
+                  variant="wordmark"
+                  label=""
+                  className="mx-auto mt-16 w-full max-w-7xl text-paper-2/10"
+                />
 
-                <div className="flex items-center justify-center gap-4">
-                  <a
-                    href="https://instagram.com/aspencoffee.co"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#d7c8b8] text-muted-foreground transition-colors hover:text-foreground dark:border-white/20"
-                    aria-label="Instagram"
-                  >
-                    <Instagram className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="https://www.facebook.com/profile.php?id=61587097293266"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#d7c8b8] text-muted-foreground transition-colors hover:text-foreground dark:border-white/20"
-                    aria-label="Facebook"
-                  >
-                    <Facebook className="h-4 w-4" />
-                  </a>
+                <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-2 border-t-2 border-paper-2/20 pt-6 text-xs font-semibold uppercase tracking-[0.16em] text-paper-2/60 md:flex-row md:justify-between">
+                  <p>© {new Date().getFullYear()} {shopName}</p>
+                  <p>Freshly roasted in Pittsburgh, PA</p>
                 </div>
-
-                <p className="text-center md:text-right">Freshly roasted in Pittsburgh, PA</p>
-              </div>
-            </footer>
+              </footer>
+            </>
           );
         }}
       </Await>
@@ -164,8 +160,8 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
 
 function FooterSkeleton({shopName}) {
   return (
-    <footer className="mt-10 border-t border-[#ded2c4] bg-[linear-gradient(180deg,#f7efe4_0%,#f3e8da_40%,#efe1cf_100%)] px-6 py-16 dark:border-white/10 dark:bg-[linear-gradient(180deg,#171311_0%,#1d1713_45%,#211914_100%)]">
-      <div className="mx-auto max-w-7xl text-xs uppercase tracking-[0.28em] text-muted-foreground">
+    <footer className="mt-24 bg-ink px-6 py-16 text-paper-2">
+      <div className="eyebrow mx-auto max-w-7xl">
         {shopName}
       </div>
     </footer>

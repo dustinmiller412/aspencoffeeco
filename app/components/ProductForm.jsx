@@ -13,12 +13,12 @@ export function ProductForm({productOptions, selectedVariant, hideAddToCartButto
   const navigate = useNavigate();
   const {open} = useAside();
   return (
-    <div className="product-form">
+    <div className="flex flex-col gap-6">
       {productOptions.map((option) => {
         return (
-          <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+          <div key={option.name}>
+            <p className="eyebrow mb-3">{option.name}</p>
+            <div className="flex flex-wrap gap-2.5">
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -38,18 +38,14 @@ export function ProductForm({productOptions, selectedVariant, hideAddToCartButto
                   // as an anchor tag
                   return (
                     <Link
-                      className={`product-options-item border transition-colors ${
-                        selected
-                          ? 'border-foreground dark:border-white'
-                          : 'border-transparent'
-                      }`}
+                      className={`pill ${selected ? 'pill-active' : ''}`}
                       key={option.name + name}
                       prefetch="intent"
                       preventScrollReset
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
                       style={{
-                        opacity: available ? 1 : 0.3,
+                        opacity: available ? 1 : 0.45,
                       }}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
@@ -64,14 +60,12 @@ export function ProductForm({productOptions, selectedVariant, hideAddToCartButto
                   return (
                     <button
                       type="button"
-                      className={`product-options-item border transition-colors ${
-                        selected
-                          ? 'border-foreground dark:border-white'
-                          : 'border-transparent'
-                      }${exists && !selected ? ' link' : ''}`}
+                      className={`pill ${selected ? 'pill-active' : ''} ${
+                        available ? '' : 'line-through'
+                      }`}
                       key={option.name + name}
                       style={{
-                        opacity: available ? 1 : 0.3,
+                        opacity: available ? 1 : 0.45,
                       }}
                       disabled={!exists}
                       onClick={() => {
@@ -89,12 +83,12 @@ export function ProductForm({productOptions, selectedVariant, hideAddToCartButto
                 }
               })}
             </div>
-            <br />
           </div>
         );
       })}
       {!hideAddToCartButton ? (
         <AddToCartButton
+          className="btn-cta w-full"
           disabled={!selectedVariant || !selectedVariant.availableForSale}
           onClick={() => {
             open('cart');
@@ -133,7 +127,7 @@ function ProductOptionSwatch({swatch, name}) {
   return (
     <div
       aria-label={name}
-      className="product-option-label-swatch"
+      className="h-5 w-5 border-2 border-ink"
       style={{
         backgroundColor: color || 'transparent',
       }}

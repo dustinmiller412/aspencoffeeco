@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
 import {SearchResults} from '~/components/SearchResults';
@@ -38,37 +39,43 @@ export default function SearchPage() {
   if (type === 'predictive') return null;
 
   return (
-    <div className="search">
-      <h1>Search</h1>
-      <SearchForm>
-        {({inputRef}) => (
-          <>
-            <input
-              defaultValue={term}
-              name="q"
-              placeholder="Search…"
-              ref={inputRef}
-              type="search"
-            />
-            &nbsp;
-            <button type="submit">Search</button>
-          </>
-        )}
-      </SearchForm>
-      {error && <p style={{color: 'red'}}>{error}</p>}
-      {!term || !result?.total ? (
-        <SearchResults.Empty />
-      ) : (
-        <SearchResults result={result} term={term}>
-          {({articles, pages, products, term}) => (
-            <div>
-              <SearchResults.Products products={products} term={term} />
-              <SearchResults.Pages pages={pages} term={term} />
-              <SearchResults.Articles articles={articles} term={term} />
+    <div>
+      <PageHeader eyebrow="Find something good" title="Search" tone="bg-pop-1">
+        <SearchForm className="max-w-none">
+          {({inputRef}) => (
+            <div className="flex max-w-xl border-2 border-ink shadow-block">
+              <input
+                defaultValue={term}
+                name="q"
+                placeholder="Search coffee, gear, notes…"
+                ref={inputRef}
+                type="search"
+                aria-label="Search"
+                className="m-0 h-14 min-w-0 flex-1 border-0 bg-paper-2 px-4 text-ink focus:outline-none"
+              />
+              <button type="submit" className="border-l-2 border-ink bg-ink px-6 font-display text-sm uppercase text-paper-2 hover:bg-cta hover:text-cta-ink">
+                Search
+              </button>
             </div>
           )}
-        </SearchResults>
-      )}
+        </SearchForm>
+      </PageHeader>
+      <div className="mx-auto max-w-7xl px-6 py-14 md:py-20">
+        {error && <p className="mb-6 font-semibold text-destructive">{error}</p>}
+        {!term || !result?.total ? (
+          <SearchResults.Empty />
+        ) : (
+          <SearchResults result={result} term={term}>
+            {({articles, pages, products, term}) => (
+              <div>
+                <SearchResults.Products products={products} term={term} />
+                <SearchResults.Pages pages={pages} term={term} />
+                <SearchResults.Articles articles={articles} term={term} />
+              </div>
+            )}
+          </SearchResults>
+        )}
+      </div>
       <Analytics.SearchView data={{searchTerm: term, searchResults: result}} />
     </div>
   );

@@ -1,11 +1,10 @@
 import {useLoaderData} from 'react-router';
 import HeroSection from '~/components/home/HeroSection';
-import MarqueeStrip from '~/components/home/MarqueeStrip';
+import BrandBand from '~/components/home/BrandBand';
 import FeaturedProducts from '~/components/home/FeaturedProducts';
 import PhilosophySection from '~/components/home/PhilosophySection';
 import TestimonialBanner from '~/components/home/TestimonialBanner';
 import BlogPreview from '~/components/home/BlogPreview';
-import NewsletterSection from '~/components/home/NewsletterSection';
 import {MockShopNotice} from '~/components/MockShopNotice';
 import {getAllNotesMeta} from '~/lib/notes.server';
 
@@ -38,6 +37,7 @@ async function loadCriticalData({context}) {
         variables: {
           blendsHandle: 'blends',
           singleOriginHandle: 'single-origin',
+          subscriptionHandle: 'roasters-choice-subscription',
           first: 8,
         },
       }),
@@ -58,6 +58,7 @@ async function loadCriticalData({context}) {
     return {
       isShopLinked: Boolean(context.env.PUBLIC_STORE_DOMAIN),
       products: {nodes: mergedNodes},
+      subscriptionImage: featuredCollections?.subscriptionFeature?.featuredImage ?? null,
       notes,
     };
   } catch (error) {
@@ -82,15 +83,14 @@ export default function Homepage() {
   const data = useLoaderData();
 
   return (
-    <div className="bg-[linear-gradient(180deg,#fffdfa_0%,#fdfaf5_38%,#fffdf9_72%,#ffffff_100%)] dark:bg-[linear-gradient(180deg,#151311_0%,#191613_40%,#12100f_100%)]">
+    <div className="bg-paper">
       {!data.isShopLinked && <MockShopNotice />}
       <HeroSection />
-      <MarqueeStrip />
+      <BrandBand />
       <FeaturedProducts products={data.products} />
-      <TestimonialBanner />
+      <TestimonialBanner image={data.subscriptionImage} />
       <PhilosophySection />
       <BlogPreview notes={data.notes} />
-      <NewsletterSection />
     </div>
   );
 }
@@ -99,8 +99,17 @@ const FEATURED_PRODUCTS_QUERY = `#graphql
   query FeaturedProducts(
     $blendsHandle: String!
     $singleOriginHandle: String!
+    $subscriptionHandle: String!
     $first: Int!
   ) {
+    subscriptionFeature: product(handle: $subscriptionHandle) {
+      featuredImage {
+        url
+        altText
+        width
+        height
+      }
+    }
     blends: collection(handle: $blendsHandle) {
       products(first: $first, sortKey: CREATED, reverse: true) {
         nodes {
@@ -108,22 +117,21 @@ const FEATURED_PRODUCTS_QUERY = `#graphql
           title
           handle
           createdAt
-          featuredImage {
-            url
-            altText
+          productType
+          availableForSale
+          images(first: 2) {
+            nodes {
+              id
+              altText
+              url
+              width
+              height
+            }
           }
           priceRange {
             minVariantPrice {
               amount
               currencyCode
-            }
-          }
-          variants(first: 1) {
-            nodes {
-              selectedOptions {
-                name
-                value
-              }
             }
           }
         }
@@ -136,22 +144,21 @@ const FEATURED_PRODUCTS_QUERY = `#graphql
           title
           handle
           createdAt
-          featuredImage {
-            url
-            altText
+          productType
+          availableForSale
+          images(first: 2) {
+            nodes {
+              id
+              altText
+              url
+              width
+              height
+            }
           }
           priceRange {
             minVariantPrice {
               amount
               currencyCode
-            }
-          }
-          variants(first: 1) {
-            nodes {
-              selectedOptions {
-                name
-                value
-              }
             }
           }
         }

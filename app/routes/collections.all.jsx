@@ -2,6 +2,7 @@ import {useLoaderData} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
+import {PageHeader} from '~/components/PageHeader';
 
 /**
  * @type {Route.MetaFunction}
@@ -58,11 +59,12 @@ export default function Collection() {
   const {products} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
+    <div>
+      <PageHeader eyebrow="Shop" title="Everything" dark />
+      <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">
       <PaginatedResourceSection
         connection={products}
-        resourcesClassName="products-grid"
+        resourcesClassName="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
       >
         {({node: product, index}) => (
           <ProductItem
@@ -72,6 +74,7 @@ export default function Collection() {
           />
         )}
       </PaginatedResourceSection>
+      </div>
     </div>
   );
 }
@@ -85,12 +88,16 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
+    productType
+    availableForSale
+    images(first: 2) {
+      nodes {
+        id
+        altText
+        url
+        width
+        height
+      }
     }
     priceRange {
       minVariantPrice {

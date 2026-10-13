@@ -1,4 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 
 /**
  * @type {Route.MetaFunction}
@@ -44,15 +45,12 @@ export default function Policy() {
   const {policy} = useLoaderData();
 
   return (
-    <div className="policy">
-      <br />
-      <br />
-      <div>
-        <Link to="/policies">← Back to Policies</Link>
-      </div>
-      <br />
-      <h1>{policy.title}</h1>
-      <div dangerouslySetInnerHTML={{__html: policy.body}} />
+    <div>
+      <PageHeader eyebrow={<Link to="/policies">← All policies</Link>} title={policy.title} tone="bg-paper-2" />
+      <div
+        className="prose mx-auto max-w-3xl px-6 py-14 md:py-20"
+        dangerouslySetInnerHTML={{__html: policy.body}}
+      />
     </div>
   );
 }

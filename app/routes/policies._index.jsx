@@ -1,4 +1,5 @@
 import {useLoaderData, Link} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 
 /**
  * @param {Route.LoaderArgs}
@@ -27,13 +28,18 @@ export default function Policies() {
   const {policies} = useLoaderData();
 
   return (
-    <div className="policies">
-      <h1>Policies</h1>
-      <div>
+    <div>
+      <PageHeader eyebrow="The fine print" title="Policies" tone="bg-paper-2" />
+      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-14 sm:grid-cols-2 lg:grid-cols-3 md:py-20">
         {policies.map((policy) => (
-          <fieldset key={policy.id}>
-            <Link to={`/policies/${policy.handle}`}>{policy.title}</Link>
-          </fieldset>
+          <Link
+            key={policy.id}
+            to={`/policies/${policy.handle}`}
+            className="block-card flex items-center justify-between p-6 font-display text-xl uppercase no-underline transition-[transform,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:no-underline hover:shadow-block-lg"
+          >
+            {policy.title}
+            <span aria-hidden="true">→</span>
+          </Link>
         ))}
       </div>
     </div>

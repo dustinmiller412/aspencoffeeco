@@ -44,102 +44,48 @@ export default function NoteDetail() {
   });
 
   return (
-    <article className="min-h-screen bg-[#FAF8F4] dark:bg-background">
-
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <div className="relative pt-40 md:pt-44">
-
-        {/* Cover image — cinematic, full-bleed within max-w-3xl */}
-        {note.coverImage ? (
-          <div className="mx-auto max-w-3xl px-4 sm:px-6">
-            <div className="relative overflow-hidden rounded-[1.5rem] border border-[#e7ddd1] shadow-lg dark:border-white/10">
-              <img
-                src={note.coverImage}
-                alt={note.title}
-                className="aspect-[16/8] w-full object-cover"
-                loading="eager"
-              />
-              {/* gradient vignette — bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-              {/* gradient vignette — top (for nav clearance) */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-transparent" />
-
-              {/* Back link — floated over the image */}
-              <div className="absolute left-5 top-5">
-                <Link
-                  to="/fieldnotes"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-black/30 px-3 py-1.5 text-[0.65rem] uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm transition-colors hover:bg-black/50"
-                >
-                  <ArrowLeft className="h-3 w-3" />
-                  Field Notes
-                </Link>
-              </div>
-
-              {/* Tags — bottom-left of image */}
-              {note.tags?.length ? (
-                <div className="absolute bottom-5 left-5 flex flex-wrap gap-1.5">
-                  {note.tags.map((tag) => (
-                    <span
-                      key={`${note.title}-${tag}`}
-                      className="rounded-full border border-white/20 bg-black/30 px-2.5 py-1 text-[0.6rem] uppercase tracking-[0.13em] text-white/80 backdrop-blur-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : (
-          /* No cover image — show back link inline */
-          <div className="mx-auto max-w-3xl px-4 sm:px-6">
-            <Link
-              to="/fieldnotes"
-              className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Back to field notes
-            </Link>
-          </div>
-        )}
-
-        {/* ── Title block ─────────────────────────────────────────── */}
-        <div className="mx-auto max-w-2xl px-4 pb-2 pt-8 sm:px-6">
-
-          {/* Meta row */}
-          <div className="mb-5 flex flex-wrap items-center gap-2 text-[0.68rem] uppercase tracking-[0.16em] text-muted-foreground">
+    <article>
+      <header className="border-b-2 border-ink bg-pop-2 px-4 pb-32 pt-12 sm:px-6 md:pt-16">
+        <div className="mx-auto max-w-3xl">
+          <Link to="/fieldnotes" className="pill mb-10 gap-2 no-underline hover:no-underline">
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Field notes
+          </Link>
+          <div className="eyebrow mb-5 flex flex-wrap items-center gap-2">
             {note.category && (
               <>
                 <span>{note.category}</span>
-                <span aria-hidden="true" className="text-[#c9bfb3]">&middot;</span>
+                <span aria-hidden="true">✺</span>
               </>
             )}
             <time dateTime={note.date}>{formattedDate}</time>
           </div>
-
-          {/* Title */}
-          <h1 className="font-serif text-[2.8rem] leading-[1.04] tracking-[-0.01em] text-foreground sm:text-[3.4rem]">
-            {note.title}
-          </h1>
-
-          {/* Excerpt / lead */}
-          {note.excerpt && (
-            <p className="mt-5 text-[1.05rem] leading-[1.75] text-muted-foreground sm:text-[1.1rem]">
-              {note.excerpt}
-            </p>
-          )}
-
-          {/* Decorative rule */}
-          <div className="mt-8 flex items-center gap-4">
-            <div className="h-px flex-1 bg-[#e4d8cc] dark:bg-white/10" />
-            <span className="text-[0.7rem] tracking-[0.2em] text-[#c9bfb3] dark:text-white/20">✦</span>
-            <div className="h-px flex-1 bg-[#e4d8cc] dark:bg-white/10" />
-          </div>
+          <h1 className="m-0 text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.95]">{note.title}</h1>
+          {note.excerpt && <p className="mt-6 max-w-2xl text-lg leading-relaxed">{note.excerpt}</p>}
+          {note.tags?.length ? (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {note.tags.map((tag) => (
+                <span key={tag} className="eyebrow border-2 border-ink bg-paper-2 px-2 py-0.5 text-[0.6rem]">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
-      </div>
+      </header>
 
-      {/* ── Prose body ───────────────────────────────────────────── */}
-      <div className="mx-auto max-w-2xl px-4 pb-28 pt-10 sm:px-6">
+      {note.coverImage ? (
+        <div className="mx-auto -mt-24 max-w-3xl px-4 sm:px-6">
+          <img
+            src={note.coverImage}
+            alt={note.title}
+            className="block-card aspect-[16/9] w-full object-cover p-0 shadow-block-lg"
+            loading="eager"
+          />
+        </div>
+      ) : null}
+
+      <div className="mx-auto max-w-2xl px-4 pb-10 pt-14 sm:px-6">
         <div
           className="note-prose prose max-w-none"
           dangerouslySetInnerHTML={{__html: note.html}}

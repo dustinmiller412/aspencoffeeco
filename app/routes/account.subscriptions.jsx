@@ -1,19 +1,11 @@
 import {data, Form, useLoaderData, useActionData, useNavigation} from 'react-router';
+import {EmptyState} from '~/components/EmptyState';
 import {useEffect, useState} from 'react';
 import {toast} from 'sonner';
 import * as Dialog from '@radix-ui/react-dialog';
 import {sealClient} from '~/lib/seal.server';
 import {sendEmail} from '~/lib/email.server';
-
-const CUSTOMER_EMAIL_QUERY = `#graphql
-  query CustomerEmail {
-    customer {
-      emailAddress {
-        emailAddress
-      }
-    }
-  }
-`;
+import {CUSTOMER_EMAIL_QUERY} from '~/graphql/customer-account/CustomerEmailQuery';
 
 /** @type {Route.MetaFunction} */
 export const meta = () => [{title: 'Subscriptions'}];
@@ -132,13 +124,16 @@ export default function AccountSubscriptions() {
   return (
     <div>
       {loaderError && (
-        <p className="mb-4 text-sm text-red-500">{loaderError}</p>
+        <p className="mb-4 text-sm text-destructive font-semibold">{loaderError}</p>
       )}
 
       {!loaderError && !subscriptions.length && (
-        <div className="py-16 text-center text-[var(--muted-foreground)]">
-          <p>You don&apos;t have any active subscriptions.</p>
-        </div>
+        <EmptyState
+          title="No subscriptions yet"
+          body="Subscribe for free shipping, first access to new drops, and a reliable coffee routine without the guesswork. Pause, skip or cancel anytime from here."
+          cta={{to: '/collections/subscriptions', label: 'Subscribe & save'}}
+          tone="bg-pop-1"
+        />
       )}
 
       <div className="flex flex-col gap-4">
@@ -167,7 +162,7 @@ function SubscriptionCard({subscription, isSubmitting}) {
   const canManage = isActive || isPaused;
 
   return (
-    <div className="border border-[var(--border)] rounded-lg p-5">
+    <div className="block-card p-5">
       <div className="flex items-center justify-between gap-3 mb-4">
         <p className="font-semibold">Subscription #{subscription.id}</p>
         <StatusBadge status={subscription.status} />
@@ -176,7 +171,7 @@ function SubscriptionCard({subscription, isSubmitting}) {
       {subscription.items?.length > 0 && (
         <ul className="mb-3 space-y-1">
           {subscription.items.map((item) => (
-            <li key={item.id} className="text-sm text-[var(--muted-foreground)]">
+            <li key={item.id} className="text-sm text-muted-foreground">
               {item.title} × {item.quantity} —{' '}
               {formatPrice(item.price, subscription.currency)}
             </li>
@@ -184,20 +179,20 @@ function SubscriptionCard({subscription, isSubmitting}) {
         </ul>
       )}
 
-      <div className="text-sm text-[var(--muted-foreground)] space-y-1 mb-4">
+      <div className="text-sm text-muted-foreground space-y-1 mb-4">
         <p>Delivery every {subscription.delivery_interval}</p>
 
         {nextDelivery && (
           <p>
             Next order:{' '}
-            <span className="text-[var(--foreground)] font-medium">
+            <span className="text-foreground font-medium">
               {formatDate(nextDelivery.date)}
             </span>
           </p>
         )}
 
         {isNextSkipped && nextAttempt && (
-          <p className="text-yellow-500">
+          <p className="font-bold">
             {formatDate(nextAttempt.date)} skipped
           </p>
         )}
@@ -211,14 +206,14 @@ function SubscriptionCard({subscription, isSubmitting}) {
       </div>
 
       {canManage && (
-        <div className="flex flex-wrap gap-2 pt-3 border-t border-[var(--border)]">
+        <div className="flex flex-wrap gap-2 pt-3 border-t-2 border-ink">
           {nextAttempt && isActive && (
             <Form method="POST">
               <input type="hidden" name="_action" value={isNextSkipped ? 'unskip' : 'skip'} />
               <input type="hidden" name="subscriptionId" value={subscription.id} />
               <input type="hidden" name="billingAttemptId" value={nextAttempt.id} />
               <button type="submit" disabled={isSubmitting}
-                className="px-3 py-1.5 text-sm border border-[var(--border)] rounded-md hover:bg-[var(--accent)] transition-colors disabled:opacity-50">
+                className="pill disabled:opacity-50">
                 {isNextSkipped
                   ? `Unskip ${new Date(nextAttempt.date).toLocaleString('en-US', {month: 'long'})}`
                   : 'Skip next'}
@@ -230,7 +225,7 @@ function SubscriptionCard({subscription, isSubmitting}) {
             <input type="hidden" name="_action" value={isActive ? 'pause' : 'resume'} />
             <input type="hidden" name="subscriptionId" value={subscription.id} />
             <button type="submit" disabled={isSubmitting}
-              className="px-3 py-1.5 text-sm border border-[var(--border)] rounded-md hover:bg-[var(--accent)] transition-colors disabled:opacity-50">
+              className="pill disabled:opacity-50">
               {isActive ? 'Pause' : 'Resume'}
             </button>
           </Form>
@@ -265,19 +260,19 @@ function CancelButton({subscriptionId, customerName, customerEmail, isSubmitting
       <Dialog.Trigger asChild>
         <button
           disabled={isSubmitting}
-          className="px-3 py-1.5 text-sm text-red-500 border border-red-500/30 rounded-md hover:bg-red-500/10 transition-colors disabled:opacity-50"
+          className="pill text-destructive hover:bg-destructive hover:text-paper-2 disabled:opacity-50"
         >
           Cancel
         </button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-[var(--background)] border border-[var(--border)] rounded-xl p-6 shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
-          <Dialog.Title className="text-base font-semibold mb-1">
+        <Dialog.Overlay className="fixed inset-0 bg-ink/60 z-50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-paper-2 border-2 border-ink shadow-block-lg p-6 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
+          <Dialog.Title className="mb-2 text-2xl">
             Before you go…
           </Dialog.Title>
-          <Dialog.Description className="text-sm text-[var(--muted-foreground)] mb-5">
+          <Dialog.Description className="text-sm text-muted-foreground mb-5">
             We&apos;d love to know why you&apos;re cancelling so we can improve.
           </Dialog.Description>
 
@@ -293,7 +288,7 @@ function CancelButton({subscriptionId, customerName, customerEmail, isSubmitting
                   key={r}
                   type="button"
                   onClick={() => setReason(r)}
-                  className={`text-left px-3.5 py-2.5 rounded-lg text-sm border transition-colors ${
+                  className={`text-left px-3.5 py-2.5 text-sm border transition-colors ${
                     reason === r
                       ? 'border-[var(--foreground)] bg-[var(--accent)] font-medium'
                       : 'border-[var(--border)] hover:bg-[var(--accent)]'
@@ -317,14 +312,14 @@ function CancelButton({subscriptionId, customerName, customerEmail, isSubmitting
               <button
                 type="submit"
                 disabled={!reason || isSubmitting}
-                className="w-full px-4 py-2.5 text-sm font-medium bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2.5 text-sm font-medium btn bg-destructive text-paper-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Cancelling…' : 'Confirm cancellation'}
               </button>
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className="w-full px-4 py-2.5 text-sm font-medium border border-[var(--border)] rounded-lg hover:bg-[var(--accent)] transition-colors"
+                  className="btn-outline w-full"
                 >
                   Keep my subscription
                 </button>
@@ -340,14 +335,14 @@ function CancelButton({subscriptionId, customerName, customerEmail, isSubmitting
 /** @param {{status: string}} */
 function StatusBadge({status}) {
   const cls = {
-    ACTIVE: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
-    PAUSED: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
-    CANCELLED: 'bg-red-500/15 text-red-500',
-    EXPIRED: 'bg-[var(--muted)] text-[var(--muted-foreground)]',
-  }[status] ?? 'bg-[var(--muted)] text-[var(--muted-foreground)]';
+    ACTIVE: 'border-2 border-ink bg-pop-1 text-ink',
+    PAUSED: 'border-2 border-ink bg-cta text-ink',
+    CANCELLED: 'border-2 border-ink bg-destructive text-paper-2',
+    EXPIRED: 'bg-[var(--muted)] text-muted-foreground',
+  }[status] ?? 'bg-[var(--muted)] text-muted-foreground';
 
   return (
-    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${cls}`}>
+    <span className={`inline-block px-2 py-0.5 text-xs font-medium ${cls}`}>
       {status}
     </span>
   );

@@ -2,7 +2,7 @@ import {CartForm, Money} from '@shopify/hydrogen';
 import {useEffect, useId, useRef, useState} from 'react';
 import {useFetcher} from 'react-router';
 
-const FREE_SHIPPING_THRESHOLD = 40;
+export const FREE_SHIPPING_THRESHOLD = 40;
 
 /**
  * @param {CartSummaryProps}
@@ -25,17 +25,17 @@ export function CartSummary({cart, layout}) {
       aria-labelledby={summaryId}
       className={`${className} ${
         isAside
-          ? 'mt-4 border-t border-border/80 bg-background pt-4'
-          : 'mt-8 border-t border-border/80 pt-4'
+          ? 'mt-4 border-t-2 border-ink bg-paper pt-4'
+          : 'block-card mt-8 p-6'
       }`}
     >
       <FreeShippingProgress subtotal={cart?.cost?.subtotalAmount} />
-      <h4 id={summaryId} className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-        Order Summary
+      <h4 id={summaryId} className="eyebrow m-0">
+        Order summary
       </h4>
-      <dl role="group" className="cart-subtotal mt-2 flex items-center justify-between">
+      <dl role="group" className="mt-2 flex items-center justify-between font-display text-xl uppercase">
         <dt>Subtotal</dt>
-        <dd className="font-medium">
+        <dd className="m-0">
           {cart?.cost?.subtotalAmount?.amount ? (
             <Money data={cart?.cost?.subtotalAmount} />
           ) : (
@@ -56,7 +56,7 @@ export function CartSummary({cart, layout}) {
         />
       </div>
       {subscriptionLineCount > 0 ? (
-        <p className="mt-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+        <p className="eyebrow mt-3">
           Includes {subscriptionLineCount} subscription item
           {subscriptionLineCount > 1 ? 's' : ''}
         </p>
@@ -74,10 +74,10 @@ function FreeShippingProgress({subtotal}) {
   const qualified = remaining === 0;
 
   return (
-    <div className="mb-4 rounded-md bg-secondary/50 px-3 py-2.5">
-      <p className="text-xs text-foreground">
+    <div className="mb-4 border-2 border-ink bg-pop-2 px-3 py-2.5">
+      <p className="text-xs font-semibold">
         {qualified ? (
-          <span className="font-medium text-green-600 dark:text-green-400">
+          <span className="font-bold uppercase tracking-wide">
             You&apos;ve unlocked free shipping!
           </span>
         ) : (
@@ -96,11 +96,11 @@ function FreeShippingProgress({subtotal}) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Progress to free shipping"
-        className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-border"
+        className="mt-2 h-3 w-full overflow-hidden border-2 border-ink bg-paper-2"
       >
         <div
-          className={`h-full rounded-full transition-all duration-500 ${
-            qualified ? 'bg-green-500' : 'bg-primary'
+          className={`h-full transition-all duration-500 ${
+            qualified ? 'bg-pop-1' : 'bg-cta'
           }`}
           style={{width: `${progress}%`}}
         />
@@ -116,23 +116,23 @@ function CartCheckoutActions({checkoutUrl, layout}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div className="mt-4 space-y-2">
+    <div className="mt-5 space-y-3">
       <a
         href={checkoutUrl}
         target="_self"
-        className="inline-flex h-11 w-full items-center justify-center rounded-md bg-primary px-5 text-xs uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-primary/90"
+        className="btn-cta w-full"
       >
         Continue to checkout
       </a>
       {layout === 'aside' ? (
         <a
           href="/cart"
-          className="inline-flex h-11 w-full items-center justify-center rounded-md border border-border px-5 text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-secondary"
+          className="btn-outline w-full"
         >
           View bag
         </a>
       ) : null}
-      <p className="text-[11px] leading-relaxed text-muted-foreground">
+      <p className="pt-2 text-[11px] leading-relaxed">
         Shipping and taxes are calculated at checkout.
       </p>
     </div>
@@ -180,7 +180,7 @@ function CartDiscounts({
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div className="mt-1.5 flex items-center gap-2">
+        <div className="mt-1.5 flex items-center">
           <label htmlFor={discountCodeInputId} className="sr-only">
             Discount code
           </label>
@@ -189,12 +189,12 @@ function CartDiscounts({
             type="text"
             name="discountCode"
             placeholder="Discount code"
-            className="h-10 flex-1 rounded-md border border-border bg-background px-3 text-sm"
+            className="m-0 h-10 min-w-0 flex-1 border-2 border-ink bg-paper-2 px-3 text-sm"
           />
           <button
             type="submit"
             aria-label="Apply discount code"
-            className="inline-flex h-10 items-center rounded-md border border-border px-3 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-secondary"
+            className="inline-flex h-10 items-center border-2 border-ink bg-ink px-3 font-display text-xs uppercase text-paper-2 transition-colors hover:bg-pop-1 hover:text-ink"
           >
             Apply
           </button>
@@ -307,7 +307,7 @@ function CartGiftCard({giftCardCodes, giftCardHeadingId, giftCardInputId}) {
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div className="mt-1.5 flex items-center gap-2">
+        <div className="mt-1.5 flex items-center">
           <label htmlFor={giftCardInputId} className="sr-only">
             Gift card code
           </label>
@@ -317,13 +317,13 @@ function CartGiftCard({giftCardCodes, giftCardHeadingId, giftCardInputId}) {
             name="giftCardCode"
             placeholder="Gift card code"
             ref={giftCardCodeInput}
-            className="h-10 flex-1 rounded-md border border-border bg-background px-3 text-sm"
+            className="m-0 h-10 min-w-0 flex-1 border-2 border-ink bg-paper-2 px-3 text-sm"
           />
           <button
             type="submit"
             disabled={giftCardAddFetcher.state !== 'idle'}
             aria-label="Apply gift card code"
-            className="inline-flex h-10 items-center rounded-md border border-border px-3 text-xs uppercase tracking-[0.12em] transition-colors hover:bg-secondary disabled:opacity-60"
+            className="inline-flex h-10 items-center border-2 border-ink bg-ink px-3 font-display text-xs uppercase text-paper-2 transition-colors hover:bg-pop-1 hover:text-ink disabled:opacity-60"
           >
             Apply
           </button>

@@ -17,6 +17,9 @@ import {
 } from '~/lib/orderFilters';
 import {CUSTOMER_ORDERS_QUERY} from '~/graphql/customer-account/CustomerOrdersQuery';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+import {EmptyState} from '~/components/EmptyState';
+import {Logo} from '~/components/Header';
+import {OrderStatusBadge} from '~/components/OrderStatusBadge';
 
 /**
  * @type {Route.MetaFunction}
@@ -93,29 +96,15 @@ function OrdersTable({orders, filters}) {
  */
 function EmptyOrders({hasFilters = false}) {
   return (
-    <div className="py-16 text-center text-[var(--muted-foreground)]">
-      {hasFilters ? (
-        <>
-          <p className="mb-4">No orders found matching your search.</p>
-          <Link
-            to="/account/orders"
-            className="text-sm underline underline-offset-4 hover:text-[var(--foreground)]"
-          >
-            Clear filters →
-          </Link>
-        </>
-      ) : (
-        <>
-          <p className="mb-4">You haven&apos;t placed any orders yet.</p>
-          <Link
-            to="/collections"
-            className="text-sm underline underline-offset-4 hover:text-[var(--foreground)]"
-          >
-            Start Shopping →
-          </Link>
-        </>
-      )}
-    </div>
+    <EmptyState
+      title={hasFilters ? 'No matching orders' : 'No orders yet'}
+      body={
+        hasFilters
+          ? 'Nothing matches that order or confirmation number.'
+          : 'Once you place an order it will show up here, with tracking as soon as it ships.'
+      }
+      cta={hasFilters ? {to: '/account/orders', label: 'Clear search'} : {to: '/collections/coffee', label: 'Shop coffee'}}
+    />
   );
 }
 
@@ -180,7 +169,7 @@ function OrderSearchForm({currentFilters}) {
         <button
           type="submit"
           disabled={isSearching}
-          className="px-4 py-2 text-sm font-medium bg-[var(--foreground)] text-[var(--background)] rounded-md hover:opacity-90 transition-opacity disabled:opacity-50"
+          className="btn-ink px-4 py-2"
         >
           {isSearching ? 'Searching…' : 'Search'}
         </button>
@@ -192,7 +181,7 @@ function OrderSearchForm({currentFilters}) {
               setSearchParams(new URLSearchParams());
               formRef.current?.reset();
             }}
-            className="px-4 py-2 text-sm font-medium border border-[var(--border)] rounded-md hover:bg-[var(--accent)] transition-colors disabled:opacity-50"
+            className="btn-outline px-4 py-2"
           >
             Clear
           </button>
@@ -205,84 +194,78 @@ function OrderSearchForm({currentFilters}) {
 /**
  * @param {{order: OrderItemFragment}}
  */
-const FINANCIAL_STATUS_STYLES = {
-  PAID: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
-  PENDING: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
-  REFUNDED: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  PARTIALLY_REFUNDED: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  VOIDED: 'bg-[var(--muted)] text-[var(--muted-foreground)]',
-};
-
-const FULFILLMENT_STATUS_STYLES = {
-  SUCCESS: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400',
-  FAILURE: 'bg-red-500/15 text-red-600 dark:text-red-400',
-  PENDING: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
-  IN_PROGRESS: 'bg-blue-500/15 text-blue-600 dark:text-blue-400',
-};
-
-function StatusBadge({label, styleMap}) {
-  const cls =
-    styleMap[label] ?? 'bg-[var(--muted)] text-[var(--muted-foreground)]';
-  return (
-    <span
-      className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${cls}`}
-    >
-      {label}
-    </span>
-  );
-}
-
 function OrderItem({order}) {
   const fulfillmentStatus = flattenConnection(order.fulfillments)[0]?.status;
   const orderUrl = `/account/orders/${btoa(order.id)}`;
+  const lineItems = order.lineItems?.nodes ?? [];
+  const shown = lineItems.slice(0, 3);
+  const extra = lineItems.length - shown.length;
 
   return (
-    <div className="flex items-center justify-between gap-4 py-4 border-b border-[var(--border)] last:border-0">
-      <div className="flex flex-col gap-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <Link
-            to={orderUrl}
-            className="font-semibold hover:underline underline-offset-2"
+    <Link
+      to={orderUrl}
+      className="block-card group mb-5 flex flex-col gap-5 p-4 text-ink no-underline transition-[transform,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:no-underline hover:shadow-block-lg sm:flex-row sm:items-center"
+    >
+      <div className="flex shrink-0 items-center">
+        {shown.map((item, i) => (
+          <div
+            key={item.id}
+            className={`h-16 w-16 overflow-hidden border-2 border-ink bg-paper ${i > 0 ? '-ml-4' : ''}`}
+            style={{zIndex: shown.length - i}}
           >
-            Order #{order.number}
-          </Link>
-          {order.financialStatus && (
-            <StatusBadge
-              label={order.financialStatus}
-              styleMap={FINANCIAL_STATUS_STYLES}
-            />
-          )}
-          {fulfillmentStatus && (
-            <StatusBadge
-              label={fulfillmentStatus}
-              styleMap={FULFILLMENT_STATUS_STYLES}
-            />
-          )}
-        </div>
-        <p className="text-sm text-[var(--muted-foreground)]">
+            {item.image?.url ? (
+              <img
+                src={item.image.url}
+                alt={item.image.altText || item.title}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <Logo variant="mark" label="" className="m-auto mt-3 h-8 opacity-25" />
+            )}
+          </div>
+        ))}
+        {extra > 0 ? (
+          <span className="-ml-4 flex h-16 w-16 items-center justify-center border-2 border-ink bg-pop-2 font-display text-sm">
+            +{extra}
+          </span>
+        ) : null}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="m-0 font-display text-xl uppercase leading-none">Order #{order.number}</p>
+        <p className="mt-2 text-sm">
           {new Date(order.processedAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
           })}
-          {order.confirmationNumber && (
-            <span> · #{order.confirmationNumber}</span>
-          )}
+          {shown[0] ? (
+            <span>
+              {' · '}
+              {shown[0].title}
+              {lineItems.length > 1 ? ` + ${lineItems.length - 1} more` : ''}
+            </span>
+          ) : null}
         </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {order.financialStatus && (
+            <OrderStatusBadge status={order.financialStatus} kind="financial" />
+          )}
+          {fulfillmentStatus && (
+            <OrderStatusBadge status={fulfillmentStatus} kind="fulfillment" />
+          )}
+        </div>
       </div>
-      <div className="flex items-center gap-4 shrink-0">
-        <Money
-          data={order.totalPrice}
-          className="font-medium tabular-nums"
-        />
-        <Link
-          to={orderUrl}
-          className="text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors whitespace-nowrap"
-        >
-          View →
-        </Link>
+
+      <div className="flex items-center justify-between gap-5 sm:flex-col sm:items-end">
+        <Money data={order.totalPrice} className="font-display text-2xl tabular-nums" />
+        <span className="eyebrow inline-flex items-center gap-1">
+          View order
+          <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -1,4 +1,5 @@
 import {useLoaderData, data} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
 
@@ -112,9 +113,11 @@ export default function Cart() {
   const cart = useLoaderData();
 
   return (
-    <div className="cart">
-      <h1>Cart</h1>
-      <CartMain layout="page" cart={cart} />
+    <div>
+      <PageHeader eyebrow="Checkout" title="Your bag" tone="bg-cta" />
+      <div className="px-6 py-12 md:py-16">
+        <CartMain layout="page" cart={cart} />
+      </div>
     </div>
   );
 }

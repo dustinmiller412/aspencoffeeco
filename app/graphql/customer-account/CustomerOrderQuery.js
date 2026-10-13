@@ -33,6 +33,9 @@ export const CUSTOMER_ORDER_QUERY = `#graphql
     totalDiscount {
       ...OrderMoney
     }
+    totalPrice {
+      ...OrderMoney
+    }
     image {
       altText
       height
@@ -61,6 +64,9 @@ export const CUSTOMER_ORDER_QUERY = `#graphql
       ...OrderMoney
     }
     subtotal {
+      ...OrderMoney
+    }
+    totalShipping {
       ...OrderMoney
     }
     shippingAddress {

@@ -1,4 +1,4 @@
-import {Await, Link, useLocation} from 'react-router';
+import {Await, Link} from 'react-router';
 import {Suspense, useId} from 'react';
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
@@ -22,9 +22,6 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
 }) {
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
-
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
@@ -38,7 +35,7 @@ export function PageLayout({
         />
       )}
       <NewsletterPopup />
-      <main className={isHomePage ? undefined : 'pt-28 md:pt-0'}>{children}</main>
+      <main>{children}</main>
       <Footer
         footer={footer}
         header={header}
@@ -54,7 +51,7 @@ export function PageLayout({
 function CartAside({cart}) {
   return (
     <Aside type="cart" heading="CART">
-      <Suspense fallback={<p>Loading cart ...</p>}>
+      <Suspense fallback={<p className="eyebrow">Loading cart…</p>}>
         <Await resolve={cart}>
           {(cart) => {
             return <CartMain cart={cart} layout="aside" />;
@@ -70,22 +67,23 @@ function SearchAside() {
   return (
     <Aside type="search" heading="SEARCH">
       <div className="predictive-search">
-        <br />
         <SearchFormPredictive>
           {({fetchResults, goToSearch, inputRef}) => (
-            <>
+            <div className="flex gap-2">
               <input
                 name="q"
                 onChange={fetchResults}
                 onFocus={fetchResults}
-                placeholder="Search"
+                placeholder="Search coffee, gear, notes…"
                 ref={inputRef}
                 type="search"
                 list={queriesDatalistId}
+                className="field"
               />
-              &nbsp;
-              <button onClick={goToSearch}>Search</button>
-            </>
+              <button type="button" onClick={goToSearch} className="btn-ink px-4">
+                Go
+              </button>
+            </div>
           )}
         </SearchFormPredictive>
 
@@ -94,7 +92,7 @@ function SearchAside() {
             const {articles, collections, pages, products, queries} = items;
 
             if (state === 'loading' && term.current) {
-              return <div>Loading...</div>;
+              return <p className="eyebrow mt-6">Searching…</p>;
             }
 
             if (!total) {
@@ -131,11 +129,9 @@ function SearchAside() {
                   <Link
                     onClick={closeSearch}
                     to={`${SEARCH_ENDPOINT}?q=${term.current}`}
+                    className="btn-cta mt-6 w-full"
                   >
-                    <p>
-                      View all results for <q>{term.current}</q>
-                      &nbsp; →
-                    </p>
+                    All results for “{term.current}” →
                   </Link>
                 ) : null}
               </>

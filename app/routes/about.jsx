@@ -1,6 +1,8 @@
 import {motion} from 'framer-motion';
 import {NavLink} from 'react-router';
 import {ArrowRight} from 'lucide-react';
+import {Logo} from '~/components/Header';
+import {PageHeader} from '~/components/PageHeader';
 
 /** @type {Route.MetaFunction} */
 export const meta = () => {
@@ -24,53 +26,31 @@ const PHILOSOPHY = [
 
 export default function About() {
   return (
-    <div className="bg-[linear-gradient(180deg,#fefcf8_0%,#f7efe5_36%,#f6eee4_64%,#fffdfa_100%)] dark:bg-[linear-gradient(180deg,#13110f_0%,#181411_42%,#16120f_100%)]">
-
-      {/* Hero */}
-      <section className="px-6 pt-36 pb-24 text-center md:pt-48 md:pb-28">
-        <motion.div
-          initial={{opacity: 0, y: 24}}
-          animate={{opacity: 1, y: 0}}
-          transition={{duration: 0.8, ease: [0.22, 1, 0.36, 1]}}
-          className="mx-auto max-w-4xl"
-        >
-          <p className="mb-5 text-xs uppercase tracking-[0.24em] text-muted-foreground">The Story Behind Aspen</p>
-          <h1 className="font-serif text-5xl leading-[1.05] tracking-[0.01em] text-foreground md:text-6xl lg:text-7xl">
-            Every coffee has a story.<br className="hidden sm:block" /> We're here to connect you to it.
-          </h1>
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-            Aspen Coffee Co grew out of a personal obsession with understanding coffee: where it comes from,
-            how it&apos;s made, and what makes each cup different. I built it because I couldn&apos;t stop asking questions.
-          </p>
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <NavLink
-              to="/collections/coffee"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              Shop Coffee
-              <ArrowRight className="h-4 w-4" />
-            </NavLink>
-            <NavLink
-              to="/fieldnotes"
-              className="inline-flex items-center gap-2 rounded-full border border-border/70 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground transition-colors hover:bg-background/70"
-            >
-              Read Field Notes
-            </NavLink>
-          </div>
-        </motion.div>
-      </section>
+    <div>
+      <PageHeader eyebrow="Our story" title="About Aspen" dark>
+        Small-batch coffee roasted in Pittsburgh, PA, and the people and places behind every cup.
+      </PageHeader>
 
       {/* Story */}
-      <section className="px-6 pb-14">
-        <motion.div
-          initial={{opacity: 0, y: 20}}
-          whileInView={{opacity: 1, y: 0}}
-          viewport={{once: true}}
-          transition={{duration: 0.8, ease: [0.22, 1, 0.36, 1]}}
-          className="mx-auto max-w-2xl"
-        >
-          <p className="mb-6 text-xs uppercase tracking-[0.24em] text-muted-foreground">How It Started</p>
-          <div className="space-y-6 text-base leading-relaxed text-muted-foreground md:text-lg">
+      <section className="px-6 pb-20 pt-14 md:pb-28 md:pt-20">
+        <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[1fr_1.4fr]">
+          <div className="md:sticky md:top-32 md:self-start">
+            <p className="eyebrow mb-4">How it started</p>
+            <h2 className="m-0 text-5xl md:text-6xl">A washed Tanzanian peaberry opened the door.</h2>
+            <Logo variant="badge" label="" className="mt-10 h-36 text-ink" />
+          </div>
+          <motion.div
+            initial={{opacity: 0, y: 20}}
+            whileInView={{opacity: 1, y: 0}}
+            viewport={{once: true}}
+            transition={{duration: 0.8, ease: [0.22, 1, 0.36, 1]}}
+            className="block-card space-y-6 p-8 text-lg leading-relaxed md:p-12"
+          >
+            <p className="text-xl font-semibold leading-relaxed">
+              Aspen Coffee Co grew out of a personal obsession with understanding coffee: where it comes
+              from, how it&apos;s made, and what makes each cup different. I built it because I couldn&apos;t
+              stop asking questions.
+            </p>
             <p>
               Around 2020, I walked into a coffee shop that roasted on site. I had never really seen coffee
               roasting up close before. Until then, coffee was something I enjoyed, but watching it being
@@ -100,15 +80,16 @@ export default function About() {
               Aspen grew out of all of that: curiosity, craft, and the belief that coffee should connect us
               more deeply to the people and places behind it.
             </p>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Philosophy */}
-      <section className="px-6 pb-28">
-        <div className="mx-auto max-w-2xl">
-          <p className="mb-10 text-xs uppercase tracking-[0.24em] text-muted-foreground">Our Philosophy</p>
-          <div className="divide-y divide-border/50">
+      <section className="on-ink bg-ink px-6 py-24 text-paper-2 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <p className="eyebrow mb-4 text-glow">Our philosophy</p>
+          <h2 className="mb-14 text-5xl md:text-7xl">What we believe</h2>
+          <div className="grid gap-8 md:grid-cols-3">
             {PHILOSOPHY.map((item, index) => (
               <motion.div
                 key={item.label}
@@ -116,10 +97,13 @@ export default function About() {
                 whileInView={{opacity: 1, y: 0}}
                 viewport={{once: true}}
                 transition={{duration: 0.6, delay: index * 0.08}}
-                className="py-8 first:pt-0 last:pb-0"
+                className="block-card p-8 text-ink"
               >
-                <h3 className="font-serif text-2xl text-foreground mb-3">{item.label}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground md:text-base">{item.text}</p>
+                <span className="mb-6 inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-cta font-display text-lg">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mb-4 text-3xl">{item.label}</h3>
+                <p className="text-sm leading-relaxed md:text-base">{item.text}</p>
               </motion.div>
             ))}
           </div>
@@ -127,39 +111,30 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 pb-24">
+      <section className="px-6 pt-24">
         <motion.div
           initial={{opacity: 0, y: 16}}
           whileInView={{opacity: 1, y: 0}}
           viewport={{once: true}}
           transition={{duration: 0.7}}
-          className="mx-auto max-w-2xl border-t border-border/40 pt-16 text-center"
+          className="mx-auto max-w-4xl text-center"
         >
-          <h2 className="font-serif text-4xl leading-[0.98] tracking-[0.01em] text-foreground md:text-5xl">
-            Specialty coffee is something<br className="hidden sm:block" /> you can be part of.
-          </h2>
-          <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-muted-foreground md:text-base">
+          <h2 className="text-5xl md:text-6xl">Specialty coffee is something you can be part of.</h2>
+          <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed">
             Browse what we&apos;re currently roasting. Each bag comes with the origin story, producer context,
             and the details that help the cup make sense.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <NavLink
-              to="/collections/coffee"
-              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs uppercase tracking-[0.18em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              Browse Current Coffees
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <NavLink to="/collections/coffee" className="btn-cta">
+              Browse current coffees
               <ArrowRight className="h-4 w-4" />
             </NavLink>
-            <NavLink
-              to="/fieldnotes"
-              className="inline-flex items-center gap-2 rounded-full border border-border/60 px-6 py-3 text-xs uppercase tracking-[0.18em] text-foreground/70 transition-colors hover:text-foreground"
-            >
-              Read Field Notes
+            <NavLink to="/fieldnotes" className="btn-outline">
+              Read field notes
             </NavLink>
           </div>
         </motion.div>
       </section>
-
     </div>
   );
 }

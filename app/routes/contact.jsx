@@ -1,4 +1,5 @@
 import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
+import {PageHeader} from '~/components/PageHeader';
 import {useEffect, useRef} from 'react';
 import {sendEmail} from '~/lib/email.server';
 
@@ -88,21 +89,16 @@ export default function Contact() {
   }, []);
 
   return (
-    <div className="bg-[linear-gradient(180deg,#fefcf8_0%,#f8f1e8_40%,#fffdfa_100%)] px-6 pb-36 pt-32 dark:bg-[linear-gradient(180deg,#13110f_0%,#171310_45%,#14110f_100%)] md:pt-40">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-12 text-center">
-          <h1 className="mt-24 font-serif text-5xl leading-[0.95] tracking-[0.01em] text-foreground md:text-6xl">
-            Get In Touch
-          </h1>
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            Questions about orders, subscriptions, or brewing? Send a message and we will get back to you.
-          </p>
-        </div>
+    <div>
+      <PageHeader eyebrow="Contact" title="Get in touch" tone="bg-pop-2">
+        Questions about orders, subscriptions, or brewing? Send a message and we will get back to you.
+      </PageHeader>
+      <div className="mx-auto max-w-5xl px-6 py-14 md:py-20">
 
-        <div className="mx-auto max-w-4xl rounded-[1.75rem] border border-[#e4d7c8] bg-white/80 py-6 shadow-[0_16px_42px_rgba(78,56,36,0.06)] dark:border-white/10 dark:bg-white/5 dark:shadow-[0_16px_42px_rgba(0,0,0,0.22)] md:py-8">
+        <div className="block-card mx-auto max-w-4xl p-6 shadow-block-lg md:p-10">
           <Form
             method="post"
-            className="w-full max-w-none space-y-5 px-2 md:px-4"
+            className="w-full max-w-none space-y-5"
             style={{maxWidth: 'none'}}
           >
             {/* Timing token — set on mount so instant bot submissions fail */}
@@ -115,7 +111,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <label htmlFor="contact-name" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              <label htmlFor="contact-name" className="eyebrow mb-2 block">
                 Name
               </label>
               <input
@@ -123,12 +119,12 @@ export default function Contact() {
                 name="name"
                 type="text"
                 required
-                className="h-12 w-full rounded-lg border border-[#dfd1c2] bg-white px-4 text-sm text-foreground outline-none transition-colors focus:border-foreground/45 dark:border-white/15 dark:bg-white/5"
+                className="field m-0 h-12"
               />
             </div>
 
             <div>
-              <label htmlFor="contact-email" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              <label htmlFor="contact-email" className="eyebrow mb-2 block">
                 Email
               </label>
               <input
@@ -136,12 +132,12 @@ export default function Contact() {
                 name="email"
                 type="email"
                 required
-                className="h-12 w-full rounded-lg border border-[#dfd1c2] bg-white px-4 text-sm text-foreground outline-none transition-colors focus:border-foreground/45 dark:border-white/15 dark:bg-white/5"
+                className="field m-0 h-12"
               />
             </div>
 
             <div>
-              <label htmlFor="contact-subject" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              <label htmlFor="contact-subject" className="eyebrow mb-2 block">
                 Subject
               </label>
               <select
@@ -149,7 +145,7 @@ export default function Contact() {
                 name="subject"
                 required
                 defaultValue=""
-                className="h-12 w-full rounded-lg border border-[#dfd1c2] bg-white px-4 text-sm text-foreground outline-none transition-colors focus:border-foreground/45 dark:border-white/15 dark:bg-white/5"
+                className="field m-0 h-12"
               >
                 <option value="" disabled>Select a subject</option>
                 <option value="Order Support">Order Support</option>
@@ -161,7 +157,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <label htmlFor="contact-message" className="mb-2 block text-xs uppercase tracking-[0.16em] text-muted-foreground">
+              <label htmlFor="contact-message" className="eyebrow mb-2 block">
                 Message
               </label>
               <textarea
@@ -169,42 +165,42 @@ export default function Contact() {
                 name="message"
                 rows={6}
                 required
-                className="w-full rounded-lg border border-[#dfd1c2] bg-white px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-foreground/45 dark:border-white/15 dark:bg-white/5"
+                className="field m-0"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex h-12 min-w-[190px] items-center justify-center rounded-lg bg-primary px-8 text-xs font-medium uppercase tracking-[0.16em] text-primary-foreground transition-colors hover:bg-accent hover:text-accent-foreground disabled:cursor-not-allowed disabled:opacity-70"
+              className="btn-cta min-w-[190px]"
             >
               {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </Form>
 
           {actionData?.ok ? (
-            <p className="mx-2 mt-5 rounded-lg border border-emerald-300/40 bg-emerald-50/70 px-4 py-3 text-sm text-foreground dark:border-emerald-300/20 dark:bg-emerald-900/10 md:mx-4">
+            <p className="mt-6 border-2 border-ink bg-pop-1 px-4 py-3 text-sm font-semibold">
               Message sent. We will get back to you soon.
             </p>
           ) : null}
 
           {actionData?.ok === false ? (
-            <p className="mx-2 mt-5 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive md:mx-4">
+            <p className="mt-6 border-2 border-destructive bg-paper-2 px-4 py-3 text-sm font-semibold text-destructive">
               {actionData.error}
             </p>
           ) : null}
 
-          <p className="mx-2 mt-6 text-sm text-muted-foreground md:mx-4">
+          <p className="mt-8 text-sm">
             Looking for wholesale?{' '}
-            <NavLink to="/wholesale" className="underline underline-offset-4 hover:text-foreground">
+            <NavLink to="/wholesale" className="font-bold underline decoration-cta decoration-[3px] underline-offset-4">
               Submit a wholesale inquiry
             </NavLink>
             .
           </p>
 
-          <p className="mx-2 mt-2 text-sm text-muted-foreground md:mx-4">
+          <p className="mt-2 text-sm">
             Prefer email? Reach us directly at{' '}
-            <a href="mailto:dustin@aspencoffee.co" className="underline underline-offset-4 hover:text-foreground">
+            <a href="mailto:dustin@aspencoffee.co" className="font-bold underline decoration-cta decoration-[3px] underline-offset-4">
               dustin@aspencoffee.co
             </a>
             .

@@ -49,12 +49,12 @@ export function Aside({children, heading, type}) {
         <header className="flex items-center justify-between">
           <h3
             id={id}
-            className="text-xs uppercase tracking-[0.2em] text-muted-foreground"
+            className="font-display text-xl uppercase text-ink"
           >
             {heading}
           </h3>
           <button
-            className="close reset inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-base leading-none text-foreground transition-colors hover:bg-secondary"
+            className="inline-flex h-10 w-10 items-center justify-center border-2 border-ink bg-paper-2 text-xl leading-none text-ink transition-colors hover:bg-cta"
             onClick={close}
             aria-label="Close"
           >

@@ -16,6 +16,17 @@ export const ORDER_ITEM_FRAGMENT = `#graphql
     number
     confirmationNumber
     processedAt
+    lineItems(first: 4) {
+      nodes {
+        id
+        title
+        quantity
+        image {
+          url
+          altText
+        }
+      }
+    }
   }
 `;
 

@@ -25,10 +25,10 @@ export function CartLineItem({layout, line, childrenMap}) {
   const childrenLabelId = `cart-line-children-${id}`;
 
   return (
-    <li key={id} className="cart-line border-b border-border/70 py-4 last:border-b-0">
-      <div className="cart-line-inner flex gap-4">
+    <li key={id} className="block-card mb-4 p-3 shadow-none">
+      <div className="flex gap-4">
         {image && (
-          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-md bg-secondary">
+          <div className="h-20 w-20 shrink-0 overflow-hidden border-2 border-ink bg-paper">
             <Image
               alt={title}
               aspectRatio="1/1"
@@ -51,16 +51,16 @@ export function CartLineItem({layout, line, childrenMap}) {
             }}
             className="no-underline"
           >
-            <p className="line-clamp-2 text-sm font-medium text-foreground">
+            <p className="line-clamp-2 font-display text-sm uppercase leading-tight">
               {product.title}
             </p>
           </Link>
-          <p className="mt-1 text-sm text-foreground">
+          <div className="mt-1 text-sm font-bold">
             <ProductPrice price={line?.cost?.totalAmount} />
-          </p>
+          </div>
           <ul className="mt-1 space-y-0.5">
             {selectedOptions.map((option) => (
-              <li key={option.name} className="text-xs text-muted-foreground">
+              <li key={option.name} className="m-0 text-xs">
                 <small>
                   {option.name}: {option.value}
                 </small>
@@ -68,7 +68,7 @@ export function CartLineItem({layout, line, childrenMap}) {
             ))}
           </ul>
           {sellingPlanName ? (
-            <p className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="eyebrow mt-1">
               Delivery: {sellingPlanName}
             </p>
           ) : null}
@@ -110,7 +110,7 @@ function CartLineQuantity({line}) {
   const nextQuantity = Number((quantity + 1).toFixed(0));
 
   return (
-    <div className="cart-line-quantity mt-3 flex items-center gap-2">
+    <div className="mt-3 flex items-center">
       <small className="sr-only">Quantity: {quantity}</small>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
@@ -118,12 +118,12 @@ function CartLineQuantity({line}) {
           disabled={quantity <= 1 || !!isOptimistic}
           name="decrease-quantity"
           value={prevQuantity}
-          className="inline-flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex h-8 w-8 items-center justify-center border-2 border-ink bg-paper-2 font-bold transition-colors hover:bg-pop-1 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <span>&#8722;</span>
         </button>
       </CartLineUpdateButton>
-      <span className="inline-flex h-7 min-w-8 items-center justify-center px-2 text-xs font-medium">
+      <span className="inline-flex h-8 min-w-9 items-center justify-center border-y-2 border-ink bg-paper-2 px-2 text-xs font-bold">
         {quantity}
       </span>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
@@ -132,7 +132,7 @@ function CartLineQuantity({line}) {
           name="increase-quantity"
           value={nextQuantity}
           disabled={!!isOptimistic}
-          className="inline-flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex h-8 w-8 items-center justify-center border-2 border-ink bg-paper-2 font-bold transition-colors hover:bg-pop-1 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <span>&#43;</span>
         </button>
@@ -162,7 +162,7 @@ function CartLineRemoveButton({lineIds, disabled}) {
       <button
         disabled={disabled}
         type="submit"
-        className="ml-2 text-xs uppercase tracking-[0.12em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:cursor-not-allowed disabled:opacity-40"
+        className="eyebrow ml-4 underline underline-offset-4 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-40"
       >
         Remove
       </button>
