@@ -119,29 +119,8 @@ export default function Product() {
   const activeImage = productImages[currentImageIndex] || selectedVariant?.image || null;
   const hasMultipleImages = productImages.length > 1;
 
-  const fallbackDescriptionParagraphs = useMemo(() => {
-    return (product?.description || '')
-      .split(/\n{2,}/)
-      .map((paragraph) => paragraph.trim())
-      .filter(Boolean);
-  }, [product?.description]);
-
-  const heroHook = useMemo(() => {
-    const metafieldText = product?.shortDescription?.value;
-
-    if (metafieldText) return metafieldText;
-
-    const fallback = fallbackDescriptionParagraphs[0] || '';
-    if (!fallback) return '';
-
-    // Trim fallback so it doesn't get long
-    const trimmed = fallback.slice(0, 1000);
-    const lastSpace = trimmed.lastIndexOf(' ');
-
-    return fallback.length > 220
-      ? `${trimmed.slice(0, lastSpace)}...`
-      : fallback;
-  }, [product?.shortDescription?.value, fallbackDescriptionParagraphs]);
+  // Short-description metafield wins; otherwise show the full Shopify description.
+  const shortDescription = product?.shortDescription?.value?.trim();
 
   const isSubscriptionProduct = useMemo(() => {
     return (product?.collections?.nodes || []).some(
@@ -322,8 +301,13 @@ export default function Product() {
 
             <h1 className="m-0 mb-6 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.95]">{product.title}</h1>
 
-            {heroHook ? (
-              <p className="mb-8 max-w-lg whitespace-pre-line text-lg leading-relaxed">{heroHook}</p>
+            {shortDescription ? (
+              <p className="mb-8 max-w-lg whitespace-pre-line text-lg leading-relaxed">{shortDescription}</p>
+            ) : product.descriptionHtml ? (
+              <div
+                className="mb-8 max-w-lg space-y-4 text-lg leading-relaxed [&_a]:underline [&_a]:decoration-cta [&_a]:decoration-[3px] [&_a]:underline-offset-4 [&_li]:mb-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_strong]:font-bold [&_ul]:list-disc [&_ul]:pl-6"
+                dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
+              />
             ) : null}
 
             <div className="flex flex-col gap-7">

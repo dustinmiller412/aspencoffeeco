@@ -1,6 +1,6 @@
 import {useLoaderData} from 'react-router';
 import HeroSection from '~/components/home/HeroSection';
-import BrandBand from '~/components/home/BrandBand';
+import {ContourDivider} from '~/components/ContourDivider';
 import FeaturedProducts from '~/components/home/FeaturedProducts';
 import PhilosophySection from '~/components/home/PhilosophySection';
 import TestimonialBanner from '~/components/home/TestimonialBanner';
@@ -86,7 +86,7 @@ export default function Homepage() {
     <div className="bg-paper">
       {!data.isShopLinked && <MockShopNotice />}
       <HeroSection />
-      <BrandBand />
+      <ContourDivider fillAbove="fill-ink" />
       <FeaturedProducts products={data.products} />
       <TestimonialBanner image={data.subscriptionImage} />
       <PhilosophySection />
