@@ -1,8 +1,15 @@
-import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
+import {data, Form, NavLink, useActionData, useLoaderData, useNavigation} from 'react-router';
 import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
-import {useEffect, useRef} from 'react';
 import {sendEmail} from '~/lib/email.server';
+
+/**
+ * Server-side render time for the spam timing check. Stamped by the server (not the
+ * browser) so it works without client JS and isn't thrown off by a visitor's clock.
+ */
+export async function loader() {
+  return {renderedAt: Date.now()};
+}
 
 /**
  * @param {Route.ActionArgs} args
@@ -81,16 +88,10 @@ export const meta = ({matches}) =>
   });
 
 export default function Contact() {
+  const {renderedAt} = useLoaderData();
   const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state !== 'idle';
-  const timestampRef = useRef(null);
-
-  useEffect(() => {
-    if (timestampRef.current) {
-      timestampRef.current.value = Date.now().toString();
-    }
-  }, []);
 
   return (
     <div>
@@ -105,12 +106,12 @@ export default function Contact() {
             className="w-full max-w-none space-y-5"
             style={{maxWidth: 'none'}}
           >
-            {/* Timing token — set on mount so instant bot submissions fail */}
-            <input ref={timestampRef} type="hidden" name="_t" defaultValue="" />
+            {/* Timing token: server render time, so instant bot submissions fail */}
+            <input type="hidden" name="_t" value={renderedAt} readOnly />
 
             {/* Honeypot — visually hidden, bots fill it, real users don't */}
             <div aria-hidden="true" style={{position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none'}}>
-              <label htmlFor="contact-website">Website</label>
+              <label htmlFor="contact-website">Leave this field empty</label>
               <input id="contact-website" name="_hp" type="text" tabIndex={-1} autoComplete="off" />
             </div>
 
