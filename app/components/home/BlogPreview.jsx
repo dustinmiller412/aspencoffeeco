@@ -10,7 +10,7 @@ export default function BlogPreview({notes = []}) {
   const previewNotes = notes.slice(0, 3);
 
   return (
-    <section className="bg-paper px-6 py-24 md:py-32">
+    <section className="bg-paper px-6 pb-4 pt-14 md:pt-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>

@@ -27,7 +27,7 @@ const PILLARS = [
 
 export default function PhilosophySection() {
   return (
-    <section className="on-ink bg-ink px-6 py-24 text-paper-2 md:py-32">
+    <section className="on-ink bg-ink px-6 py-12 text-paper-2 md:py-16">
       <div className="mx-auto max-w-7xl">
         <motion.div
           initial={{opacity: 0, y: 30}}

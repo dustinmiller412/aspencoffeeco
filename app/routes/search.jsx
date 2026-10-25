@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
@@ -8,9 +9,7 @@ import {getEmptyPredictiveSearchResult} from '~/lib/search';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: `Hydrogen | Search`}];
-};
+export const meta = ({matches}) => seoMeta({title: 'Search', matches});
 
 /**
  * @param {Route.LoaderArgs}

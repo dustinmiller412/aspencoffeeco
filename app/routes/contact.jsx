@@ -1,4 +1,5 @@
 import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
 import {useEffect, useRef} from 'react';
 import {sendEmail} from '~/lib/email.server';
@@ -72,9 +73,12 @@ export async function action({request, context}) {
 }
 
 /** @type {Route.MetaFunction} */
-export const meta = () => {
-  return [{title: 'Contact | Aspen Coffee Co'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({
+    title: 'Contact',
+    description: 'Questions about an order, a subscription or brewing? Get in touch with Aspen Coffee Co.',
+    matches,
+  });
 
 export default function Contact() {
   const actionData = useActionData();

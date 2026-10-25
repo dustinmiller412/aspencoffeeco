@@ -1,9 +1,14 @@
 import {PageHeader} from '~/components/PageHeader';
+import {seoMeta} from '~/lib/meta';
 
 /** @type {Route.MetaFunction} */
-export const meta = () => {
-  return [{title: 'Aspen Coffee Co | Grind Size Guide'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({
+    title: 'Grind Size Guide',
+    description:
+      'Match your grind to your brew method. A quick reference for pour over, French press, AeroPress, cold brew and more.',
+    matches,
+  });
 
 const BREW_METHODS = [
   {

@@ -1,13 +1,17 @@
 import {useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
-};
+export const meta = ({data, matches}) =>
+  seoMeta({
+    title: data?.page.seo?.title || data?.page.title,
+    description: data?.page.seo?.description,
+    matches,
+  });
 
 /**
  * @param {Route.LoaderArgs} args

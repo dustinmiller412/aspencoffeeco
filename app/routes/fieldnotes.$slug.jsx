@@ -1,13 +1,18 @@
 import {Link, useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {ArrowLeft} from 'lucide-react';
 import {getNoteBySlug, renderMarkdown} from '~/lib/notes.server';
 import '~/styles/note-prose.css';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = ({data}) => {
-  return [{title: `${data?.note.title ?? 'Note'} | Aspen Coffee Co`}];
-};
+export const meta = ({data, matches}) =>
+  seoMeta({
+    title: data?.note.title ?? 'Field Notes',
+    description: data?.note.excerpt,
+    image: data?.note.coverImage,
+    matches,
+  });
 
 /**
  * @param {Route.LoaderArgs}

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ArrowRight} from 'lucide-react';
 import {useFetcher} from 'react-router';
-import {ContourDivider} from '~/components/ContourDivider';
+import {Logo} from '~/components/Header';
 
 export default function NewsletterSection() {
   const fetcher = useFetcher();
@@ -14,20 +14,16 @@ export default function NewsletterSection() {
   }, [fetcher.data]);
 
   return (
-    <section id="subscribe" className="mt-24 p-0">
-      <ContourDivider fillBelow="fill-cta" />
-      <div className="bg-cta px-6 py-16 text-cta-ink md:py-20">
-        <div className="mx-auto grid max-w-7xl items-end gap-10 md:grid-cols-[1.2fr_1fr]">
-          <div>
-            <p className="eyebrow mb-4">Roasted fresh. Delivered first.</p>
-            <h2 className="text-5xl md:text-7xl">New roasts, first dibs</h2>
-            <p className="mt-5 max-w-lg text-lg">
+    <section id="subscribe" className="p-0">
+      <div className="border-t-2 border-ink bg-pop-2 px-6 py-10 text-ink md:py-14">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-[1.5fr_1fr]">
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-4">The Aspen list</p>
+            <h2 className="text-5xl md:text-6xl">Be first in line for every new roast.</h2>
+            <p className="mb-8 mt-5 max-w-lg text-lg">
               Join the list and get 10% off your next order, plus first access to new roasts,
               brew guides and member-only drops.
             </p>
-          </div>
-
-          <div>
             {submitted ? (
               <p className="block-card px-6 py-5 font-display text-xl uppercase">
                 You&apos;re in. Your 10% off is on the way.
@@ -36,7 +32,7 @@ export default function NewsletterSection() {
               <fetcher.Form
                 method="post"
                 action="/api/newsletter"
-                className="flex max-w-none border-2 border-ink shadow-block"
+                className="flex max-w-xl border-2 border-ink shadow-block"
               >
                 <input
                   type="text"
@@ -72,6 +68,7 @@ export default function NewsletterSection() {
               <p className="mt-4 text-sm font-semibold">{fetcher.data.error}</p>
             ) : null}
           </div>
+          <Logo variant="mark" label="" className="mx-auto hidden h-52 text-ink md:block" />
         </div>
       </div>
     </section>

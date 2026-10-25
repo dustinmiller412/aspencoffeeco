@@ -1,4 +1,5 @@
 import {data, Form, useLoaderData, useActionData, useNavigation} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {EmptyState} from '~/components/EmptyState';
 import {useEffect, useState} from 'react';
 import {toast} from 'sonner';
@@ -8,7 +9,7 @@ import {sendEmail} from '~/lib/email.server';
 import {CUSTOMER_EMAIL_QUERY} from '~/graphql/customer-account/CustomerEmailQuery';
 
 /** @type {Route.MetaFunction} */
-export const meta = () => [{title: 'Subscriptions'}];
+export const meta = ({matches}) => seoMeta({title: 'Subscriptions', matches});
 
 /** @param {Route.LoaderArgs} */
 export async function loader({context}) {
@@ -130,7 +131,7 @@ export default function AccountSubscriptions() {
       {!loaderError && !subscriptions.length && (
         <EmptyState
           title="No subscriptions yet"
-          body="Subscribe for free shipping, first access to new drops, and a reliable coffee routine without the guesswork. Pause, skip or cancel anytime from here."
+          body="Subscribe for first access to new drops and a reliable coffee routine without the guesswork. Subscriptions of two bags or more ship free, and you can pause, skip or cancel anytime from here."
           cta={{to: '/collections/subscriptions', label: 'Subscribe & save'}}
           tone="bg-pop-1"
         />

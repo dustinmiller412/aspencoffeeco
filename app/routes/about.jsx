@@ -1,3 +1,5 @@
+import {seoMeta} from '~/lib/meta';
+
 import {motion} from 'framer-motion';
 import {NavLink} from 'react-router';
 import {ArrowRight} from 'lucide-react';
@@ -5,9 +7,13 @@ import {Logo} from '~/components/Header';
 import {PageHeader} from '~/components/PageHeader';
 
 /** @type {Route.MetaFunction} */
-export const meta = () => {
-  return [{title: 'About | Aspen Coffee Co'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({
+    title: 'About',
+    description:
+      'How Aspen Coffee Co started, and why we believe coffee should connect us to the people and places behind every cup.',
+    matches,
+  });
 
 const PHILOSOPHY = [
   {
@@ -36,49 +42,67 @@ export default function About() {
         <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-[1fr_1.4fr]">
           <div className="md:sticky md:top-32 md:self-start">
             <p className="eyebrow mb-4">How it started</p>
-            <h2 className="m-0 text-5xl md:text-6xl">A washed Tanzanian peaberry opened the door.</h2>
-            <Logo variant="badge" label="" className="mt-10 h-36 text-ink" />
+            <h2 className="m-0 text-5xl md:text-6xl">
+              Good coffee starts with curiosity.
+            </h2>
+            <Logo
+              variant="badge"
+              label=""
+              className="mt-10 h-36 text-ink"
+            />
           </div>
+
           <motion.div
             initial={{opacity: 0, y: 20}}
             whileInView={{opacity: 1, y: 0}}
             viewport={{once: true}}
-            transition={{duration: 0.8, ease: [0.22, 1, 0.36, 1]}}
+            transition={{
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="block-card space-y-6 p-8 text-lg leading-relaxed md:p-12"
           >
             <p className="text-xl font-semibold leading-relaxed">
-              Aspen Coffee Co grew out of a personal obsession with understanding coffee: where it comes
-              from, how it&apos;s made, and what makes each cup different. I built it because I couldn&apos;t
-              stop asking questions.
+              Aspen Coffee Co. started with a simple curiosity:
+              how can something as familiar as coffee have so
+              much variety, complexity, and character?
             </p>
+
             <p>
-              Around 2020, I walked into a coffee shop that roasted on site. I had never really seen coffee
-              roasting up close before. Until then, coffee was something I enjoyed, but watching it being
-              roasted made it feel alive, like there was a whole world behind the cup that I had barely noticed.
+              That curiosity turned into a hobby, then a fascination
+              with roasting, and eventually a small coffee roastery
+              in Pittsburgh. What began as a way to better understand
+              coffee became something I wanted to share with others.
             </p>
+
             <p>
-              The coffee that changed things for me was a washed Tanzanian Peaberry from that shop. It was
-              bright, clean, and expressive in a way I did not know coffee could be. That cup opened a door.
+              Along the way, I learned that great coffee is about far
+              more than what ends up in your cup.
             </p>
+
             <p>
-              From there, I started paying attention differently. I wanted to understand why one coffee tasted
-              so different from another: origin, processing, variety, roast level, and all the small choices
-              that shape the final cup. Eventually, buying roasted coffee was not enough for the kind of
-              curiosity I had developed. I wanted to experiment and understand those differences for myself,
-              so I started roasting at home.
+              Behind every coffee are people making countless
+              decisions. Farmers growing and harvesting the cherries,
+              producers carefully processing them, and communities
+              whose knowledge and traditions shape the coffees we
+              enjoy. Visiting coffee farms in Honduras brought that
+              into focus for me in a way that reading about coffee
+              never could.
             </p>
+
             <p>
-              Roasting became a way to learn by doing: cupping samples, comparing profiles, tasting coffees
-              across different roast levels, and trying to understand what each coffee wanted to be.
+              Today, Aspen is built around that same curiosity.
+              I roast in small batches, experiment constantly, and
+              try to approach every coffee with the care and attention
+              it deserves. Not to chase a particular roast style or
+              tasting score, but to bring out what makes each coffee
+              special.
             </p>
-            <p>
-              Later, visiting farms in Honduras and spending time with producers changed that understanding
-              again. Coffee is easy to reduce to tasting notes, scores, and labels. But it begins with people,
-              land, labor, weather, and decisions made long before it ever reaches a roaster.
-            </p>
-            <p>
-              Aspen grew out of all of that: curiosity, craft, and the belief that coffee should connect us
-              more deeply to the people and places behind it.
+
+            <p className="font-semibold">
+              Because great coffee isn&apos;t just about how it
+              tastes. It&apos;s about the people, places, and
+              stories that make it possible.
             </p>
           </motion.div>
         </div>
@@ -87,8 +111,13 @@ export default function About() {
       {/* Philosophy */}
       <section className="on-ink bg-ink px-6 py-24 text-paper-2 md:py-28">
         <div className="mx-auto max-w-7xl">
-          <p className="eyebrow mb-4 text-glow">Our philosophy</p>
-          <h2 className="mb-14 text-5xl md:text-7xl">What we believe</h2>
+          <p className="eyebrow mb-4 text-glow">
+            Our philosophy
+          </p>
+          <h2 className="mb-14 text-5xl md:text-7xl">
+            What we believe
+          </h2>
+
           <div className="grid gap-8 md:grid-cols-3">
             {PHILOSOPHY.map((item, index) => (
               <motion.div
@@ -96,14 +125,23 @@ export default function About() {
                 initial={{opacity: 0, y: 16}}
                 whileInView={{opacity: 1, y: 0}}
                 viewport={{once: true}}
-                transition={{duration: 0.6, delay: index * 0.08}}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.08,
+                }}
                 className="block-card p-8 text-ink"
               >
                 <span className="mb-6 inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-cta font-display text-lg">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="mb-4 text-3xl">{item.label}</h3>
-                <p className="text-sm leading-relaxed md:text-base">{item.text}</p>
+
+                <h3 className="mb-4 text-3xl">
+                  {item.label}
+                </h3>
+
+                <p className="text-sm leading-relaxed md:text-base">
+                  {item.text}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -111,7 +149,7 @@ export default function About() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 pt-24">
+      <section className="px-6 pb-20 pt-24">
         <motion.div
           initial={{opacity: 0, y: 16}}
           whileInView={{opacity: 1, y: 0}}
@@ -119,17 +157,29 @@ export default function About() {
           transition={{duration: 0.7}}
           className="mx-auto max-w-4xl text-center"
         >
-          <h2 className="text-5xl md:text-6xl">Specialty coffee is something you can be part of.</h2>
+          <h2 className="text-5xl md:text-6xl">
+            Specialty coffee is something you can be part of.
+          </h2>
+
           <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed">
-            Browse what we&apos;re currently roasting. Each bag comes with the origin story, producer context,
-            and the details that help the cup make sense.
+            Browse what we&apos;re currently roasting. Each bag
+            comes with the origin story, producer context, and
+            the details that help the cup make sense.
           </p>
+
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <NavLink to="/collections/coffee" className="btn-cta">
+            <NavLink
+              to="/collections/coffee"
+              className="btn-cta"
+            >
               Browse current coffees
               <ArrowRight className="h-4 w-4" />
             </NavLink>
-            <NavLink to="/fieldnotes" className="btn-outline">
+
+            <NavLink
+              to="/fieldnotes"
+              className="btn-outline"
+            >
               Read field notes
             </NavLink>
           </div>

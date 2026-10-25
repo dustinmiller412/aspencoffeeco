@@ -1,4 +1,5 @@
 import {Link, useLoaderData, useSearchParams} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {motion} from 'framer-motion';
 import {NoteCard} from '~/components/NoteCard';
 import {PageHeader} from '~/components/PageHeader';
@@ -8,9 +9,12 @@ import {NOTE_TAGS} from '~/lib/note-tags';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Aspen Coffee Co | Field Notes'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({
+    title: 'Field Notes',
+    description: "Brewing guides, origin stories, and everything worth knowing about what's in your cup.",
+    matches,
+  });
 
 /**
  * @param {Route.LoaderArgs}

@@ -1,3 +1,4 @@
+import {seoMeta} from '~/lib/meta';
 import {
   data,
   Form,
@@ -14,9 +15,7 @@ import {
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Addresses'}];
-};
+export const meta = ({matches}) => seoMeta({title: 'Addresses', matches});
 
 /**
  * @param {Route.LoaderArgs}

@@ -140,7 +140,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
                 </div>
 
                 <Logo
-                  variant="wordmark"
+                  variant="aspen"
                   label=""
                   className="mx-auto mt-16 w-full max-w-7xl text-paper-2/10"
                 />

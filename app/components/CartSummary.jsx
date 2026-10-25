@@ -56,7 +56,7 @@ export function CartSummary({cart, layout}) {
         />
       </div>
       {subscriptionLineCount > 0 ? (
-        <p className="eyebrow mt-3">
+        <p className="mt-3 text-sm font-semibold">
           Includes {subscriptionLineCount} subscription item
           {subscriptionLineCount > 1 ? 's' : ''}
         </p>
@@ -75,7 +75,7 @@ function FreeShippingProgress({subtotal}) {
 
   return (
     <div className="mb-4 border-2 border-ink bg-pop-2 px-3 py-2.5">
-      <p className="text-xs font-semibold">
+      <p className="text-sm font-semibold">
         {qualified ? (
           <span className="font-bold uppercase tracking-wide">
             You&apos;ve unlocked free shipping!
@@ -132,7 +132,7 @@ function CartCheckoutActions({checkoutUrl, layout}) {
           View bag
         </a>
       ) : null}
-      <p className="pt-2 text-[11px] leading-relaxed">
+      <p className="pt-2 text-sm leading-relaxed">
         Shipping and taxes are calculated at checkout.
       </p>
     </div>

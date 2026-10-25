@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import HeroSection from '~/components/home/HeroSection';
 import {ContourDivider} from '~/components/ContourDivider';
 import FeaturedProducts from '~/components/home/FeaturedProducts';
@@ -11,9 +12,8 @@ import {getAllNotesMeta} from '~/lib/notes.server';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Aspen Coffee Co | Home'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({fullTitle: 'Aspen Coffee Co | Small-batch coffee roasted in Pittsburgh', matches});
 
 /**
  * @param {Route.LoaderArgs} args
@@ -35,6 +35,7 @@ async function loadCriticalData({context}) {
     const [featuredCollections] = await Promise.all([
       context.storefront.query(FEATURED_PRODUCTS_QUERY, {
         variables: {
+          featuredHandle: 'featured',
           blendsHandle: 'blends',
           singleOriginHandle: 'single-origin',
           subscriptionHandle: 'roasters-choice-subscription',
@@ -43,6 +44,9 @@ async function loadCriticalData({context}) {
       }),
     ]);
 
+    // Lineup comes from the "featured" collection (in its admin sort order). Until that
+    // collection exists or while it's empty, fall back to the newest blends + single origins.
+    const featuredNodes = featuredCollections?.featured?.products?.nodes || [];
     const blendedNodes = featuredCollections?.blends?.products?.nodes || [];
     const singleOriginNodes = featuredCollections?.singleOrigin?.products?.nodes || [];
 
@@ -52,12 +56,13 @@ async function loadCriticalData({context}) {
         (product, index, allProducts) =>
           allProducts.findIndex((item) => item.id === product.id) === index,
       )
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 4);
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    const lineup = (featuredNodes.length ? featuredNodes : mergedNodes).slice(0, 8);
 
     return {
       isShopLinked: Boolean(context.env.PUBLIC_STORE_DOMAIN),
-      products: {nodes: mergedNodes},
+      products: {nodes: lineup},
       subscriptionImage: featuredCollections?.subscriptionFeature?.featuredImage ?? null,
       notes,
     };
@@ -79,6 +84,9 @@ function loadDeferredData({context}) {
   return {};
 }
 
+// Temporarily hidden. Flip to true to bring the Field Notes preview back.
+const SHOW_FIELD_NOTES = false;
+
 export default function Homepage() {
   const data = useLoaderData();
 
@@ -90,13 +98,37 @@ export default function Homepage() {
       <FeaturedProducts products={data.products} />
       <TestimonialBanner image={data.subscriptionImage} />
       <PhilosophySection />
-      <BlogPreview notes={data.notes} />
+      {SHOW_FIELD_NOTES && <BlogPreview notes={data.notes} />}
     </div>
   );
 }
 
 const FEATURED_PRODUCTS_QUERY = `#graphql
+  fragment HomeProduct on Product {
+    id
+    title
+    handle
+    createdAt
+    productType
+    availableForSale
+    images(first: 2) {
+      nodes {
+        id
+        altText
+        url
+        width
+        height
+      }
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+  }
   query FeaturedProducts(
+    $featuredHandle: String!
     $blendsHandle: String!
     $singleOriginHandle: String!
     $subscriptionHandle: String!
@@ -110,57 +142,24 @@ const FEATURED_PRODUCTS_QUERY = `#graphql
         height
       }
     }
+    featured: collection(handle: $featuredHandle) {
+      products(first: $first, sortKey: COLLECTION_DEFAULT) {
+        nodes {
+          ...HomeProduct
+        }
+      }
+    }
     blends: collection(handle: $blendsHandle) {
       products(first: $first, sortKey: CREATED, reverse: true) {
         nodes {
-          id
-          title
-          handle
-          createdAt
-          productType
-          availableForSale
-          images(first: 2) {
-            nodes {
-              id
-              altText
-              url
-              width
-              height
-            }
-          }
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
+          ...HomeProduct
         }
       }
     }
     singleOrigin: collection(handle: $singleOriginHandle) {
       products(first: $first, sortKey: CREATED, reverse: true) {
         nodes {
-          id
-          title
-          handle
-          createdAt
-          productType
-          availableForSale
-          images(first: 2) {
-            nodes {
-              id
-              altText
-              url
-              width
-              height
-            }
-          }
-          priceRange {
-            minVariantPrice {
-              amount
-              currencyCode
-            }
-          }
+          ...HomeProduct
         }
       }
     }

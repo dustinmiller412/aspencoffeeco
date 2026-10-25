@@ -1,4 +1,5 @@
 import {useLoaderData, data} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
 import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
@@ -6,9 +7,7 @@ import {CartMain} from '~/components/CartMain';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: `Hydrogen | Cart`}];
-};
+export const meta = ({matches}) => seoMeta({title: 'Your bag', matches});
 
 /**
  * @type {HeadersFunction}

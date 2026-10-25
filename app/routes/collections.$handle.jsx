@@ -1,4 +1,5 @@
 import {redirect, useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {NavLink} from 'react-router';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {motion} from 'framer-motion';
@@ -9,9 +10,13 @@ import {PageHeader} from '~/components/PageHeader';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = ({data}) => {
-  return [{title: `${data?.collection.title ?? ''} | Aspen Coffee Co`}];
-};
+export const meta = ({data, matches}) =>
+  seoMeta({
+    title: data?.collection.title,
+    description:
+      COLLECTION_HEADER_COPY[data?.collection.handle] || data?.collection.description,
+    matches,
+  });
 
 /**
  * @param {Route.LoaderArgs} args
@@ -223,8 +228,7 @@ const COLLECTION_QUERY = `#graphql
         last: $last,
         before: $startCursor,
         after: $endCursor,
-        sortKey: CREATED,
-        reverse: true
+        sortKey: COLLECTION_DEFAULT
       ) {
         nodes {
           ...ProductItem

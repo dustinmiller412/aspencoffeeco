@@ -4,15 +4,15 @@ import {ArrowRight} from 'lucide-react';
 import {ProductItem} from '~/components/ProductItem';
 
 export default function FeaturedProducts({products}) {
-  const productsToShow = products?.nodes?.slice(0, 4) ?? [];
+  const productsToShow = products?.nodes?.slice(0, 8) ?? [];
 
   return (
-    <section className="bg-paper px-6 py-24 md:py-32">
+    <section className="bg-paper px-6 pb-14 pt-10 md:pb-16 md:pt-12">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
             <p className="eyebrow mb-4">Current lineup</p>
-            <h2 className="display text-5xl md:text-7xl">Fresh off the roaster</h2>
+            <h2 className="display text-5xl lg:text-6xl">Fresh off the roaster</h2>
           </div>
           <NavLink to="/collections/coffee" className="btn-outline self-start md:self-auto">
             Shop all coffee

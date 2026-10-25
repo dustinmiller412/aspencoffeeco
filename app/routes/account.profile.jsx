@@ -1,4 +1,5 @@
 import {CUSTOMER_UPDATE_MUTATION} from '~/graphql/customer-account/CustomerUpdateMutation';
+import {seoMeta} from '~/lib/meta';
 import {
   data,
   Form,
@@ -11,9 +12,7 @@ import {
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Profile'}];
-};
+export const meta = ({matches}) => seoMeta({title: 'Profile', matches});
 
 /**
  * @param {Route.LoaderArgs}

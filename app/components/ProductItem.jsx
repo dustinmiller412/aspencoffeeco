@@ -48,9 +48,6 @@ export function ProductItem({product, loading}) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-5">
-        {product.productType && (
-          <p className="eyebrow opacity-70">{product.productType}</p>
-        )}
         <h3 className="display text-xl">{product.title}</h3>
         <div className="mt-auto flex items-baseline justify-between pt-4">
           <span className="font-display text-lg">

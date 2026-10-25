@@ -1,3 +1,4 @@
+import {seoMeta} from '~/lib/meta';
 import {
   Link,
   useLoaderData,
@@ -24,9 +25,7 @@ import {OrderStatusBadge} from '~/components/OrderStatusBadge';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: 'Orders'}];
-};
+export const meta = ({matches}) => seoMeta({title: 'Orders', matches});
 
 /**
  * @param {Route.LoaderArgs}

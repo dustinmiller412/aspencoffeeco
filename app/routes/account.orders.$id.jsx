@@ -1,4 +1,5 @@
 import {redirect, useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {OrderStatusBadge} from '~/components/OrderStatusBadge';
 import {Money, Image} from '@shopify/hydrogen';
 import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuery';
@@ -6,9 +7,8 @@ import {CUSTOMER_ORDER_QUERY} from '~/graphql/customer-account/CustomerOrderQuer
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = ({data}) => {
-  return [{title: `Order ${data?.order?.name}`}];
-};
+export const meta = ({data, matches}) =>
+  seoMeta({title: `Order ${data?.order?.name ?? ''}`.trim(), matches});
 
 /**
  * @param {Route.LoaderArgs}
@@ -177,7 +177,7 @@ function OrderLineRow({lineItem}) {
         <div>
           {lineItem?.image && (
             <div>
-              <Image data={lineItem.image} width={96} height={96} />
+              <Image data={lineItem.image} width={96} height={96} className="h-24 w-24 object-cover" />
             </div>
           )}
           <div>

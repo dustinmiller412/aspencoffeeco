@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
@@ -7,9 +8,7 @@ import {PageHeader} from '~/components/PageHeader';
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
-  return [{title: `Hydrogen | Products`}];
-};
+export const meta = ({matches}) => seoMeta({title: 'All products', matches});
 
 /**
  * @param {Route.LoaderArgs} args

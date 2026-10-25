@@ -191,6 +191,7 @@ function SearchResultsPredictiveProducts({term, products, closeSearch}) {
                     src={image.url}
                     width={50}
                     height={50}
+                    className="h-12 w-12 shrink-0 object-cover"
                   />
                 )}
                 <div>

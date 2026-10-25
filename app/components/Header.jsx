@@ -17,10 +17,11 @@ const ICON_BUTTON_CLASS =
 
 export const LOGOS = {
   horizontal: {src: '/brand/horizontal/Asset 5.svg', ratio: '633 / 177'},
-  stacked: {src: '/brand/stacked/stacked-web.png', ratio: '900 / 812'},
-  badge: {src: '/brand/badge/badge-web.png', ratio: '899 / 900'},
-  mark: {src: '/brand/logomark/logomark-web.png', ratio: '898 / 900'},
+  stacked: {src: '/brand/stacked/stacked-web.png', ratio: '617 / 557'},
+  badge: {src: '/brand/badge/badge-web.png', ratio: '1 / 1'},
+  mark: {src: '/brand/logomark/logomark-web.png', ratio: '889 / 900'},
   wordmark: {src: '/brand/aspn/ASPN-trimmed.png', ratio: '610 / 145'},
+  aspen: {src: '/brand/aspn/ASPEN-wordmark.png', ratio: '900 / 185'},
 };
 
 /**
@@ -59,11 +60,11 @@ export function Header({header, isLoggedIn, cart}) {
     <>
       <NavLink
         to="/collections/coffee"
-        className="eyebrow block bg-ink px-4 py-2.5 text-center text-paper-2 no-underline hover:text-glow hover:no-underline"
+        className="eyebrow block border-b-2 border-ink bg-cta px-4 py-2.5 text-center text-cta-ink no-underline hover:underline"
       >
         Free shipping on orders ${FREE_SHIPPING_THRESHOLD}+ <span aria-hidden="true">→</span>
       </NavLink>
-      <nav className="sticky top-0 z-50 border-b-2 border-ink bg-pop-1">
+      <nav className="sticky top-0 z-50 border-b-2 border-ink bg-paper">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 md:px-6">
           <div className="hidden flex-1 items-center gap-1 md:flex">
             {NAV_LINKS.map((link) => (

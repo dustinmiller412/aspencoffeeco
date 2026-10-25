@@ -19,6 +19,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import indexStyles from '../index.css?url';
 import {PageLayout} from './components/PageLayout';
+import {seoMeta} from '~/lib/meta';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -38,6 +39,21 @@ export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
   // For more details see: https://remix.run/docs/en/main/route/should-revalidate
   return false;
 };
+
+/**
+ * Site-wide default title/description/share tags. Routes with their own meta override this;
+ * it also titles the error page (e.g. 404s) since errors render through the root boundary.
+ * @type {Route.MetaFunction}
+ */
+export const meta = ({error, matches}) =>
+  seoMeta({
+    title: error
+      ? isRouteErrorResponse(error) && error.status === 404
+        ? 'Page not found'
+        : 'Something went wrong'
+      : undefined,
+    matches,
+  });
 
 /**
  * The main and reset stylesheets are added in the Layout component
@@ -80,6 +96,8 @@ export async function loader(args) {
     ...deferredData,
     ...criticalData,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
+    // This storefront's own origin, for absolute share-image URLs in meta tags.
+    origin: new URL(args.request.url).origin,
     // New per page load; ContourDivider uses it to draw unique lines (same on server and client).
     contourSeed: Math.floor(Math.random() * 2 ** 31),
     shop: getShopAnalytics({

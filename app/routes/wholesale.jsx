@@ -1,4 +1,5 @@
 import {data, Form, NavLink, useActionData, useNavigation} from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import {PageHeader} from '~/components/PageHeader';
 import {sendEmail} from '~/lib/email.server';
 
@@ -76,9 +77,13 @@ export async function action({request, context}) {
 }
 
 /** @type {Route.MetaFunction} */
-export const meta = () => {
-  return [{title: 'Wholesale | Aspen Coffee Co'}];
-};
+export const meta = ({matches}) =>
+  seoMeta({
+    title: 'Wholesale',
+    description:
+      'Wholesale coffee for cafes, offices and teams from Aspen Coffee Co, a small-batch roaster in Pittsburgh, PA.',
+    matches,
+  });
 
 export default function Wholesale() {
   const actionData = useActionData();

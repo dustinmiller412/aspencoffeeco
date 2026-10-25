@@ -51,25 +51,23 @@ export function CartLineItem({layout, line, childrenMap}) {
             }}
             className="no-underline"
           >
-            <p className="line-clamp-2 font-display text-sm uppercase leading-tight">
+            <p className="line-clamp-2 font-display text-base uppercase leading-tight">
               {product.title}
             </p>
           </Link>
-          <div className="mt-1 text-sm font-bold">
+          <div className="mt-1 text-base font-bold">
             <ProductPrice price={line?.cost?.totalAmount} />
           </div>
           <ul className="mt-1 space-y-0.5">
             {selectedOptions.map((option) => (
-              <li key={option.name} className="m-0 text-xs">
-                <small>
-                  {option.name}: {option.value}
-                </small>
+              <li key={option.name} className="m-0 text-sm">
+                <span className="font-semibold">{option.name}:</span> {option.value}
               </li>
             ))}
           </ul>
           {sellingPlanName ? (
-            <p className="eyebrow mt-1">
-              Delivery: {sellingPlanName}
+            <p className="mt-1 text-sm">
+              <span className="font-semibold">Delivery:</span> {sellingPlanName}
             </p>
           ) : null}
           <CartLineQuantity line={line} />
@@ -123,7 +121,7 @@ function CartLineQuantity({line}) {
           <span>&#8722;</span>
         </button>
       </CartLineUpdateButton>
-      <span className="inline-flex h-8 min-w-9 items-center justify-center border-y-2 border-ink bg-paper-2 px-2 text-xs font-bold">
+      <span className="inline-flex h-8 min-w-9 items-center justify-center border-y-2 border-ink bg-paper-2 px-2 text-sm font-bold">
         {quantity}
       </span>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
@@ -162,7 +160,7 @@ function CartLineRemoveButton({lineIds, disabled}) {
       <button
         disabled={disabled}
         type="submit"
-        className="eyebrow ml-4 underline underline-offset-4 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-40"
+        className="ml-4 text-sm font-semibold underline underline-offset-4 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-40"
       >
         Remove
       </button>

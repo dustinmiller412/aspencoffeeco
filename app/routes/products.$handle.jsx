@@ -1,4 +1,5 @@
 import { useLoaderData } from 'react-router';
+import {seoMeta} from '~/lib/meta';
 import { NavLink } from 'react-router';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import {
@@ -29,15 +30,18 @@ const SHOP_COLLECTION_PRIORITY = [
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = ({ data }) => {
-  return [
-    { title: `${data?.product.title ?? ''} | Aspen Coffee Co` },
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
-  ];
-};
+export const meta = ({ data, matches }) => [
+  ...seoMeta({
+    title: data?.product.title,
+    description: data?.product.seo?.description || data?.product.description,
+    image: data?.product.images?.nodes?.[0]?.url,
+    matches,
+  }),
+  {
+    rel: 'canonical',
+    href: `/products/${data?.product.handle}`,
+  },
+];
 
 /**
  * @param {Route.LoaderArgs} args
@@ -118,9 +122,6 @@ export default function Product() {
   const productImages = useMemo(() => product?.images?.nodes || [], [product?.images?.nodes]);
   const activeImage = productImages[currentImageIndex] || selectedVariant?.image || null;
   const hasMultipleImages = productImages.length > 1;
-
-  // Short-description metafield wins; otherwise show the full Shopify description.
-  const shortDescription = product?.shortDescription?.value?.trim();
 
   const isSubscriptionProduct = useMemo(() => {
     return (product?.collections?.nodes || []).some(
@@ -244,7 +245,9 @@ export default function Product() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="lg:sticky lg:top-28 lg:self-start"
           >
-            <div className="block-card relative aspect-square overflow-hidden shadow-block-lg">
+            {/* Double-line frame, matching the homepage arches */}
+            <div className="border-2 border-ink p-2">
+            <div className="relative aspect-square overflow-hidden border-2 border-ink bg-paper-2">
               {activeImage ? (
                 <button
                   type="button"
@@ -270,6 +273,7 @@ export default function Product() {
                   </button>
                 </div>
               ) : null}
+            </div>
             </div>
 
             {hasMultipleImages ? (
@@ -301,9 +305,7 @@ export default function Product() {
 
             <h1 className="m-0 mb-6 text-[clamp(2.5rem,5vw,4.25rem)] leading-[0.95]">{product.title}</h1>
 
-            {shortDescription ? (
-              <p className="mb-8 max-w-lg whitespace-pre-line text-lg leading-relaxed">{shortDescription}</p>
-            ) : product.descriptionHtml ? (
+            {product.descriptionHtml ? (
               <div
                 className="mb-8 max-w-lg space-y-4 text-lg leading-relaxed [&_a]:underline [&_a]:decoration-cta [&_a]:decoration-[3px] [&_a]:underline-offset-4 [&_li]:mb-1 [&_ol]:list-decimal [&_ol]:pl-6 [&_strong]:font-bold [&_ul]:list-disc [&_ul]:pl-6"
                 dangerouslySetInnerHTML={{__html: product.descriptionHtml}}
@@ -589,9 +591,6 @@ const PRODUCT_FRAGMENT = `#graphql
       title
     }
     metafield(namespace: "custom", key: "roast_level") {
-      value
-    }
-    shortDescription: metafield(namespace: "custom", key: "short_description") {
       value
     }
     storytellingOverview: metafield(namespace: "custom", key: "storytelling_overview") {
